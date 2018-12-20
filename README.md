@@ -15,6 +15,11 @@ sphrs = { git = "https://github.com/stefan-k/sphrs.git" }
 ```
 
 
+## References
+
+* Robin Green, ["Spherical Harmonic Lighting: The Gritty Details"](http://silviojemma.com/public/papers/lighting/spherical-harmonic-lighting.pdf)
+* [Wikipedia](https://en.wikipedia.org/wiki/Spherical_harmonics)
+
 ## License
 
 Licensed under either of

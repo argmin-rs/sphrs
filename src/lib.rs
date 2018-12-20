@@ -10,7 +10,8 @@
 pub mod coords;
 
 use crate::coords::*;
-use std::f64::consts::FRAC_1_PI;
+use num_complex::Complex;
+use std::f64::consts::{FRAC_1_PI, SQRT_2};
 
 pub fn sh00(_p: &impl Coordinates) -> f64 {
     0.5 * FRAC_1_PI.sqrt()
@@ -86,6 +87,77 @@ pub fn sh3p3(p: &impl Coordinates) -> f64 {
         / p.r().powi(3)
 }
 
+#[inline(always)]
+fn factorial(n: i64) -> i64 {
+    (1..=n).fold(1, |acc, x| acc * x)
+}
+
+#[allow(non_snake_case)]
+#[inline(always)]
+fn K(l: i64, m: i64) -> f64 {
+    let m = m.abs();
+    (FRAC_1_PI * ((2 * l + 1) as f64) / 4.0 * (factorial(l - m) as f64) / (factorial(l + m) as f64))
+        .sqrt()
+}
+
+#[allow(non_snake_case)]
+fn P(l: i64, m: i64, x: f64) -> f64 {
+    let mut pmm: f64 = 1.0;
+    if m > 0 {
+        let somx2 = ((1.0 - x) * (1.0 + x)).sqrt();
+        let mut fact: f64 = 1.0;
+        for _ in 1..=m {
+            pmm *= -fact * somx2;
+            fact += 2.0;
+        }
+    }
+
+    if l == m {
+        return pmm;
+    }
+
+    let mut pmmp1 = x * (2.0 * m as f64 + 1.0) * pmm;
+
+    if l == m + 1 {
+        return pmmp1;
+    }
+
+    let mf = m as f64;
+
+    let mut pll = 0.0;
+    for ll in (m + 2 + 1)..=l {
+        let ll = ll as f64;
+        pll = ((2.0 * ll - 1.0) * x * pmmp1 - (ll + mf - 1.0) * pmm) / (ll - mf);
+        pmm = pmmp1;
+        pmmp1 = pll;
+    }
+    pll
+}
+
+#[allow(non_snake_case)]
+fn SH(l: i64, m: i64, p: &impl Coordinates) -> Complex<f64> {
+    let v = if m == 0 {
+        K(l, 0) * P(l, m, p.theta().cos())
+    } else if m > 0 {
+        K(l, m) as f64 * P(l, m, p.theta().cos())
+    } else {
+        K(l, -m) as f64 * P(l, -m, p.theta().cos())
+    };
+    let m = m as f64;
+    Complex::new(v * (m * p.phi()).sin(), v * (m * p.phi()).cos())
+}
+
+#[allow(non_snake_case)]
+fn RealSH(l: i64, m: i64, p: &impl Coordinates) -> f64 {
+    if m == 0 {
+        K(l, 0) * P(l, m, p.theta().cos())
+    } else if m > 0 {
+        SQRT_2 * K(l, m) as f64 * ((m as f64) * p.phi()).cos() * P(l, m, p.theta().cos())
+    } else {
+        SQRT_2 * K(l, -m) as f64 * (-(m as f64) * p.phi()).sin() * P(l, -m, p.theta().cos())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -95,7 +167,15 @@ mod tests {
     fn it_works() {
         let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
         let v = sh10(&p);
-        println!("p: {:?} | v: {}", p, v);
+        // println!("p: {:?} | v: {}", p, v);
         assert_eq!(2 + 2, 4);
+    }
+
+    #[test]
+    fn comp() {
+        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        // let p = GenCoordinates::cartesian(1.0, 1.0, 0.3);
+        assert!((RealSH(2, 1, &p) - sh2p1(&p)) < std::f64::EPSILON);
+        assert!((RealSH(3, -2, &p) - sh3n2(&p)) < std::f64::EPSILON);
     }
 }
