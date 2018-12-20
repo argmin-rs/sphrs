@@ -49,6 +49,43 @@ pub fn sh2p2(p: &impl Coordinates) -> f64 {
     0.25 * (15.0 * FRAC_1_PI).sqrt() * (p.x().powi(2) * p.y().powi(2)) / p.r().powi(2)
 }
 
+pub fn sh3n3(p: &impl Coordinates) -> f64 {
+    0.25 * (35.0 / 2.0 * FRAC_1_PI).sqrt() * (3.0 * p.x().powi(2) - p.y().powi(2)) * p.y()
+        / p.r().powi(3)
+}
+
+pub fn sh3n2(p: &impl Coordinates) -> f64 {
+    0.5 * (105.0 * FRAC_1_PI).sqrt() * (p.x() * p.y() * p.z()) / p.r().powi(3)
+}
+
+pub fn sh3n1(p: &impl Coordinates) -> f64 {
+    0.25 * (21.0 / 2.0 * FRAC_1_PI).sqrt()
+        * p.y()
+        * (4.0 * p.z().powi(2) - p.x().powi(2) - p.y().powi(2))
+        / p.r().powi(3)
+}
+
+pub fn sh30(p: &impl Coordinates) -> f64 {
+    0.25 * (7.0 * FRAC_1_PI).sqrt()
+        * p.z()
+        * (2.0 * p.z().powi(2) - 3.0 * p.x().powi(2) - 3.0 * p.y().powi(2))
+        / p.r().powi(3)
+}
+
+pub fn sh3p1(p: &impl Coordinates) -> f64 {
+    0.25 * (21.0 / 2.0 * FRAC_1_PI) * p.x() * (4.0 * p.z().powi(2) - p.x().powi(2) - p.y().powi(2))
+        / p.r().powi(3)
+}
+
+pub fn sh3p2(p: &impl Coordinates) -> f64 {
+    0.25 * (105.0 * FRAC_1_PI) * (p.x().powi(2) - p.y().powi(2)) * p.z() / p.r().powi(3)
+}
+
+pub fn sh3p3(p: &impl Coordinates) -> f64 {
+    0.25 * (35.0 / 2.0 * FRAC_1_PI) * (p.x().powi(2) - 3.0 * p.y().powi(2)) * p.x().powi(2)
+        / p.r().powi(3)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -58,7 +95,7 @@ mod tests {
     fn it_works() {
         let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
         let v = sh10(&p);
-        println!("{}", v);
+        println!("p: {:?} | v: {}", p, v);
         assert_eq!(2 + 2, 4);
     }
 }

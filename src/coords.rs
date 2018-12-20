@@ -8,15 +8,18 @@
 use std::cell::Cell;
 
 pub trait Coordinates {
-    fn x(&self) -> f64;
-    fn y(&self) -> f64;
-    fn z(&self) -> f64;
     fn theta(&self) -> f64;
     fn phi(&self) -> f64;
     fn r(&self) -> f64;
+    fn x(&self) -> f64;
+    fn y(&self) -> f64;
+    fn z(&self) -> f64;
+    // fn x2(&self) -> f64;
+    // fn y2(&self) -> f64;
+    // fn z2(&self) -> f64;
 }
 
-#[derive(Default, Clone)]
+#[derive(Default, Clone, Debug)]
 pub struct SphericalCoordinates {
     theta: f64,
     phi: f64,
@@ -31,21 +34,6 @@ impl SphericalCoordinates {
 
 impl Coordinates for SphericalCoordinates {
     #[inline(always)]
-    fn x(&self) -> f64 {
-        self.r * self.theta.sin() * self.phi.cos()
-    }
-
-    #[inline(always)]
-    fn y(&self) -> f64 {
-        self.r * self.theta.sin() * self.phi.sin()
-    }
-
-    #[inline(always)]
-    fn z(&self) -> f64 {
-        self.r * self.theta.cos()
-    }
-
-    #[inline(always)]
     fn theta(&self) -> f64 {
         self.theta
     }
@@ -59,9 +47,24 @@ impl Coordinates for SphericalCoordinates {
     fn r(&self) -> f64 {
         self.r
     }
+
+    #[inline(always)]
+    fn x(&self) -> f64 {
+        self.r * self.theta.sin() * self.phi.cos()
+    }
+
+    #[inline(always)]
+    fn y(&self) -> f64 {
+        self.r * self.theta.sin() * self.phi.sin()
+    }
+
+    #[inline(always)]
+    fn z(&self) -> f64 {
+        self.r * self.theta.cos()
+    }
 }
 
-#[derive(Default, Clone)]
+#[derive(Default, Clone, Debug)]
 pub struct CartesianCoordinates {
     x: f64,
     y: f64,
@@ -76,21 +79,6 @@ impl CartesianCoordinates {
 
 impl Coordinates for CartesianCoordinates {
     #[inline(always)]
-    fn x(&self) -> f64 {
-        self.x
-    }
-
-    #[inline(always)]
-    fn y(&self) -> f64 {
-        self.y
-    }
-
-    #[inline(always)]
-    fn z(&self) -> f64 {
-        self.z
-    }
-
-    #[inline(always)]
     fn theta(&self) -> f64 {
         (self.z / (self.x.powi(2) + self.y.powi(2) + self.z.powi(2)).sqrt()).acos()
     }
@@ -104,9 +92,24 @@ impl Coordinates for CartesianCoordinates {
     fn r(&self) -> f64 {
         (self.x.powi(2) + self.y.powi(2) + self.z.powi(2)).sqrt()
     }
+
+    #[inline(always)]
+    fn x(&self) -> f64 {
+        self.x
+    }
+
+    #[inline(always)]
+    fn y(&self) -> f64 {
+        self.y
+    }
+
+    #[inline(always)]
+    fn z(&self) -> f64 {
+        self.z
+    }
 }
 
-#[derive(Default, Clone)]
+#[derive(Default, Clone, Debug)]
 pub struct GenCoordinates {
     r: Cell<Option<f64>>,
     theta: Cell<Option<f64>>,
@@ -206,39 +209,6 @@ impl GenCoordinates {
 
 impl Coordinates for GenCoordinates {
     #[inline(always)]
-    fn x(&self) -> f64 {
-        if let Some(x) = self.x.get() {
-            x
-        } else {
-            let x = self.get_r() * self.get_theta().sin() * self.get_phi().cos();
-            self.set_x(x);
-            x
-        }
-    }
-
-    #[inline(always)]
-    fn y(&self) -> f64 {
-        if let Some(y) = self.y.get() {
-            y
-        } else {
-            let y = self.get_r() * self.get_theta().sin() * self.get_phi().sin();
-            self.set_y(y);
-            y
-        }
-    }
-
-    #[inline(always)]
-    fn z(&self) -> f64 {
-        if let Some(z) = self.z.get() {
-            z
-        } else {
-            let z = self.get_r() * self.get_theta().cos();
-            self.set_z(z);
-            z
-        }
-    }
-
-    #[inline(always)]
     fn theta(&self) -> f64 {
         if let Some(theta) = self.theta.get() {
             theta
@@ -270,6 +240,39 @@ impl Coordinates for GenCoordinates {
             let r = (self.get_x().powi(2) + self.get_y().powi(2) + self.get_z().powi(2)).sqrt();
             self.set_r(r);
             r
+        }
+    }
+
+    #[inline(always)]
+    fn x(&self) -> f64 {
+        if let Some(x) = self.x.get() {
+            x
+        } else {
+            let x = self.get_r() * self.get_theta().sin() * self.get_phi().cos();
+            self.set_x(x);
+            x
+        }
+    }
+
+    #[inline(always)]
+    fn y(&self) -> f64 {
+        if let Some(y) = self.y.get() {
+            y
+        } else {
+            let y = self.get_r() * self.get_theta().sin() * self.get_phi().sin();
+            self.set_y(y);
+            y
+        }
+    }
+
+    #[inline(always)]
+    fn z(&self) -> f64 {
+        if let Some(z) = self.z.get() {
+            z
+        } else {
+            let z = self.get_r() * self.get_theta().cos();
+            self.set_z(z);
+            z
         }
     }
 }
