@@ -123,13 +123,13 @@ pub fn sh3p3<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> 
         / p.r().powi(3)
 }
 
-#[inline(always)]
+#[inline]
 fn factorial(n: i64) -> i64 {
     (1..=n).fold(1, |acc, x| acc * x)
 }
 
 #[allow(non_snake_case)]
-#[inline(always)]
+#[inline]
 fn K<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64) -> T {
     let m = m.abs();
     (T::FRAC_1_PI() * T::from_i64(2 * l + 1).unwrap() / T::from_f64(4.0).unwrap()
@@ -139,8 +139,10 @@ fn K<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64) -> T {
 }
 
 #[allow(non_snake_case)]
+#[inline]
 fn P<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, x: T) -> T {
     let mut pmm = T::one();
+
     if m > 0 {
         let somx2 = ((T::one() - x) * (T::one() + x)).sqrt();
         let mut fact = T::one();
@@ -172,6 +174,7 @@ fn P<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, x: T) -> T {
 }
 
 #[allow(non_snake_case)]
+#[inline]
 pub fn SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
