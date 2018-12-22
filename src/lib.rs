@@ -242,7 +242,7 @@ pub fn irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn regular_solid_real_SH<T: Float + FloatConst + FromPrimitive>(
+pub fn real_regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
     p: &impl Coordinates<T>,
@@ -254,7 +254,7 @@ pub fn regular_solid_real_SH<T: Float + FloatConst + FromPrimitive>(
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn irregular_solid_real_SH<T: Float + FloatConst + FromPrimitive>(
+pub fn real_irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
     p: &impl Coordinates<T>,

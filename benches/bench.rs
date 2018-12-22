@@ -27,7 +27,7 @@ mod tests {
         // assert!((real_SH(2, 1, &p) - sh2p1(&p)) < std::f64::EPSILON);
         // assert!((real_SH(3, -2, &p) - sh3n2(&p)) < std::f64::EPSILON);
         b.iter(|| {
-            black_box(regular_solid_real_SH(99, 98, &p));
+            black_box(real_regular_solid_SH(99, 98, &p));
         });
     }
 
@@ -36,7 +36,7 @@ mod tests {
         let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
         let p = p.finalize();
         b.iter(|| {
-            black_box(regular_solid_real_SH(2, 1, &p));
+            black_box(real_regular_solid_SH(2, 1, &p));
         });
     }
 
@@ -54,7 +54,7 @@ mod tests {
         let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
         let p = p.finalize();
         b.iter(|| {
-            black_box(regular_solid_real_SH(3, 3, &p));
+            black_box(real_regular_solid_SH(3, 3, &p));
         });
     }
 
