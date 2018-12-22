@@ -10,58 +10,58 @@ use num::{Float, FromPrimitive};
 use num_complex::Complex;
 use num_traits::float::FloatConst;
 
-pub fn sh00<T: Float + FloatConst + FromPrimitive>(_p: &impl Coordinates<T>) -> T {
+pub fn sh00<T: Float + FloatConst + FromPrimitive>(_p: &Coordinates<T>) -> T {
     T::from_f64(0.5).unwrap() * T::FRAC_1_PI().sqrt()
 }
 
-pub fn sh1n1<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh1n1<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     (T::from_f64(3.0 / 4.0).unwrap() * T::FRAC_1_PI()).sqrt() * p.y() / p.r()
 }
 
-pub fn sh10<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh10<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     (T::from_f64(3.0 / 4.0).unwrap() * T::FRAC_1_PI()).sqrt() * p.z() / p.r()
 }
 
-pub fn sh1p1<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh1p1<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     (T::from_f64(3.0 / 4.0).unwrap() * T::FRAC_1_PI()).sqrt() * p.x() / p.r()
 }
 
-pub fn sh2n2<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh2n2<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x() * p.y())
         / p.r().powi(2)
 }
 
-pub fn sh2n1<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh2n1<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.y() * p.z())
         / p.r().powi(2)
 }
 
-pub fn sh20<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh20<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (-p.x().powi(2) - p.y().powi(2) * T::from_f64(2.0).unwrap() * p.z().powi(2))
         / p.r().powi(2)
 }
 
-pub fn sh2p1<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh2p1<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.z() * p.x())
         / p.r().powi(2)
 }
 
-pub fn sh2p2<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh2p2<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x().powi(2) * p.y().powi(2))
         / p.r().powi(2)
 }
 
-pub fn sh3n3<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh3n3<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(35.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (T::from_f64(3.0).unwrap() * p.x().powi(2) - p.y().powi(2))
@@ -69,14 +69,14 @@ pub fn sh3n3<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> 
         / p.r().powi(3)
 }
 
-pub fn sh3n2<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh3n2<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     T::from_f64(0.5).unwrap()
         * (T::from_f64(105.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x() * p.y() * p.z())
         / p.r().powi(3)
 }
 
-pub fn sh3n1<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh3n1<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(21.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * p.y()
@@ -84,7 +84,7 @@ pub fn sh3n1<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> 
         / p.r().powi(3)
 }
 
-pub fn sh30<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh30<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(7.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * p.z()
@@ -94,7 +94,7 @@ pub fn sh30<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T
         / p.r().powi(3)
 }
 
-pub fn sh3p1<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh3p1<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(21.0 / 2.0).unwrap() * T::FRAC_1_PI())
         * p.x()
@@ -102,7 +102,7 @@ pub fn sh3p1<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> 
         / p.r().powi(3)
 }
 
-pub fn sh3p2<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh3p2<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(105.0).unwrap() * T::FRAC_1_PI())
         * (p.x().powi(2) - p.y().powi(2))
@@ -110,7 +110,7 @@ pub fn sh3p2<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> 
         / p.r().powi(3)
 }
 
-pub fn sh3p3<T: Float + FloatConst + FromPrimitive>(p: &impl Coordinates<T>) -> T {
+pub fn sh3p3<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(35.0 / 2.0).unwrap() * T::FRAC_1_PI())
         * (p.x().powi(2) - T::from_f64(3.0).unwrap() * p.y().powi(2))
@@ -170,11 +170,7 @@ fn P<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, x: T) -> T {
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn SH<T: Float + FloatConst + FromPrimitive>(
-    l: i64,
-    m: i64,
-    p: &impl Coordinates<T>,
-) -> Complex<T> {
+pub fn SH<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, p: &Coordinates<T>) -> Complex<T> {
     let v: T = if m == 0 {
         K::<T>(l, 0) * P(l, m, p.theta_cos())
     } else if m > 0 {
@@ -190,11 +186,7 @@ pub fn SH<T: Float + FloatConst + FromPrimitive>(
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn real_SH<T: Float + FloatConst + FromPrimitive>(
-    l: i64,
-    m: i64,
-    p: &impl Coordinates<T>,
-) -> T {
+pub fn real_SH<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, p: &Coordinates<T>) -> T {
     if m == 0 {
         K::<T>(l, 0) * P(l, m, p.theta_cos())
     } else if m > 0 {
@@ -215,7 +207,7 @@ pub fn real_SH<T: Float + FloatConst + FromPrimitive>(
 pub fn regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
-    p: &impl Coordinates<T>,
+    p: &Coordinates<T>,
 ) -> Complex<T> {
     let scaling = ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         * p.r().powi(l as i32);
@@ -228,7 +220,7 @@ pub fn regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 pub fn irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
-    p: &impl Coordinates<T>,
+    p: &Coordinates<T>,
 ) -> Complex<T> {
     let scaling = ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         / p.r().powi((l + 1) as i32);
@@ -241,7 +233,7 @@ pub fn irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 pub fn real_regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
-    p: &impl Coordinates<T>,
+    p: &Coordinates<T>,
 ) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         * p.r().powi(l as i32)
@@ -253,7 +245,7 @@ pub fn real_regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 pub fn real_irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
-    p: &impl Coordinates<T>,
+    p: &Coordinates<T>,
 ) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         / p.r().powi(l as i32)
