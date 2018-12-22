@@ -145,6 +145,19 @@ where
     z: Cell<Option<T>>,
 }
 
+#[derive(Default, Clone, Debug)]
+pub struct GenCoordinatesFinal<T>
+where
+    T: Float + FloatConst + FromPrimitive,
+{
+    r: T,
+    theta: T,
+    phi: T,
+    x: T,
+    y: T,
+    z: T,
+}
+
 impl<T> GenCoordinates<T>
 where
     T: Float + FloatConst + FromPrimitive,
@@ -171,7 +184,7 @@ where
         }
     }
 
-    pub fn finalize(&self) {
+    pub fn finalize(&self) -> GenCoordinatesFinal<T> {
         if self.r.get().is_some() {
             self.x();
             self.y();
@@ -180,6 +193,14 @@ where
             self.r();
             self.theta();
             self.phi();
+        }
+        GenCoordinatesFinal {
+            r: self.get_r(),
+            theta: self.get_theta(),
+            phi: self.get_phi(),
+            x: self.get_x(),
+            y: self.get_y(),
+            z: self.get_z(),
         }
     }
 
@@ -314,5 +335,40 @@ where
             self.set_z(z);
             z
         }
+    }
+}
+
+impl<T> Coordinates<T> for GenCoordinatesFinal<T>
+where
+    T: Float + FloatConst + FromPrimitive,
+{
+    #[inline]
+    fn theta(&self) -> T {
+        self.theta
+    }
+
+    #[inline]
+    fn phi(&self) -> T {
+        self.phi
+    }
+
+    #[inline]
+    fn r(&self) -> T {
+        self.r
+    }
+
+    #[inline]
+    fn x(&self) -> T {
+        self.x
+    }
+
+    #[inline]
+    fn y(&self) -> T {
+        self.y
+    }
+
+    #[inline]
+    fn z(&self) -> T {
+        self.z
     }
 }
