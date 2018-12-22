@@ -242,6 +242,31 @@ pub fn irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     Complex::new(sh.re * scaling, sh.im * scaling)
 }
 
+#[allow(non_snake_case)]
+#[inline]
+pub fn regular_solid_real_SH<T: Float + FloatConst + FromPrimitive>(
+    l: i64,
+    m: i64,
+    p: &impl Coordinates<T>,
+) -> T {
+    ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
+        * p.r().powi(l as i32)
+        * real_SH(l, m, p)
+}
+
+#[allow(non_snake_case)]
+#[inline]
+pub fn irregular_solid_real_SH<T: Float + FloatConst + FromPrimitive>(
+    l: i64,
+    m: i64,
+    p: &impl Coordinates<T>,
+) -> T {
+    ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
+        * T::from_f64(1.0).unwrap()
+        / p.r().powi(l as i32)
+        * real_SH(l, m, p)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
