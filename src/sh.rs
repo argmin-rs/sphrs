@@ -119,6 +119,11 @@ pub fn sh3p3<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
 }
 
 #[inline]
+pub fn sh99p98<T: Float + FloatConst + FromPrimitive>(p: &Coordinates<T>) -> T {
+    real_SH(99, 98, p)
+}
+
+#[inline]
 fn factorial(n: i64) -> i64 {
     (1..=n).fold(1, |acc, x| acc * x)
 }

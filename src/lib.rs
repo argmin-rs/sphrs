@@ -15,7 +15,6 @@ pub use crate::sh::*;
 use num::{Float, FromPrimitive};
 use num_traits::float::FloatConst;
 // use num_complex::Complex;
-// use std::marker::PhantomData;
 
 pub struct SphericalHarmonics<T>
 where
@@ -24,7 +23,9 @@ where
     order: usize,
     coeffs: Vec<T>,
     sh: Vec<fn(&Coordinates<T>) -> T>,
-    // _marker: PhantomData<T>,
+    // sh_beyond_3: Vec<Box<dyn FnMut(&Coordinates<T>) -> T>>,
+    // sh_beyond_3: Vec<&'a Fn(&Coordinates<T>) -> T>,
+    // sh_beyond_3: Vec<fn(&Coordinates<T>) -> T>,
 }
 
 impl<T> SphericalHarmonics<T>
@@ -33,6 +34,7 @@ where
 {
     pub fn new(order: usize) -> Self {
         let mut sh = Vec::with_capacity(order);
+        // let mut sh_beyond_3 = Vec::with_capacity(order);
 
         sh.push(sh00::<T> as fn(&Coordinates<T>) -> T);
 
@@ -65,7 +67,22 @@ where
         //         let l = l as i64;
         //         for m in (-l)..=l {
         //             let m = m as i64;
-        //             sh.push((|p| real_SH::<T>(m, l, p)) as fn(&Coordinates<T>) -> T);
+        //             // sh.push((|p| real_SH::<T>(m, l, p)) as fn(&Coordinates<T>) -> T);
+        //             let l_ = l.clone();
+        //             let m_ = m.clone();
+        //             // let bla = move |p| real_SH::<T>(m_, l_, p);
+        //             // fn bla<T>(p: &Coordinates<T>) -> T {
+        //             //     |p| real_SH(m_, l_, p)
+        //             // }
+        //
+        //             let bla = |p| real_SH::<T>(0, 0, p);
+        //             // sh.push(|p| real_SH::<T>(0, 0, p));
+        //             // sh_beyond_3.push(Box::new(bla));
+        //             sh_beyond_3.push(bla as fn(&Coordinates<T>) -> T);
+        //             // sh.push(
+        //             //     (|p| real_SH::<T>(m, l, p))
+        //             //         as for<'r> fn(&'r (dyn Coordinates<T> + 'r)) -> T,
+        //             // );
         //         }
         //     }
         //     unimplemented!()
@@ -74,8 +91,8 @@ where
         SphericalHarmonics {
             order,
             coeffs: Vec::with_capacity(order),
-            sh: Vec::with_capacity(order),
-            // _marker: PhantomData,
+            sh: sh,
+            // sh_beyond_3: sh_beyond_3,
         }
     }
 }
