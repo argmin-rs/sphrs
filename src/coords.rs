@@ -19,6 +19,7 @@ where
     fn x(&self) -> T;
     fn y(&self) -> T;
     fn z(&self) -> T;
+    fn theta_cos(&self) -> T;
     // fn x2(&self) -> T;
     // fn y2(&self) -> T;
     // fn z2(&self) -> T;
@@ -35,6 +36,7 @@ where
     x: Cell<Option<T>>,
     y: Cell<Option<T>>,
     z: Cell<Option<T>>,
+    theta_cos: Cell<Option<T>>,
 }
 
 #[derive(Default, Clone, Debug)]
@@ -48,6 +50,7 @@ where
     x: T,
     y: T,
     z: T,
+    theta_cos: T,
 }
 
 impl<T> GenCoordinates<T>
@@ -62,6 +65,7 @@ where
             x: Cell::new(Some(x)),
             y: Cell::new(Some(y)),
             z: Cell::new(Some(z)),
+            theta_cos: Cell::new(None),
         }
     }
 
@@ -73,6 +77,7 @@ where
             x: Cell::new(None),
             y: Cell::new(None),
             z: Cell::new(None),
+            theta_cos: Cell::new(None),
         }
     }
 
@@ -86,6 +91,9 @@ where
             self.theta();
             self.phi();
         }
+
+        self.theta_cos();
+
         GenCoordinatesFinal {
             r: self.get_r(),
             theta: self.get_theta(),
@@ -93,6 +101,7 @@ where
             x: self.get_x(),
             y: self.get_y(),
             z: self.get_z(),
+            theta_cos: self.get_theta_cos(),
         }
     }
 
@@ -127,6 +136,11 @@ where
     }
 
     #[inline]
+    fn get_theta_cos(&self) -> T {
+        self.theta_cos.get().unwrap()
+    }
+
+    #[inline]
     fn set_x(&self, x: T) {
         self.x.set(Some(x));
     }
@@ -154,6 +168,11 @@ where
     #[inline]
     fn set_phi(&self, phi: T) {
         self.phi.set(Some(phi));
+    }
+
+    #[inline]
+    fn set_theta_cos(&self, theta_cos: T) {
+        self.theta_cos.set(Some(theta_cos));
     }
 }
 
@@ -228,6 +247,17 @@ where
             z
         }
     }
+
+    #[inline]
+    fn theta_cos(&self) -> T {
+        if let Some(theta_cos) = self.theta_cos.get() {
+            theta_cos
+        } else {
+            let theta_cos = self.get_theta().cos();
+            self.set_theta_cos(theta_cos);
+            theta_cos
+        }
+    }
 }
 
 impl<T> Coordinates<T> for GenCoordinatesFinal<T>
@@ -262,5 +292,10 @@ where
     #[inline]
     fn z(&self) -> T {
         self.z
+    }
+
+    #[inline]
+    fn theta_cos(&self) -> T {
+        self.theta_cos
     }
 }

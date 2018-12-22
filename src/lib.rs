@@ -180,11 +180,11 @@ pub fn SH<T: Float + FloatConst + FromPrimitive>(
     p: &impl Coordinates<T>,
 ) -> Complex<T> {
     let v: T = if m == 0 {
-        K::<T>(l, 0) * P(l, m, p.theta().cos())
+        K::<T>(l, 0) * P(l, m, p.theta_cos())
     } else if m > 0 {
-        K::<T>(l, m) * P(l, m, p.theta().cos())
+        K::<T>(l, m) * P(l, m, p.theta_cos())
     } else {
-        K::<T>(l, -m) * P(l, -m, p.theta().cos())
+        K::<T>(l, -m) * P(l, -m, p.theta_cos())
     };
     Complex::new(
         v * (T::from_i64(m).unwrap() * p.phi()).sin(),
@@ -200,17 +200,17 @@ pub fn real_SH<T: Float + FloatConst + FromPrimitive>(
     p: &impl Coordinates<T>,
 ) -> T {
     if m == 0 {
-        K::<T>(l, 0) * P(l, m, p.theta().cos())
+        K::<T>(l, 0) * P(l, m, p.theta_cos())
     } else if m > 0 {
         T::SQRT_2()
             * K::<T>(l, m)
             * (T::from_i64(m).unwrap() * p.phi()).cos()
-            * P(l, m, p.theta().cos())
+            * P(l, m, p.theta_cos())
     } else {
         T::SQRT_2()
             * K::<T>(l, -m)
             * (T::from_i64(-m).unwrap() * p.phi()).sin()
-            * P(l, -m, p.theta().cos())
+            * P(l, -m, p.theta_cos())
     }
 }
 
