@@ -194,6 +194,7 @@ pub fn SH<T: Float + FloatConst + FromPrimitive>(
 }
 
 #[allow(non_snake_case)]
+#[inline]
 pub fn RealSH<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, p: &impl Coordinates<T>) -> T {
     if m == 0 {
         K::<T>(l, 0) * P(l, m, p.theta().cos())
@@ -208,6 +209,19 @@ pub fn RealSH<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, p: &impl Co
             * (T::from_i64(-m).unwrap() * p.phi()).sin()
             * P(l, -m, p.theta().cos())
     }
+}
+
+#[allow(non_snake_case)]
+#[inline]
+pub fn RegularSolidSH<T: Float + FloatConst + FromPrimitive>(
+    l: i64,
+    m: i64,
+    p: &impl Coordinates<T>,
+) -> Complex<T> {
+    let scaling = ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
+        * p.r().powi(l as i32);
+    let sh = SH(l, m, p);
+    Complex::new(sh.re * scaling, sh.im * scaling)
 }
 
 #[cfg(test)]
