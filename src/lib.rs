@@ -9,11 +9,10 @@
 
 pub mod coords;
 
-use crate::coords::*;
+pub use crate::coords::*;
 use num::{Float, FromPrimitive};
 use num_complex::Complex;
 use num_traits::float::FloatConst;
-// use std::f64::consts::{FRAC_1_PI, SQRT_2};
 
 pub fn sh00<T: Float + FloatConst + FromPrimitive>(_p: &impl Coordinates<T>) -> T {
     T::from_f64(0.5).unwrap() * T::FRAC_1_PI().sqrt()
@@ -236,7 +235,6 @@ pub fn irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     p: &impl Coordinates<T>,
 ) -> Complex<T> {
     let scaling = ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
-        * T::from_f64(1.0).unwrap()
         / p.r().powi((l + 1) as i32);
     let sh = SH(l, m, p);
     Complex::new(sh.re * scaling, sh.im * scaling)
@@ -262,7 +260,6 @@ pub fn irregular_solid_real_SH<T: Float + FloatConst + FromPrimitive>(
     p: &impl Coordinates<T>,
 ) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
-        * T::from_f64(1.0).unwrap()
         / p.r().powi(l as i32)
         * real_SH(l, m, p)
 }
