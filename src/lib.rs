@@ -195,7 +195,11 @@ pub fn SH<T: Float + FloatConst + FromPrimitive>(
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn RealSH<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, p: &impl Coordinates<T>) -> T {
+pub fn real_SH<T: Float + FloatConst + FromPrimitive>(
+    l: i64,
+    m: i64,
+    p: &impl Coordinates<T>,
+) -> T {
     if m == 0 {
         K::<T>(l, 0) * P(l, m, p.theta().cos())
     } else if m > 0 {
@@ -213,7 +217,7 @@ pub fn RealSH<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, p: &impl Co
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn RegularSolidSH<T: Float + FloatConst + FromPrimitive>(
+pub fn regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
     p: &impl Coordinates<T>,
