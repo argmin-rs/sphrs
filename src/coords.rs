@@ -47,32 +47,32 @@ impl<T> Coordinates<T> for SphericalCoordinates<T>
 where
     T: Float + FloatConst + FromPrimitive,
 {
-    #[inline(always)]
+    #[inline]
     fn theta(&self) -> T {
         self.theta
     }
 
-    #[inline(always)]
+    #[inline]
     fn phi(&self) -> T {
         self.phi
     }
 
-    #[inline(always)]
+    #[inline]
     fn r(&self) -> T {
         self.r
     }
 
-    #[inline(always)]
+    #[inline]
     fn x(&self) -> T {
         self.r * self.theta.sin() * self.phi.cos()
     }
 
-    #[inline(always)]
+    #[inline]
     fn y(&self) -> T {
         self.r * self.theta.sin() * self.phi.sin()
     }
 
-    #[inline(always)]
+    #[inline]
     fn z(&self) -> T {
         self.r * self.theta.cos()
     }
@@ -101,32 +101,32 @@ impl<T> Coordinates<T> for CartesianCoordinates<T>
 where
     T: Float + FloatConst + FromPrimitive,
 {
-    #[inline(always)]
+    #[inline]
     fn theta(&self) -> T {
         (self.z / (self.x.powi(2) + self.y.powi(2) + self.z.powi(2)).sqrt()).acos()
     }
 
-    #[inline(always)]
+    #[inline]
     fn phi(&self) -> T {
         (self.y / self.x).atan()
     }
 
-    #[inline(always)]
+    #[inline]
     fn r(&self) -> T {
         (self.x.powi(2) + self.y.powi(2) + self.z.powi(2)).sqrt()
     }
 
-    #[inline(always)]
+    #[inline]
     fn x(&self) -> T {
         self.x
     }
 
-    #[inline(always)]
+    #[inline]
     fn y(&self) -> T {
         self.y
     }
 
-    #[inline(always)]
+    #[inline]
     fn z(&self) -> T {
         self.z
     }
@@ -183,62 +183,62 @@ where
         }
     }
 
-    #[inline(always)]
+    #[inline]
     fn get_x(&self) -> T {
         self.x.get().unwrap()
     }
 
-    #[inline(always)]
+    #[inline]
     fn get_y(&self) -> T {
         self.y.get().unwrap()
     }
 
-    #[inline(always)]
+    #[inline]
     fn get_z(&self) -> T {
         self.z.get().unwrap()
     }
 
-    #[inline(always)]
+    #[inline]
     fn get_r(&self) -> T {
         self.r.get().unwrap()
     }
 
-    #[inline(always)]
+    #[inline]
     fn get_theta(&self) -> T {
         self.theta.get().unwrap()
     }
 
-    #[inline(always)]
+    #[inline]
     fn get_phi(&self) -> T {
         self.phi.get().unwrap()
     }
 
-    #[inline(always)]
+    #[inline]
     fn set_x(&self, x: T) {
         self.x.set(Some(x));
     }
 
-    #[inline(always)]
+    #[inline]
     fn set_y(&self, y: T) {
         self.y.set(Some(y));
     }
 
-    #[inline(always)]
+    #[inline]
     fn set_z(&self, z: T) {
         self.z.set(Some(z));
     }
 
-    #[inline(always)]
+    #[inline]
     fn set_r(&self, r: T) {
         self.z.set(Some(r));
     }
 
-    #[inline(always)]
+    #[inline]
     fn set_theta(&self, theta: T) {
         self.theta.set(Some(theta));
     }
 
-    #[inline(always)]
+    #[inline]
     fn set_phi(&self, phi: T) {
         self.phi.set(Some(phi));
     }
@@ -248,7 +248,7 @@ impl<T> Coordinates<T> for GenCoordinates<T>
 where
     T: Float + FloatConst + FromPrimitive,
 {
-    #[inline(always)]
+    #[inline]
     fn theta(&self) -> T {
         if let Some(theta) = self.theta.get() {
             theta
@@ -261,7 +261,7 @@ where
         }
     }
 
-    #[inline(always)]
+    #[inline]
     fn phi(&self) -> T {
         if let Some(phi) = self.phi.get() {
             phi
@@ -272,7 +272,7 @@ where
         }
     }
 
-    #[inline(always)]
+    #[inline]
     fn r(&self) -> T {
         if let Some(r) = self.r.get() {
             r
@@ -283,7 +283,7 @@ where
         }
     }
 
-    #[inline(always)]
+    #[inline]
     fn x(&self) -> T {
         if let Some(x) = self.x.get() {
             x
@@ -294,7 +294,7 @@ where
         }
     }
 
-    #[inline(always)]
+    #[inline]
     fn y(&self) -> T {
         if let Some(y) = self.y.get() {
             y
@@ -305,7 +305,7 @@ where
         }
     }
 
-    #[inline(always)]
+    #[inline]
     fn z(&self) -> T {
         if let Some(z) = self.z.get() {
             z
