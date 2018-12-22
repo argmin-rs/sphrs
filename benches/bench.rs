@@ -34,6 +34,7 @@ mod tests {
     #[bench]
     fn sh2p1_gen(b: &mut Bencher) {
         let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        p.finalize();
         b.iter(|| {
             black_box(regular_solid_real_SH(2, 1, &p));
         });
@@ -42,6 +43,7 @@ mod tests {
     #[bench]
     fn sh2p1_hc(b: &mut Bencher) {
         let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        p.finalize();
         b.iter(|| {
             black_box(sh2p1(&p));
         });
@@ -50,6 +52,7 @@ mod tests {
     #[bench]
     fn sh3p3_gen(b: &mut Bencher) {
         let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        p.finalize();
         b.iter(|| {
             black_box(regular_solid_real_SH(3, 3, &p));
         });
@@ -58,6 +61,7 @@ mod tests {
     #[bench]
     fn sh3p3_hc(b: &mut Bencher) {
         let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        p.finalize();
         b.iter(|| {
             black_box(sh3p3(&p));
         });

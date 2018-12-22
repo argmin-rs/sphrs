@@ -171,6 +171,18 @@ where
         }
     }
 
+    pub fn finalize(&self) {
+        if self.r.get().is_some() {
+            self.x();
+            self.y();
+            self.z();
+        } else {
+            self.r();
+            self.theta();
+            self.phi();
+        }
+    }
+
     #[inline(always)]
     fn get_x(&self) -> T {
         self.x.get().unwrap()
