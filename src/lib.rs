@@ -259,7 +259,7 @@ mod tests {
     fn comp() {
         let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
         // let p = GenCoordinates::cartesian(1.0, 1.0, 0.3);
-        assert!((RealSH(2, 1, &p) - sh2p1(&p)) < std::f64::EPSILON);
-        assert!((RealSH(3, -2, &p) - sh3n2(&p)) < std::f64::EPSILON);
+        assert!((real_SH(2, 1, &p) - sh2p1(&p)) < std::f64::EPSILON);
+        assert!((real_SH(3, -2, &p) - sh3n2(&p)) < std::f64::EPSILON);
     }
 }
