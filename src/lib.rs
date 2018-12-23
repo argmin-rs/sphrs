@@ -30,41 +30,91 @@ impl<T> SphericalHarmonics<T>
 where
     T: Float + FromPrimitive + FloatConst,
 {
-    pub fn eval(&self, p: &Coordinates<T>) -> Vec<T> {
-        let mut sh = Vec::with_capacity(self.num_sh);
+    pub fn eval_vec(&self, p: Vec<&Coordinates<T>>) -> Vec<T> {
+        p.iter().map(|&pi| self.eval(pi)).collect()
+    }
 
-        sh.push(sh00(p));
+    pub fn eval(&self, p: &Coordinates<T>) -> T {
+        let mut res = self.coeffs[0] * sh00(p);
 
         if self.order >= 1 {
-            sh.push(sh1n1(p));
-            sh.push(sh10(p));
-            sh.push(sh1p1(p));
+            res = res
+                + self.coeffs[1] * sh1n1(p)
+                + self.coeffs[2] * sh10(p)
+                + self.coeffs[3] * sh1p1(p);
         }
 
         if self.order >= 2 {
-            sh.push(sh2n2(p));
-            sh.push(sh2n1(p));
-            sh.push(sh20(p));
-            sh.push(sh2p1(p));
-            sh.push(sh2p2(p));
+            res = res
+                + self.coeffs[4] * sh2n2(p)
+                + self.coeffs[5] * sh2n1(p)
+                + self.coeffs[6] * sh20(p)
+                + self.coeffs[7] * sh2p1(p)
+                + self.coeffs[8] * sh2p2(p);
         }
 
         if self.order >= 3 {
-            sh.push(sh3n3(p));
-            sh.push(sh3n2(p));
-            sh.push(sh3n1(p));
-            sh.push(sh30(p));
-            sh.push(sh3p1(p));
-            sh.push(sh3p2(p));
-            sh.push(sh3p3(p));
+            res = res
+                + self.coeffs[9] * sh3n3(p)
+                + self.coeffs[10] * sh3n2(p)
+                + self.coeffs[11] * sh3n1(p)
+                + self.coeffs[12] * sh30(p)
+                + self.coeffs[13] * sh3p1(p)
+                + self.coeffs[14] * sh3p2(p)
+                + self.coeffs[15] * sh3p3(p);
         }
 
+        let mut j = 16;
         if self.order >= 4 {
             for l in 4..=self.order {
                 let l = l as i64;
                 for m in (-l)..=l {
                     let m = m as i64;
-                    sh.push(real_SH(m, l, p));
+                    res = res + self.coeffs[j] * real_SH(m, l, p);
+                    j += 1;
+                }
+            }
+        }
+
+        res
+    }
+    pub fn eval_indiv(&self, p: &Coordinates<T>) -> Vec<T> {
+        let mut sh = Vec::with_capacity(self.num_sh);
+
+        sh.push(self.coeffs[0] * sh00(p));
+
+        if self.order >= 1 {
+            sh.push(self.coeffs[1] * sh1n1(p));
+            sh.push(self.coeffs[2] * sh10(p));
+            sh.push(self.coeffs[3] * sh1p1(p));
+        }
+
+        if self.order >= 2 {
+            sh.push(self.coeffs[4] * sh2n2(p));
+            sh.push(self.coeffs[5] * sh2n1(p));
+            sh.push(self.coeffs[6] * sh20(p));
+            sh.push(self.coeffs[7] * sh2p1(p));
+            sh.push(self.coeffs[8] * sh2p2(p));
+        }
+
+        if self.order >= 3 {
+            sh.push(self.coeffs[9] * sh3n3(p));
+            sh.push(self.coeffs[10] * sh3n2(p));
+            sh.push(self.coeffs[11] * sh3n1(p));
+            sh.push(self.coeffs[12] * sh30(p));
+            sh.push(self.coeffs[13] * sh3p1(p));
+            sh.push(self.coeffs[14] * sh3p2(p));
+            sh.push(self.coeffs[15] * sh3p3(p));
+        }
+
+        let mut j = 16;
+        if self.order >= 4 {
+            for l in 4..=self.order {
+                let l = l as i64;
+                for m in (-l)..=l {
+                    let m = m as i64;
+                    sh.push(self.coeffs[j] * real_SH(m, l, p));
+                    j += 1;
                 }
             }
         }

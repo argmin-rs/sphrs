@@ -35,6 +35,16 @@ mod tests {
     fn k_1(b: &mut Bencher) {
         b.iter(|| {
             black_box(K::<f64>(99, 98));
+            // black_box(K::<f64>(10, 10));
+        });
+    }
+
+    #[bench]
+    fn full_set(b: &mut Bencher) {
+        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0).finalize();
+        let s: SphericalHarmonics<f64> = SphericalHarmonics::new(3);
+        b.iter(|| {
+            black_box(s.eval(&p));
         });
     }
 
