@@ -130,7 +130,7 @@ fn factorial(n: i64) -> i64 {
 
 #[allow(non_snake_case)]
 #[inline]
-fn K<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64) -> T {
+pub fn K<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64) -> T {
     let m = m.abs();
     (T::FRAC_1_PI() * T::from_i64(2 * l + 1).unwrap() / T::from_f64(4.0).unwrap()
         * T::from_i64(factorial(l - m)).unwrap()

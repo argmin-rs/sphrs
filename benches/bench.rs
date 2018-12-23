@@ -32,6 +32,13 @@ mod tests {
     }
 
     #[bench]
+    fn k_1(b: &mut Bencher) {
+        b.iter(|| {
+            black_box(K::<f64>(99, 98));
+        });
+    }
+
+    #[bench]
     fn sh_1_static(b: &mut Bencher) {
         let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
         // let p = GenCoordinates::spherical(1.0f32, std::f32::consts::PI / 2.0f32, 0.0f32);
