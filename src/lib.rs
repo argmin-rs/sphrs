@@ -21,78 +21,63 @@ where
     T: Float + FromPrimitive + FloatConst,
 {
     order: usize,
+    num_sh: usize,
     coeffs: Vec<T>,
-    sh: Vec<fn(&Coordinates<T>) -> T>,
-    // sh_beyond_3: Vec<Box<dyn FnMut(&Coordinates<T>) -> T>>,
-    // sh_beyond_3: Vec<&'a Fn(&Coordinates<T>) -> T>,
-    // sh_beyond_3: Vec<fn(&Coordinates<T>) -> T>,
+    // sh: Vec<fn(&Coordinates<T>) -> T>,
 }
 
 impl<T> SphericalHarmonics<T>
 where
     T: Float + FromPrimitive + FloatConst,
 {
+    pub fn eval(&self, p: &Coordinates<T>) -> Vec<T> {
+        let mut sh = Vec::with_capacity(self.num_sh);
+
+        sh.push(sh00(p));
+
+        if self.order >= 1 {
+            sh.push(sh1n1(p));
+            sh.push(sh10(p));
+            sh.push(sh1p1(p));
+        }
+
+        if self.order >= 2 {
+            sh.push(sh2n2(p));
+            sh.push(sh2n1(p));
+            sh.push(sh20(p));
+            sh.push(sh2p1(p));
+            sh.push(sh2p2(p));
+        }
+
+        if self.order >= 3 {
+            sh.push(sh3n3(p));
+            sh.push(sh3n2(p));
+            sh.push(sh3n1(p));
+            sh.push(sh30(p));
+            sh.push(sh3p1(p));
+            sh.push(sh3p2(p));
+            sh.push(sh3p3(p));
+        }
+
+        if self.order >= 4 {
+            for l in 4..=self.order {
+                let l = l as i64;
+                for m in (-l)..=l {
+                    let m = m as i64;
+                    sh.push(real_SH(m, l, p));
+                }
+            }
+        }
+
+        sh
+    }
+
     pub fn new(order: usize) -> Self {
-        let mut sh = Vec::with_capacity(order);
-        // let mut sh_beyond_3 = Vec::with_capacity(order);
-
-        sh.push(sh00::<T> as fn(&Coordinates<T>) -> T);
-
-        if order >= 1 {
-            sh.push(sh1n1::<T> as fn(&Coordinates<T>) -> T);
-            sh.push(sh10::<T> as fn(&Coordinates<T>) -> T);
-            sh.push(sh1p1::<T> as fn(&Coordinates<T>) -> T);
-        }
-
-        if order >= 2 {
-            sh.push(sh2n2::<T> as fn(&Coordinates<T>) -> T);
-            sh.push(sh2n1::<T> as fn(&Coordinates<T>) -> T);
-            sh.push(sh20::<T> as fn(&Coordinates<T>) -> T);
-            sh.push(sh2p1::<T> as fn(&Coordinates<T>) -> T);
-            sh.push(sh2p2::<T> as fn(&Coordinates<T>) -> T);
-        }
-
-        if order >= 3 {
-            sh.push(sh3n3::<T> as fn(&Coordinates<T>) -> T);
-            sh.push(sh3n2::<T> as fn(&Coordinates<T>) -> T);
-            sh.push(sh3n1::<T> as fn(&Coordinates<T>) -> T);
-            sh.push(sh30::<T> as fn(&Coordinates<T>) -> T);
-            sh.push(sh3p1::<T> as fn(&Coordinates<T>) -> T);
-            sh.push(sh3p2::<T> as fn(&Coordinates<T>) -> T);
-            sh.push(sh3p3::<T> as fn(&Coordinates<T>) -> T);
-        }
-
-        // if order >= 4 {
-        //     for l in 4..=order {
-        //         let l = l as i64;
-        //         for m in (-l)..=l {
-        //             let m = m as i64;
-        //             // sh.push((|p| real_SH::<T>(m, l, p)) as fn(&Coordinates<T>) -> T);
-        //             let l_ = l.clone();
-        //             let m_ = m.clone();
-        //             // let bla = move |p| real_SH::<T>(m_, l_, p);
-        //             // fn bla<T>(p: &Coordinates<T>) -> T {
-        //             //     |p| real_SH(m_, l_, p)
-        //             // }
-        //
-        //             let bla = |p| real_SH::<T>(0, 0, p);
-        //             // sh.push(|p| real_SH::<T>(0, 0, p));
-        //             // sh_beyond_3.push(Box::new(bla));
-        //             sh_beyond_3.push(bla as fn(&Coordinates<T>) -> T);
-        //             // sh.push(
-        //             //     (|p| real_SH::<T>(m, l, p))
-        //             //         as for<'r> fn(&'r (dyn Coordinates<T> + 'r)) -> T,
-        //             // );
-        //         }
-        //     }
-        //     unimplemented!()
-        // }
-
+        let n = (0..=order).map(|o| (o + 1) * (o + 2) / 2).sum();
         SphericalHarmonics {
             order,
-            coeffs: Vec::with_capacity(order),
-            sh: sh,
-            // sh_beyond_3: sh_beyond_3,
+            num_sh: n,
+            coeffs: vec![T::one(); n],
         }
     }
 }
