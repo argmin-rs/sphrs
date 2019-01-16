@@ -31,8 +31,8 @@ impl<T> SphericalHarmonics<T>
 where
     T: Float + FromPrimitive + FloatConst,
 {
-    pub fn eval_vec(&self, p: Vec<&Coordinates<T>>) -> Vec<T> {
-        p.iter().map(|&pi| self.eval(pi)).collect()
+    pub fn eval_vec(&self, p: &Vec<impl Coordinates<T>>) -> Vec<T> {
+        p.iter().map(|pi| self.eval(pi)).collect()
     }
 
     pub fn eval(&self, p: &Coordinates<T>) -> T {
@@ -173,6 +173,11 @@ where
             coeffs: vec![T::one(); n],
         }
     }
+
+    pub fn set_coeffs(&mut self, coeffs: Vec<T>) {
+        assert_eq!(coeffs.len(), self.num_sh);
+        self.coeffs = coeffs;
+    }
 }
 
 pub fn sph_mat<T: Float + FromPrimitive + FloatConst>(
@@ -180,7 +185,6 @@ pub fn sph_mat<T: Float + FromPrimitive + FloatConst>(
     pos: &Vec<impl Coordinates<T>>,
 ) -> Array2<T> {
     let sh = SphericalHarmonics::new(order);
-    println!("{:?}", sh.num_sh);
     let mut mat = unsafe { Array2::uninitialized((pos.len(), sh.num_sh)) };
     for i in 0..pos.len() {
         let bla = &pos[i];

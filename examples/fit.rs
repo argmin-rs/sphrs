@@ -7,24 +7,44 @@
 
 //! todo
 
+use ndarray::Array1;
 use ndarray_linalg::Inverse;
 use sphrs::*;
 use std::error::Error;
+use std::f64::consts::PI;
 
 fn run() -> Result<(), Box<Error>> {
-    let mut fu = Vec::with_capacity(10 * 10 * 10);
-    for i in -2..0 {
-        for j in -2..0 {
-            for k in -2..0 {
-                let p = GenCoordinates::cartesian(i as f64, j as f64, k as f64);
-                fu.push(p);
-            }
+    let mut fu = Vec::with_capacity(8 * 8 * 8);
+    // let pos = vec![-1.0f64, -0.75, -0.5, -0.25, 0.25, 0.5, 0.75, 1.0];
+    // for i in &pos {
+    //     for j in &pos {
+    //         for k in &pos {
+    //             let p = GenCoordinates::cartesian(*i, *j, *k);
+    //             fu.push(p);
+    //         }
+    //     }
+    // }
+    let theta = vec![0.0, PI / 4.0, 2.0 * PI / 4.0, 3.0 * PI / 4.0];
+    for i in &theta {
+        for j in &theta {
+            let p = GenCoordinates::spherical(1.0, *i, *j);
+            fu.push(p);
         }
     }
 
-    let bla = sph_mat(1, &fu);
-    println!("{:#?}", bla);
-    println!("{:#?}", bla.t().dot(&bla));
+    let mut target = SphericalHarmonics::new(1);
+    // target.set_coeffs(vec![0.1, 2.0, 8.9, 3.2]);
+
+    let out = Array1::from_vec(target.eval_vec(&fu));
+    // println!("out:\n{:#?}", out);
+
+    let sphm = sph_mat(1, &fu);
+    // println!("{:#?}", sphm);
+    // println!("{:#?}", sphm.t().dot(&sphm));
+    println!("{:#?}", sphm.t().dot(&sphm).inv()?);
+
+    let res = (sphm.t().dot(&sphm).inv()?).dot(&(sphm.t())).dot(&out);
+    println!("res: {:#?}", res);
     Ok(())
 }
 
