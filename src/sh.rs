@@ -266,7 +266,7 @@ pub fn irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 pub fn real_regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
-    p: &impl Coordinates<T>,
+    p: &Coordinates<T>,
 ) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         * p.r().powi(l as i32)
