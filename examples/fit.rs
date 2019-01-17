@@ -15,19 +15,25 @@ use std::f64::consts::PI;
 
 fn run() -> Result<(), Box<Error>> {
     let mut fu = Vec::with_capacity(8 * 8 * 8);
-    // let pos = vec![-1.0f64, -0.75, -0.5, -0.25, 0.25, 0.5, 0.75, 1.0];
-    // for i in &pos {
-    //     for j in &pos {
-    //         for k in &pos {
-    //             let p = GenCoordinates::cartesian(*i, *j, *k);
-    //             fu.push(p);
-    //         }
-    //     }
-    // }
+    let pos = vec![
+        -2.0f64, -1.75, -1.5, -1.25, -1.0, -0.75, -0.5, -0.25, 0.25, 0.5, 0.75, 1.0, 1.25, 1.50,
+        1.75, 2.0,
+    ];
+    // let pos = vec![-0.75, -0.5, -0.25, 0.25, 0.5, 0.75];
+    for i in &pos {
+        for j in &pos {
+            for k in &pos {
+                let p = GenCoordinates::cartesian(*i, *j, *k);
+                println!("{:#?}", p);
+                let p = p.finalize();
+                fu.push(p);
+            }
+        }
+    }
     let theta = vec![0.0, PI / 4.0, 2.0 * PI / 4.0, 3.0 * PI / 4.0];
     for i in &theta {
         for j in &theta {
-            let p = GenCoordinates::spherical(1.0, *i, *j);
+            let p = GenCoordinates::spherical(1.0, *i, *j).finalize();
             fu.push(p);
         }
     }

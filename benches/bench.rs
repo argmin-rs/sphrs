@@ -42,7 +42,7 @@ mod tests {
     #[bench]
     fn full_set(b: &mut Bencher) {
         let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0).finalize();
-        let s: SphericalHarmonics<f64> = SphericalHarmonics::new(3);
+        let s: SphericalHarmonics<f64> = SphericalHarmonics::new(3, RealSHType::Real);
         b.iter(|| {
             black_box(s.eval(&p));
         });
@@ -103,7 +103,7 @@ mod tests {
         let p = p.finalize();
         let fu = vec![p; 10000];
         b.iter(|| {
-            black_box(sph_mat(3, &fu));
+            black_box(sph_mat(3, &fu, RealSHType::Real));
         });
     }
 
@@ -113,7 +113,7 @@ mod tests {
         let p = p.finalize();
         let fu = vec![p; 1000];
         b.iter(|| {
-            black_box(sph_mat(3, &fu));
+            black_box(sph_mat(3, &fu, RealSHType::Real));
         });
     }
 
@@ -123,7 +123,7 @@ mod tests {
         let p = p.finalize();
         let fu = vec![p; 1000];
         b.iter(|| {
-            black_box(sph_mat(4, &fu));
+            black_box(sph_mat(4, &fu, RealSHType::Real));
         });
     }
 
@@ -133,7 +133,7 @@ mod tests {
         let p = p.finalize();
         let fu = vec![p; 1000];
         b.iter(|| {
-            black_box(sph_mat(2, &fu));
+            black_box(sph_mat(2, &fu, RealSHType::Real));
         });
     }
 }

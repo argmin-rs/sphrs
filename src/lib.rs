@@ -30,6 +30,7 @@ pub enum RealSHType {
 }
 
 impl RealSHType {
+    #[inline]
     pub fn eval<T>(&self, l: i64, m: i64, p: &Coordinates<T>) -> T
     where
         T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
@@ -49,7 +50,7 @@ where
     order: usize,
     num_sh: usize,
     coeffs: Vec<T>,
-    sh_type: RealSHType,
+    sh: RealSHType,
 }
 
 impl<'a, T> SphericalHarmonics<T>
@@ -66,7 +67,8 @@ where
         for l in 0..=self.order {
             let l = l as i64;
             for m in -l..=l {
-                res += self.coeffs[j] * self.sh_type.eval(l, m, p);
+                res += self.coeffs[j] * self.sh.eval(l, m, p);
+                // res += self.coeffs[j] * real_regular_solid_SH(l, m, p);
                 j += 1;
             }
         }
@@ -79,7 +81,8 @@ where
         for l in 0..=self.order {
             let l = l as i64;
             for m in -l..=l {
-                res += self.sh_type.eval(l, m, p);
+                res += self.sh.eval(l, m, p);
+                // res += real_regular_solid_SH(l, m, p);
             }
         }
 
@@ -92,7 +95,8 @@ where
         for l in 0..=self.order {
             let l = l as i64;
             for m in -l..=l {
-                sh.push(self.coeffs[j] * self.sh_type.eval(l, m, p));
+                sh.push(self.coeffs[j] * self.sh.eval(l, m, p));
+                // sh.push(self.coeffs[j] * real_regular_solid_SH(l, m, p));
                 j += 1;
             }
         }
@@ -102,10 +106,37 @@ where
 
     pub fn eval_indiv_plain(&self, p: &Coordinates<T>) -> Vec<T> {
         let mut sh = Vec::with_capacity(self.num_sh);
-        for l in 0..=self.order {
+        sh.push(self.sh.eval(0, 0, p));
+
+        if self.order >= 1 {
+            sh.push(self.sh.eval(1, -1, p));
+            sh.push(self.sh.eval(1, 0, p));
+            sh.push(self.sh.eval(1, 1, p));
+        }
+
+        if self.order >= 2 {
+            sh.push(self.sh.eval(2, -2, p));
+            sh.push(self.sh.eval(2, -1, p));
+            sh.push(self.sh.eval(2, 0, p));
+            sh.push(self.sh.eval(2, 1, p));
+            sh.push(self.sh.eval(2, 2, p));
+        }
+
+        if self.order >= 3 {
+            sh.push(self.sh.eval(3, -3, p));
+            sh.push(self.sh.eval(3, -2, p));
+            sh.push(self.sh.eval(3, -1, p));
+            sh.push(self.sh.eval(3, 0, p));
+            sh.push(self.sh.eval(3, 1, p));
+            sh.push(self.sh.eval(3, 2, p));
+            sh.push(self.sh.eval(3, 3, p));
+        }
+
+        for l in 4..=self.order {
             let l = l as i64;
             for m in -l..=l {
-                sh.push(self.sh_type.eval(l, m, p));
+                sh.push(self.sh.eval(l, m, p));
+                // sh.push(real_regular_solid_SH(l, m, p));
             }
         }
 
@@ -119,7 +150,7 @@ where
             order,
             num_sh: n,
             coeffs: vec![T::one(); n],
-            sh_type,
+            sh: sh_type,
         }
     }
 
@@ -149,14 +180,14 @@ mod tests {
     use super::*;
     use std::f64::consts::PI;
 
-    #[test]
-    fn it_works() {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
-        let v = sh10(&p);
-        let bla: SphericalHarmonics<f64> = SphericalHarmonics::new(3);
-        // println!("p: {:?} | v: {}", p, v);
-        assert_eq!(2 + 2, 4);
-    }
+    // #[test]
+    // fn it_works() {
+    //     let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+    //     let v = sh10(&p);
+    //     // let bla: SphericalHarmonics<f64> = SphericalHarmonics::new(3, );
+    //     // println!("p: {:?} | v: {}", p, v);
+    //     assert_eq!(2 + 2, 4);
+    // }
 
     #[test]
     fn comp() {
