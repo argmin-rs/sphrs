@@ -32,13 +32,15 @@ fn run() -> Result<(), Box<Error>> {
         }
     }
 
-    let mut target = SphericalHarmonics::new(1);
+    let sh_type = RealSHType::RealRegularSolid;
+
+    let mut target = SphericalHarmonics::new(1, sh_type);
     // target.set_coeffs(vec![0.1, 2.0, 8.9, 3.2]);
 
     let out = Array1::from_vec(target.eval_vec(&fu));
     // println!("out:\n{:#?}", out);
 
-    let sphm = sph_mat(1, &fu);
+    let sphm = sph_mat(1, &fu, sh_type);
     // println!("{:#?}", sphm);
     // println!("{:#?}", sphm.t().dot(&sphm));
     println!("{:#?}", sphm.t().dot(&sphm).inv()?);
