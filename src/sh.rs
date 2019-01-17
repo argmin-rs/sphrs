@@ -175,7 +175,11 @@ fn P<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, x: T) -> T {
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn SH<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, p: &Coordinates<T>) -> Complex<T> {
+pub fn SH<T: Float + FloatConst + FromPrimitive>(
+    l: i64,
+    m: i64,
+    p: &impl Coordinates<T>,
+) -> Complex<T> {
     let v: T = if m == 0 {
         K::<T>(l, 0) * P(l, m, p.theta_cos())
     } else if m > 0 {
@@ -209,10 +213,34 @@ pub fn real_SH<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, p: &Coordi
 
 #[allow(non_snake_case)]
 #[inline]
+pub fn real_SH_hc<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, p: &Coordinates<T>) -> T {
+    match (l, m) {
+        (0, 0) => sh00(p),
+        (1, -1) => sh1n1(p),
+        (1, 0) => sh10(p),
+        (1, 1) => sh1p1(p),
+        (2, -2) => sh2n2(p),
+        (2, -1) => sh2n1(p),
+        (2, 0) => sh20(p),
+        (2, 1) => sh2p1(p),
+        (2, 2) => sh2p2(p),
+        (3, -3) => sh3n3(p),
+        (3, -2) => sh3n2(p),
+        (3, -1) => sh3n1(p),
+        (3, 0) => sh30(p),
+        (3, 1) => sh3p1(p),
+        (3, 2) => sh3p2(p),
+        (3, 3) => sh3p3(p),
+        _ => real_SH(l, m, p),
+    }
+}
+
+#[allow(non_snake_case)]
+#[inline]
 pub fn regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
-    p: &Coordinates<T>,
+    p: &impl Coordinates<T>,
 ) -> Complex<T> {
     let scaling = ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         * p.r().powi(l as i32);
@@ -225,7 +253,7 @@ pub fn regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 pub fn irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
-    p: &Coordinates<T>,
+    p: &impl Coordinates<T>,
 ) -> Complex<T> {
     let scaling = ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         / p.r().powi((l + 1) as i32);
@@ -238,11 +266,11 @@ pub fn irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 pub fn real_regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
-    p: &Coordinates<T>,
+    p: &impl Coordinates<T>,
 ) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         * p.r().powi(l as i32)
-        * real_SH(l, m, p)
+        * real_SH_hc(l, m, p)
 }
 
 #[allow(non_snake_case)]
@@ -250,9 +278,9 @@ pub fn real_regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 pub fn real_irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
-    p: &Coordinates<T>,
+    p: &impl Coordinates<T>,
 ) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         / p.r().powi(l as i32)
-        * real_SH(l, m, p)
+        * real_SH_hc(l, m, p)
 }
