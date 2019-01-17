@@ -24,19 +24,18 @@ fn run() -> Result<(), Box<Error>> {
         for j in &pos {
             for k in &pos {
                 let p = GenCoordinates::cartesian(*i, *j, *k);
-                println!("{:#?}", p);
                 let p = p.finalize();
                 fu.push(p);
             }
         }
     }
-    let theta = vec![0.0, PI / 4.0, 2.0 * PI / 4.0, 3.0 * PI / 4.0];
-    for i in &theta {
-        for j in &theta {
-            let p = GenCoordinates::spherical(1.0, *i, *j).finalize();
-            fu.push(p);
-        }
-    }
+    // let theta = vec![0.0, PI / 4.0, 2.0 * PI / 4.0, 3.0 * PI / 4.0];
+    // for i in &theta {
+    //     for j in &theta {
+    //         let p = GenCoordinates::spherical(1.0, *i, *j).finalize();
+    //         fu.push(p);
+    //     }
+    // }
 
     let sh_type = RealSHType::RealRegularSolid;
 

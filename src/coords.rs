@@ -157,7 +157,7 @@ where
 
     #[inline]
     fn set_r(&self, r: T) {
-        self.z.set(Some(r));
+        self.r.set(Some(r));
     }
 
     #[inline]
