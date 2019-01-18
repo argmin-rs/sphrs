@@ -37,7 +37,7 @@ fn run() -> Result<(), Box<Error>> {
     //     }
     // }
 
-    let sh_type = SHType::RegularSolid;
+    let sh_type = RealSHType::RegularSolid;
 
     let mut target = RealSphericalHarmonics::new(1, sh_type);
     // target.set_coeffs(vec![0.1, 2.0, 8.9, 3.2]);

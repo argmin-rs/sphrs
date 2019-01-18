@@ -20,25 +20,22 @@ use std::fmt::Debug;
 use std::ops::AddAssign;
 
 #[derive(Clone, Copy)]
-pub enum SHType {
+pub enum RealSHType {
     Standard,
-    // Real,
     RegularSolid,
     IrregularSolid,
-    // RealRegularSolid,
-    // RealIrregularSolid,
 }
 
-impl SHType {
+impl RealSHType {
     #[inline]
     pub fn eval<T>(&self, l: i64, m: i64, p: &Coordinates<T>) -> T
     where
         T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
     {
         match *self {
-            SHType::Standard => real_SH_hc(l, m, p),
-            SHType::RegularSolid => real_regular_solid_SH(l, m, p),
-            SHType::IrregularSolid => real_irregular_solid_SH(l, m, p),
+            RealSHType::Standard => real_SH_hc(l, m, p),
+            RealSHType::RegularSolid => real_regular_solid_SH(l, m, p),
+            RealSHType::IrregularSolid => real_irregular_solid_SH(l, m, p),
         }
     }
 }
@@ -50,7 +47,7 @@ where
     order: usize,
     num_sh: usize,
     coeffs: Vec<T>,
-    sh: SHType,
+    sh: RealSHType,
 }
 
 impl<'a, T> RealSphericalHarmonics<T>
@@ -143,7 +140,7 @@ where
         sh
     }
 
-    pub fn new(order: usize, sh_type: SHType) -> RealSphericalHarmonics<T> {
+    pub fn new(order: usize, sh_type: RealSHType) -> RealSphericalHarmonics<T> {
         let n = (0..=order).map(|o| (2 * o + 1)).sum();
 
         RealSphericalHarmonics {
@@ -163,7 +160,7 @@ where
 pub fn sph_mat<'a, T: 'a + Float + FromPrimitive + FloatConst + AddAssign + Debug>(
     order: usize,
     pos: &Vec<impl Coordinates<T>>,
-    sh_type: SHType,
+    sh_type: RealSHType,
 ) -> Array2<T> {
     let sh = RealSphericalHarmonics::new(order, sh_type);
     let mut mat = unsafe { Array2::uninitialized((pos.len(), sh.num_sh)) };
