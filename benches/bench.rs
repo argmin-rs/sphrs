@@ -21,11 +21,6 @@ mod tests {
     #[bench]
     fn sh_1(b: &mut Bencher) {
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        // let p = Coordinates::spherical(1.0f32, std::f32::consts::PI / 2.0f32, 0.0f32);
-        // black_box(real_SH(2, 1, &p));
-        // let p = Coordinates::cartesian(1.0, 1.0, 0.3);
-        // assert!((real_SH(2, 1, &p) - sh2p1(&p)) < std::f64::EPSILON);
-        // assert!((real_SH(3, -2, &p) - sh3n2(&p)) < std::f64::EPSILON);
         b.iter(|| {
             black_box(real_regular_solid_SH(99, 98, &p));
         });
@@ -35,7 +30,6 @@ mod tests {
     fn k_1(b: &mut Bencher) {
         b.iter(|| {
             black_box(K::<f64>(99, 98));
-            // black_box(K::<f64>(10, 10));
         });
     }
 
@@ -51,11 +45,6 @@ mod tests {
     #[bench]
     fn sh_1_static(b: &mut Bencher) {
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        // let p = Coordinates::spherical(1.0f32, std::f32::consts::PI / 2.0f32, 0.0f32);
-        // black_box(real_SH(2, 1, &p));
-        // let p = Coordinates::cartesian(1.0, 1.0, 0.3);
-        // assert!((real_SH(2, 1, &p) - sh2p1(&p)) < std::f64::EPSILON);
-        // assert!((real_SH(3, -2, &p) - sh3n2(&p)) < std::f64::EPSILON);
         b.iter(|| {
             black_box(sh99p98(&p));
         });
