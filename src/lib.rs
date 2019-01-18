@@ -20,40 +20,40 @@ use std::fmt::Debug;
 use std::ops::AddAssign;
 
 #[derive(Clone, Copy)]
-pub enum RealSHType {
-    // Standard,
-    Real,
-    // RegularSolid,
-    // IrregularSolid,
-    RealRegularSolid,
-    RealIrregularSolid,
+pub enum SHType {
+    Standard,
+    // Real,
+    RegularSolid,
+    IrregularSolid,
+    // RealRegularSolid,
+    // RealIrregularSolid,
 }
 
-impl RealSHType {
+impl SHType {
     #[inline]
     pub fn eval<T>(&self, l: i64, m: i64, p: &Coordinates<T>) -> T
     where
         T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
     {
         match *self {
-            RealSHType::Real => real_SH_hc(l, m, p),
-            RealSHType::RealRegularSolid => real_regular_solid_SH(l, m, p),
-            RealSHType::RealIrregularSolid => real_irregular_solid_SH(l, m, p),
+            SHType::Standard => real_SH_hc(l, m, p),
+            SHType::RegularSolid => real_regular_solid_SH(l, m, p),
+            SHType::IrregularSolid => real_irregular_solid_SH(l, m, p),
         }
     }
 }
 
-pub struct SphericalHarmonics<T>
+pub struct RealSphericalHarmonics<T>
 where
     T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
 {
     order: usize,
     num_sh: usize,
     coeffs: Vec<T>,
-    sh: RealSHType,
+    sh: SHType,
 }
 
-impl<'a, T> SphericalHarmonics<T>
+impl<'a, T> RealSphericalHarmonics<T>
 where
     T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
 {
@@ -143,10 +143,10 @@ where
         sh
     }
 
-    pub fn new(order: usize, sh_type: RealSHType) -> SphericalHarmonics<T> {
+    pub fn new(order: usize, sh_type: SHType) -> RealSphericalHarmonics<T> {
         let n = (0..=order).map(|o| (2 * o + 1)).sum();
 
-        SphericalHarmonics {
+        RealSphericalHarmonics {
             order,
             num_sh: n,
             coeffs: vec![T::one(); n],
@@ -163,9 +163,9 @@ where
 pub fn sph_mat<'a, T: 'a + Float + FromPrimitive + FloatConst + AddAssign + Debug>(
     order: usize,
     pos: &Vec<impl Coordinates<T>>,
-    sh_type: RealSHType,
+    sh_type: SHType,
 ) -> Array2<T> {
-    let sh = SphericalHarmonics::new(order, sh_type);
+    let sh = RealSphericalHarmonics::new(order, sh_type);
     let mut mat = unsafe { Array2::uninitialized((pos.len(), sh.num_sh)) };
     for i in 0..pos.len() {
         let bla = &pos[i];
