@@ -9,7 +9,7 @@ use num::{Float, FromPrimitive};
 use num_traits::FloatConst;
 use std::cell::Cell;
 
-pub trait Coordinates<T>
+pub trait SHCoordinates<T>
 where
     T: Float + FloatConst + FromPrimitive,
 {
@@ -26,7 +26,7 @@ where
 }
 
 #[derive(Default, Clone, Debug)]
-pub struct GenCoordinates<T>
+pub struct Coordinates<T>
 where
     T: Float + FloatConst + FromPrimitive,
 {
@@ -40,7 +40,7 @@ where
 }
 
 #[derive(Default, Clone, Debug)]
-pub struct GenCoordinatesFinal<T>
+pub struct CoordinatesFinal<T>
 where
     T: Float + FloatConst + FromPrimitive,
 {
@@ -53,12 +53,12 @@ where
     theta_cos: T,
 }
 
-impl<T> GenCoordinates<T>
+impl<T> Coordinates<T>
 where
     T: Float + FloatConst + FromPrimitive,
 {
     pub fn cartesian(x: T, y: T, z: T) -> Self {
-        GenCoordinates {
+        Coordinates {
             r: Cell::new(None),
             theta: Cell::new(None),
             phi: Cell::new(None),
@@ -70,7 +70,7 @@ where
     }
 
     pub fn spherical(r: T, theta: T, phi: T) -> Self {
-        GenCoordinates {
+        Coordinates {
             r: Cell::new(Some(r)),
             theta: Cell::new(Some(theta)),
             phi: Cell::new(Some(phi)),
@@ -81,7 +81,7 @@ where
         }
     }
 
-    pub fn finalize(&self) -> GenCoordinatesFinal<T> {
+    pub fn finalize(&self) -> CoordinatesFinal<T> {
         if self.r.get().is_some() {
             self.x();
             self.y();
@@ -94,7 +94,7 @@ where
 
         self.theta_cos();
 
-        GenCoordinatesFinal {
+        CoordinatesFinal {
             r: self.get_r(),
             theta: self.get_theta(),
             phi: self.get_phi(),
@@ -176,7 +176,7 @@ where
     }
 }
 
-impl<T> Coordinates<T> for GenCoordinates<T>
+impl<T> SHCoordinates<T> for Coordinates<T>
 where
     T: Float + FloatConst + FromPrimitive,
 {
@@ -260,7 +260,7 @@ where
     }
 }
 
-impl<T> Coordinates<T> for GenCoordinatesFinal<T>
+impl<T> SHCoordinates<T> for CoordinatesFinal<T>
 where
     T: Float + FloatConst + FromPrimitive,
 {

@@ -28,7 +28,7 @@ pub enum RealSHType {
 
 impl RealSHType {
     #[inline]
-    pub fn eval<T>(&self, l: i64, m: i64, p: &Coordinates<T>) -> T
+    pub fn eval<T>(&self, l: i64, m: i64, p: &SHCoordinates<T>) -> T
     where
         T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
     {
@@ -54,11 +54,11 @@ impl<'a, T> RealSphericalHarmonics<T>
 where
     T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
 {
-    pub fn eval_vec(&self, p: &Vec<impl Coordinates<T>>) -> Vec<T> {
+    pub fn eval_vec(&self, p: &Vec<impl SHCoordinates<T>>) -> Vec<T> {
         p.iter().map(|pi| self.eval(pi)).collect()
     }
 
-    pub fn eval(&self, p: &Coordinates<T>) -> T {
+    pub fn eval(&self, p: &SHCoordinates<T>) -> T {
         let mut res = T::zero();
         let mut j = 0;
         for l in 0..=self.order {
@@ -73,7 +73,7 @@ where
         res
     }
 
-    pub fn eval_plain(&self, p: &Coordinates<T>) -> T {
+    pub fn eval_plain(&self, p: &SHCoordinates<T>) -> T {
         let mut res = T::zero();
         for l in 0..=self.order {
             let l = l as i64;
@@ -86,7 +86,7 @@ where
         res
     }
 
-    pub fn eval_indiv(&self, p: &Coordinates<T>) -> Vec<T> {
+    pub fn eval_indiv(&self, p: &SHCoordinates<T>) -> Vec<T> {
         let mut sh = Vec::with_capacity(self.num_sh);
         let mut j = 0;
         for l in 0..=self.order {
@@ -101,7 +101,7 @@ where
         sh
     }
 
-    pub fn eval_indiv_plain(&self, p: &Coordinates<T>) -> Vec<T> {
+    pub fn eval_indiv_plain(&self, p: &SHCoordinates<T>) -> Vec<T> {
         let mut sh = Vec::with_capacity(self.num_sh);
         sh.push(self.sh.eval(0, 0, p));
 
@@ -159,7 +159,7 @@ where
 
 pub fn sph_mat<'a, T: 'a + Float + FromPrimitive + FloatConst + AddAssign + Debug>(
     order: usize,
-    pos: &Vec<impl Coordinates<T>>,
+    pos: &Vec<impl SHCoordinates<T>>,
     sh_type: RealSHType,
 ) -> Array2<T> {
     let sh = RealSphericalHarmonics::new(order, sh_type);
@@ -179,7 +179,7 @@ mod tests {
 
     // #[test]
     // fn it_works() {
-    //     let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+    //     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
     //     let v = sh10(&p);
     //     // let bla: SphericalHarmonics<f64> = SphericalHarmonics::new(3, );
     //     // println!("p: {:?} | v: {}", p, v);
@@ -188,17 +188,17 @@ mod tests {
 
     #[test]
     fn comp() {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
-        // let p = GenCoordinates::cartesian(1.0, 1.0, 0.3);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        // let p = Coordinates::cartesian(1.0, 1.0, 0.3);
         assert!((real_SH(2, 1, &p) - sh2p1(&p)) < std::f64::EPSILON);
         assert!((real_SH(3, -2, &p) - sh3n2(&p)) < std::f64::EPSILON);
     }
 
     // #[test]
     // fn sph_mat_test() {
-    //     let p1 = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+    //     let p1 = Coordinates::spherical(1.0, PI / 2.0, 0.0);
     //     let p1 = p1.finalize();
-    //     let p2 = GenCoordinates::spherical(0.7, PI / 4.0, 0.0);
+    //     let p2 = Coordinates::spherical(0.7, PI / 4.0, 0.0);
     //     let p2 = p2.finalize();
     //     let fu = vec![&p1, &p2];
     //     let bla = sph_mat(1, &fu);

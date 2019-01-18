@@ -20,10 +20,10 @@ mod tests {
 
     #[bench]
     fn sh_1(b: &mut Bencher) {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
-        // let p = GenCoordinates::spherical(1.0f32, std::f32::consts::PI / 2.0f32, 0.0f32);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        // let p = Coordinates::spherical(1.0f32, std::f32::consts::PI / 2.0f32, 0.0f32);
         // black_box(real_SH(2, 1, &p));
-        // let p = GenCoordinates::cartesian(1.0, 1.0, 0.3);
+        // let p = Coordinates::cartesian(1.0, 1.0, 0.3);
         // assert!((real_SH(2, 1, &p) - sh2p1(&p)) < std::f64::EPSILON);
         // assert!((real_SH(3, -2, &p) - sh3n2(&p)) < std::f64::EPSILON);
         b.iter(|| {
@@ -41,8 +41,8 @@ mod tests {
 
     #[bench]
     fn full_set(b: &mut Bencher) {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0).finalize();
-        let s: SphericalHarmonics<f64> = SphericalHarmonics::new(3, RealSHType::Real);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0).finalize();
+        let s: RealSphericalHarmonics<f64> = RealSphericalHarmonics::new(3, RealSHType::Standard);
         b.iter(|| {
             black_box(s.eval(&p));
         });
@@ -50,10 +50,10 @@ mod tests {
 
     #[bench]
     fn sh_1_static(b: &mut Bencher) {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
-        // let p = GenCoordinates::spherical(1.0f32, std::f32::consts::PI / 2.0f32, 0.0f32);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        // let p = Coordinates::spherical(1.0f32, std::f32::consts::PI / 2.0f32, 0.0f32);
         // black_box(real_SH(2, 1, &p));
-        // let p = GenCoordinates::cartesian(1.0, 1.0, 0.3);
+        // let p = Coordinates::cartesian(1.0, 1.0, 0.3);
         // assert!((real_SH(2, 1, &p) - sh2p1(&p)) < std::f64::EPSILON);
         // assert!((real_SH(3, -2, &p) - sh3n2(&p)) < std::f64::EPSILON);
         b.iter(|| {
@@ -63,7 +63,7 @@ mod tests {
 
     #[bench]
     fn sh2p1_gen(b: &mut Bencher) {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         let p = p.finalize();
         b.iter(|| {
             black_box(real_regular_solid_SH(2, 1, &p));
@@ -72,7 +72,7 @@ mod tests {
 
     #[bench]
     fn sh2p1_hc(b: &mut Bencher) {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         let p = p.finalize();
         b.iter(|| {
             black_box(sh2p1(&p));
@@ -81,7 +81,7 @@ mod tests {
 
     #[bench]
     fn sh3p3_gen(b: &mut Bencher) {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         let p = p.finalize();
         b.iter(|| {
             black_box(real_regular_solid_SH(3, 3, &p));
@@ -90,7 +90,7 @@ mod tests {
 
     #[bench]
     fn sh3p3_hc(b: &mut Bencher) {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         let p = p.finalize();
         b.iter(|| {
             black_box(sh3p3(&p));
@@ -99,41 +99,41 @@ mod tests {
 
     #[bench]
     fn sph_mat_1(b: &mut Bencher) {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         let p = p.finalize();
         let fu = vec![p; 10000];
         b.iter(|| {
-            black_box(sph_mat(3, &fu, RealSHType::Real));
+            black_box(sph_mat(3, &fu, RealSHType::Standard));
         });
     }
 
     #[bench]
     fn sph_mat_2(b: &mut Bencher) {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         let p = p.finalize();
         let fu = vec![p; 1000];
         b.iter(|| {
-            black_box(sph_mat(3, &fu, RealSHType::Real));
+            black_box(sph_mat(3, &fu, RealSHType::Standard));
         });
     }
 
     #[bench]
     fn sph_mat_3(b: &mut Bencher) {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         let p = p.finalize();
         let fu = vec![p; 1000];
         b.iter(|| {
-            black_box(sph_mat(4, &fu, RealSHType::Real));
+            black_box(sph_mat(4, &fu, RealSHType::Standard));
         });
     }
 
     #[bench]
     fn sph_mat_4(b: &mut Bencher) {
-        let p = GenCoordinates::spherical(1.0, PI / 2.0, 0.0);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         let p = p.finalize();
         let fu = vec![p; 1000];
         b.iter(|| {
-            black_box(sph_mat(2, &fu, RealSHType::Real));
+            black_box(sph_mat(2, &fu, RealSHType::Standard));
         });
     }
 }

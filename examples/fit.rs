@@ -23,7 +23,7 @@ fn run() -> Result<(), Box<Error>> {
     for i in &pos {
         for j in &pos {
             for k in &pos {
-                let p = GenCoordinates::cartesian(*i, *j, *k);
+                let p = Coordinates::cartesian(*i, *j, *k);
                 let p = p.finalize();
                 fu.push(p);
             }
@@ -32,7 +32,7 @@ fn run() -> Result<(), Box<Error>> {
     // let theta = vec![0.0, PI / 4.0, 2.0 * PI / 4.0, 3.0 * PI / 4.0];
     // for i in &theta {
     //     for j in &theta {
-    //         let p = GenCoordinates::spherical(1.0, *i, *j).finalize();
+    //         let p = Coordinates::spherical(1.0, *i, *j).finalize();
     //         fu.push(p);
     //     }
     // }
