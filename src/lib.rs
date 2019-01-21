@@ -42,7 +42,7 @@ impl RealSHType {
 
 pub struct RealSphericalHarmonics<T>
 where
-    T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
+    T: Float + FromPrimitive + FloatConst + AddAssign + std::iter::Sum + Debug,
 {
     order: usize,
     num_sh: usize,
@@ -52,55 +52,33 @@ where
 
 impl<'a, T> RealSphericalHarmonics<T>
 where
-    T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
+    T: Float + FromPrimitive + FloatConst + AddAssign + std::iter::Sum + Debug,
 {
+    #[inline]
     pub fn eval_vec(&self, p: &Vec<impl SHCoordinates<T>>) -> Vec<T> {
         p.iter().map(|pi| self.eval(pi)).collect()
     }
 
+    #[inline]
     pub fn eval(&self, p: &SHCoordinates<T>) -> T {
-        let mut res = T::zero();
-        let mut j = 0;
-        for l in 0..=self.order {
-            let l = l as i64;
-            for m in -l..=l {
-                res += self.coeffs[j] * self.sh.eval(l, m, p);
-                // res += self.coeffs[j] * real_regular_solid_SH(l, m, p);
-                j += 1;
-            }
-        }
-
-        res
+        self.eval_indiv(p).into_iter().sum()
     }
 
+    #[inline]
     pub fn eval_plain(&self, p: &SHCoordinates<T>) -> T {
-        let mut res = T::zero();
-        for l in 0..=self.order {
-            let l = l as i64;
-            for m in -l..=l {
-                res += self.sh.eval(l, m, p);
-                // res += real_regular_solid_SH(l, m, p);
-            }
-        }
-
-        res
+        self.eval_indiv_plain(p).into_iter().sum()
     }
 
+    #[inline]
     pub fn eval_indiv(&self, p: &SHCoordinates<T>) -> Vec<T> {
-        let mut sh = Vec::with_capacity(self.num_sh);
-        let mut j = 0;
-        for l in 0..=self.order {
-            let l = l as i64;
-            for m in -l..=l {
-                sh.push(self.coeffs[j] * self.sh.eval(l, m, p));
-                // sh.push(self.coeffs[j] * real_regular_solid_SH(l, m, p));
-                j += 1;
-            }
-        }
-
-        sh
+        self.eval_indiv_plain(p)
+            .iter()
+            .zip(self.coeffs.iter())
+            .map(|(&a, &b)| a * b)
+            .collect()
     }
 
+    #[inline]
     pub fn eval_indiv_plain(&self, p: &SHCoordinates<T>) -> Vec<T> {
         let mut sh = Vec::with_capacity(self.num_sh);
         sh.push(self.sh.eval(0, 0, p));
@@ -129,11 +107,36 @@ where
             sh.push(self.sh.eval(3, 3, p));
         }
 
-        for l in 4..=self.order {
+        if self.order >= 4 {
+            sh.push(self.sh.eval(4, -4, p));
+            sh.push(self.sh.eval(4, -3, p));
+            sh.push(self.sh.eval(4, -2, p));
+            sh.push(self.sh.eval(4, -1, p));
+            sh.push(self.sh.eval(4, 0, p));
+            sh.push(self.sh.eval(4, 1, p));
+            sh.push(self.sh.eval(4, 2, p));
+            sh.push(self.sh.eval(4, 3, p));
+            sh.push(self.sh.eval(4, 4, p));
+        }
+
+        if self.order >= 5 {
+            sh.push(self.sh.eval(5, -5, p));
+            sh.push(self.sh.eval(5, -4, p));
+            sh.push(self.sh.eval(5, -3, p));
+            sh.push(self.sh.eval(5, -2, p));
+            sh.push(self.sh.eval(5, -1, p));
+            sh.push(self.sh.eval(5, 0, p));
+            sh.push(self.sh.eval(5, 1, p));
+            sh.push(self.sh.eval(5, 2, p));
+            sh.push(self.sh.eval(5, 3, p));
+            sh.push(self.sh.eval(5, 4, p));
+            sh.push(self.sh.eval(5, 5, p));
+        }
+
+        for l in 6..=self.order {
             let l = l as i64;
             for m in -l..=l {
                 sh.push(self.sh.eval(l, m, p));
-                // sh.push(real_regular_solid_SH(l, m, p));
             }
         }
 
@@ -157,7 +160,10 @@ where
     }
 }
 
-pub fn sph_mat<'a, T: 'a + Float + FromPrimitive + FloatConst + AddAssign + Debug>(
+pub fn sph_mat<
+    'a,
+    T: 'a + Float + FromPrimitive + FloatConst + AddAssign + std::iter::Sum + Debug,
+>(
     order: usize,
     pos: &Vec<impl SHCoordinates<T>>,
     sh_type: RealSHType,
