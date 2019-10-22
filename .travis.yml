@@ -3,10 +3,10 @@ rust:
         - stable
         - beta
         - nightly
-matrix:
-        allow_failures:
-                - rust: stable
-                - rust: beta
+# matrix:
+#         allow_failures:
+#                 - rust: stable
+#                 - rust: beta
 cache: cargo
 script:
         - cargo build --verbose --all
