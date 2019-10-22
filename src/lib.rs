@@ -7,6 +7,8 @@
 
 //! todo
 
+extern crate openblas_src;
+
 pub mod coords;
 pub mod sh;
 
