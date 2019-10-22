@@ -28,7 +28,7 @@ pub enum RealSHType {
 
 impl RealSHType {
     #[inline]
-    pub fn eval<T>(&self, l: i64, m: i64, p: &SHCoordinates<T>) -> T
+    pub fn eval<T>(&self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T
     where
         T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
     {
@@ -60,17 +60,17 @@ where
     }
 
     #[inline]
-    pub fn eval(&self, p: &SHCoordinates<T>) -> T {
+    pub fn eval(&self, p: &dyn SHCoordinates<T>) -> T {
         self.eval_indiv(p).into_iter().sum()
     }
 
     #[inline]
-    pub fn eval_plain(&self, p: &SHCoordinates<T>) -> T {
+    pub fn eval_plain(&self, p: &dyn SHCoordinates<T>) -> T {
         self.eval_indiv_plain(p).into_iter().sum()
     }
 
     #[inline]
-    pub fn eval_indiv(&self, p: &SHCoordinates<T>) -> Vec<T> {
+    pub fn eval_indiv(&self, p: &dyn SHCoordinates<T>) -> Vec<T> {
         self.eval_indiv_plain(p)
             .iter()
             .zip(self.coeffs.iter())
@@ -79,7 +79,7 @@ where
     }
 
     #[inline]
-    pub fn eval_indiv_plain(&self, p: &SHCoordinates<T>) -> Vec<T> {
+    pub fn eval_indiv_plain(&self, p: &dyn SHCoordinates<T>) -> Vec<T> {
         let mut sh = Vec::with_capacity(self.num_sh);
         sh.push(self.sh.eval(0, 0, p));
 
@@ -173,7 +173,7 @@ pub fn sph_mat<
     for i in 0..pos.len() {
         let bla = &pos[i];
         mat.slice_mut(s![i, ..])
-            .assign(&Array1::from_vec(sh.eval_indiv_plain(bla)));
+            .assign(&Array1::from(sh.eval_indiv_plain(bla)));
     }
     mat
 }

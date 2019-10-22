@@ -11,9 +11,9 @@ use ndarray::Array1;
 use ndarray_linalg::Inverse;
 use sphrs::*;
 use std::error::Error;
-use std::f64::consts::PI;
+// use std::f64::consts::PI;
 
-fn run() -> Result<(), Box<Error>> {
+fn run() -> Result<(), Box<dyn Error>> {
     let mut fu = Vec::with_capacity(8 * 8 * 8);
     let pos = vec![
         -2.0f64, -1.75, -1.5, -1.25, -1.0, -0.75, -0.5, -0.25, 0.25, 0.5, 0.75, 1.0, 1.25, 1.50,
@@ -39,10 +39,10 @@ fn run() -> Result<(), Box<Error>> {
 
     let sh_type = RealSHType::RegularSolid;
 
-    let mut target = RealSphericalHarmonics::new(1, sh_type);
+    let target = RealSphericalHarmonics::new(1, sh_type);
     // target.set_coeffs(vec![0.1, 2.0, 8.9, 3.2]);
 
-    let out = Array1::from_vec(target.eval_vec(&fu));
+    let out = Array1::from(target.eval_vec(&fu));
     // println!("out:\n{:#?}", out);
 
     let sphm = sph_mat(1, &fu, sh_type);
