@@ -1,6 +1,8 @@
-[![Build Status](https://travis-ci.org/stefan-k/sphrs.svg?branch=master)](https://travis-ci.org/stefan-k/sphrs)
+[![Build Status](https://travis-ci.org/argmin-rs/sphrs.svg?branch=master)](https://travis-ci.org/argmin-rs/sphrs)
 
 # sphrs (WIP)
+
+Work in progress spherical harmonics library.
 
 [Documentation](https://stefan-k.github.io/sphrs/sphrs/).
 
