@@ -22,5 +22,5 @@ num = "0.2.0"
 num-complex = "0.2.1"
 num-traits = "0.2"
 ndarray = "0.13"
-ndarray-linalg = { version = "0.12", features = ["openblas"] }
+ndarray-linalg = { version = "0.12" }
 openblas-src = { version = "0.7" }
