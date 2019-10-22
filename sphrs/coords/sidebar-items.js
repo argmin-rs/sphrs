@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Coordinates",""],["CoordinatesFinal",""]],"trait":[["SHCoordinates",""]]});
