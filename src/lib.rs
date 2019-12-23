@@ -30,11 +30,11 @@ pub enum RealSHType {
 
 impl RealSHType {
     #[inline]
-    pub fn eval<T>(&self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T
+    pub fn eval<T>(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T
     where
         T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
     {
-        match *self {
+        match self {
             RealSHType::Standard => real_SH_hc(l, m, p),
             RealSHType::RegularSolid => real_regular_solid_SH(l, m, p),
             RealSHType::IrregularSolid => real_irregular_solid_SH(l, m, p),
@@ -57,7 +57,7 @@ where
     T: Float + FromPrimitive + FloatConst + AddAssign + std::iter::Sum + Debug,
 {
     #[inline]
-    pub fn eval_vec(&self, p: &Vec<impl SHCoordinates<T>>) -> Vec<T> {
+    pub fn eval_vec(&self, p: &[impl SHCoordinates<T>]) -> Vec<T> {
         p.iter().map(|pi| self.eval(pi)).collect()
     }
 
@@ -167,15 +167,14 @@ pub fn sph_mat<
     T: 'a + Float + FromPrimitive + FloatConst + AddAssign + std::iter::Sum + Debug,
 >(
     order: usize,
-    pos: &Vec<impl SHCoordinates<T>>,
+    pos: &[impl SHCoordinates<T>],
     sh_type: RealSHType,
 ) -> Array2<T> {
     let sh = RealSphericalHarmonics::new(order, sh_type);
     let mut mat = unsafe { Array2::uninitialized((pos.len(), sh.num_sh)) };
-    for i in 0..pos.len() {
-        let bla = &pos[i];
+    for (i, item) in pos.iter().enumerate() {
         mat.slice_mut(s![i, ..])
-            .assign(&Array1::from(sh.eval_indiv_plain(bla)));
+            .assign(&Array1::from(sh.eval_indiv_plain(item)));
     }
     mat
 }

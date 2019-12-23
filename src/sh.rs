@@ -5,6 +5,10 @@
 // http://opensource.org/licenses/MIT>, at your option. This file may not be
 // copied, modified, or distributed except according to those terms.
 
+// Allow comparison chains because benchmarking shows that they are much faster than match
+// expressions.
+#![allow(clippy::comparison_chain)]
+
 use crate::coords::*;
 use num::{Float, FromPrimitive};
 use num_complex::Complex;
@@ -125,7 +129,7 @@ pub fn sh99p98<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) 
 
 #[inline]
 fn factorial(n: i64) -> i64 {
-    (1..=n).fold(1, |acc, x| acc * x)
+    (1..=n).product()
 }
 
 #[allow(non_snake_case)]
@@ -195,7 +199,11 @@ pub fn SH<T: Float + FloatConst + FromPrimitive>(
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn real_SH<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
+pub fn real_SH<T: Float + FloatConst + FromPrimitive>(
+    l: i64,
+    m: i64,
+    p: &dyn SHCoordinates<T>,
+) -> T {
     if m == 0 {
         K::<T>(l, 0) * P(l, m, p.theta_cos())
     } else if m > 0 {
