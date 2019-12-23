@@ -1,4 +1,4 @@
-// Copyright 2018 Stefan Kroboth
+// Copyright 2018-2020 Stefan Kroboth
 //
 // Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
 // http://apache.org/licenses/LICENSE-2.0> or the MIT license <LICENSE-MIT or
@@ -14,9 +14,7 @@ pub mod sh;
 
 pub use crate::coords::*;
 pub use crate::sh::*;
-// use ndarray::{s, Array1, Array2};
 use num::{Float, FromPrimitive};
-// use num_complex::Complex;
 use num_traits::float::FloatConst;
 use std::fmt::Debug;
 use std::ops::AddAssign;
@@ -162,6 +160,7 @@ where
     }
 }
 
+// use ndarray::{s, Array1, Array2};
 // pub fn sph_mat<
 //     'a,
 //     T: 'a + Float + FromPrimitive + FloatConst + AddAssign + std::iter::Sum + Debug,
