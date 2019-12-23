@@ -5,59 +5,57 @@
 // http://opensource.org/licenses/MIT>, at your option. This file may not be
 // copied, modified, or distributed except according to those terms.
 
-//! todo
-
-use ndarray::Array1;
-use ndarray_linalg::Inverse;
-use sphrs::*;
-use std::error::Error;
-// use std::f64::consts::PI;
-
-fn run() -> Result<(), Box<dyn Error>> {
-    let mut fu = Vec::with_capacity(8 * 8 * 8);
-    let pos = vec![
-        -2.0f64, -1.75, -1.5, -1.25, -1.0, -0.75, -0.5, -0.25, 0.25, 0.5, 0.75, 1.0, 1.25, 1.50,
-        1.75, 2.0,
-    ];
-    // let pos = vec![-0.75, -0.5, -0.25, 0.25, 0.5, 0.75];
-    for i in &pos {
-        for j in &pos {
-            for k in &pos {
-                let p = Coordinates::cartesian(*i, *j, *k);
-                let p = p.finalize();
-                fu.push(p);
-            }
-        }
-    }
-    // let theta = vec![0.0, PI / 4.0, 2.0 * PI / 4.0, 3.0 * PI / 4.0];
-    // for i in &theta {
-    //     for j in &theta {
-    //         let p = Coordinates::spherical(1.0, *i, *j).finalize();
-    //         fu.push(p);
-    //     }
-    // }
-
-    let sh_type = RealSHType::RegularSolid;
-
-    let target = RealSphericalHarmonics::new(1, sh_type);
-    // target.set_coeffs(vec![0.1, 2.0, 8.9, 3.2]);
-
-    let out = Array1::from(target.eval_vec(&fu));
-    // println!("out:\n{:#?}", out);
-
-    let sphm = sph_mat(1, &fu, sh_type);
-    // println!("{:#?}", sphm);
-    // println!("{:#?}", sphm.t().dot(&sphm));
-    println!("{:#?}", sphm.t().dot(&sphm).inv()?);
-
-    let res = (sphm.t().dot(&sphm).inv()?).dot(&(sphm.t())).dot(&out);
-    println!("res: {:#?}", res);
-    Ok(())
-}
-
+// use ndarray::Array1;
+// use ndarray_linalg::Inverse;
+// use sphrs::*;
+// use std::error::Error;
+// // use std::f64::consts::PI;
+//
+// fn run() -> Result<(), Box<dyn Error>> {
+//     let mut fu = Vec::with_capacity(8 * 8 * 8);
+//     let pos = vec![
+//         -2.0f64, -1.75, -1.5, -1.25, -1.0, -0.75, -0.5, -0.25, 0.25, 0.5, 0.75, 1.0, 1.25, 1.50,
+//         1.75, 2.0,
+//     ];
+//     // let pos = vec![-0.75, -0.5, -0.25, 0.25, 0.5, 0.75];
+//     for i in &pos {
+//         for j in &pos {
+//             for k in &pos {
+//                 let p = Coordinates::cartesian(*i, *j, *k);
+//                 let p = p.finalize();
+//                 fu.push(p);
+//             }
+//         }
+//     }
+//     // let theta = vec![0.0, PI / 4.0, 2.0 * PI / 4.0, 3.0 * PI / 4.0];
+//     // for i in &theta {
+//     //     for j in &theta {
+//     //         let p = Coordinates::spherical(1.0, *i, *j).finalize();
+//     //         fu.push(p);
+//     //     }
+//     // }
+//
+//     let sh_type = RealSHType::RegularSolid;
+//
+//     let target = RealSphericalHarmonics::new(1, sh_type);
+//     // target.set_coeffs(vec![0.1, 2.0, 8.9, 3.2]);
+//
+//     let out = Array1::from(target.eval_vec(&fu));
+//     // println!("out:\n{:#?}", out);
+//
+//     let sphm = sph_mat(1, &fu, sh_type);
+//     // println!("{:#?}", sphm);
+//     // println!("{:#?}", sphm.t().dot(&sphm));
+//     println!("{:#?}", sphm.t().dot(&sphm).inv()?);
+//
+//     let res = (sphm.t().dot(&sphm).inv()?).dot(&(sphm.t())).dot(&out);
+//     println!("res: {:#?}", res);
+//     Ok(())
+// }
+//
 fn main() {
-    if let Err(ref e) = run() {
-        println!("{}", e);
-        std::process::exit(1);
-    }
+    // if let Err(ref e) = run() {
+    //     println!("{}", e);
+    //     std::process::exit(1);
+    // }
 }

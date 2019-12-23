@@ -7,14 +7,14 @@
 
 //! todo
 
-extern crate openblas_src;
+// extern crate openblas_src;
 
 pub mod coords;
 pub mod sh;
 
 pub use crate::coords::*;
 pub use crate::sh::*;
-use ndarray::{s, Array1, Array2};
+// use ndarray::{s, Array1, Array2};
 use num::{Float, FromPrimitive};
 // use num_complex::Complex;
 use num_traits::float::FloatConst;
@@ -162,22 +162,22 @@ where
     }
 }
 
-pub fn sph_mat<
-    'a,
-    T: 'a + Float + FromPrimitive + FloatConst + AddAssign + std::iter::Sum + Debug,
->(
-    order: usize,
-    pos: &[impl SHCoordinates<T>],
-    sh_type: RealSHType,
-) -> Array2<T> {
-    let sh = RealSphericalHarmonics::new(order, sh_type);
-    let mut mat = unsafe { Array2::uninitialized((pos.len(), sh.num_sh)) };
-    for (i, item) in pos.iter().enumerate() {
-        mat.slice_mut(s![i, ..])
-            .assign(&Array1::from(sh.eval_indiv_plain(item)));
-    }
-    mat
-}
+// pub fn sph_mat<
+//     'a,
+//     T: 'a + Float + FromPrimitive + FloatConst + AddAssign + std::iter::Sum + Debug,
+// >(
+//     order: usize,
+//     pos: &[impl SHCoordinates<T>],
+//     sh_type: RealSHType,
+// ) -> Array2<T> {
+//     let sh = RealSphericalHarmonics::new(order, sh_type);
+//     let mut mat = unsafe { Array2::uninitialized((pos.len(), sh.num_sh)) };
+//     for (i, item) in pos.iter().enumerate() {
+//         mat.slice_mut(s![i, ..])
+//             .assign(&Array1::from(sh.eval_indiv_plain(item)));
+//     }
+//     mat
+// }
 
 #[cfg(test)]
 mod tests {

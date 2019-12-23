@@ -86,45 +86,45 @@ mod tests {
         });
     }
 
-    #[bench]
-    fn sph_mat_1(b: &mut Bencher) {
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        let p = p.finalize();
-        let fu = vec![p; 10000];
-        b.iter(|| {
-            black_box(sph_mat(3, &fu, RealSHType::Standard));
-        });
-    }
-
-    #[bench]
-    fn sph_mat_2(b: &mut Bencher) {
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        let p = p.finalize();
-        let fu = vec![p; 1000];
-        b.iter(|| {
-            black_box(sph_mat(3, &fu, RealSHType::Standard));
-        });
-    }
-
-    #[bench]
-    fn sph_mat_3(b: &mut Bencher) {
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        let p = p.finalize();
-        let fu = vec![p; 10000];
-        b.iter(|| {
-            black_box(sph_mat(4, &fu, RealSHType::Standard));
-        });
-    }
-
-    #[bench]
-    fn sph_mat_4(b: &mut Bencher) {
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        let p = p.finalize();
-        let fu = vec![p; 1000];
-        b.iter(|| {
-            black_box(sph_mat(4, &fu, RealSHType::Standard));
-        });
-    }
+    // #[bench]
+    // fn sph_mat_1(b: &mut Bencher) {
+    //     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+    //     let p = p.finalize();
+    //     let fu = vec![p; 10000];
+    //     b.iter(|| {
+    //         black_box(sph_mat(3, &fu, RealSHType::Standard));
+    //     });
+    // }
+    //
+    // #[bench]
+    // fn sph_mat_2(b: &mut Bencher) {
+    //     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+    //     let p = p.finalize();
+    //     let fu = vec![p; 1000];
+    //     b.iter(|| {
+    //         black_box(sph_mat(3, &fu, RealSHType::Standard));
+    //     });
+    // }
+    //
+    // #[bench]
+    // fn sph_mat_3(b: &mut Bencher) {
+    //     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+    //     let p = p.finalize();
+    //     let fu = vec![p; 10000];
+    //     b.iter(|| {
+    //         black_box(sph_mat(4, &fu, RealSHType::Standard));
+    //     });
+    // }
+    //
+    // #[bench]
+    // fn sph_mat_4(b: &mut Bencher) {
+    //     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+    //     let p = p.finalize();
+    //     let fu = vec![p; 1000];
+    //     b.iter(|| {
+    //         black_box(sph_mat(4, &fu, RealSHType::Standard));
+    //     });
+    // }
 
     // #[bench]
     // fn sph_mat_5(b: &mut Bencher) {
