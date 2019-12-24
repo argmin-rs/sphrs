@@ -19,15 +19,15 @@ pub fn sh00<T: Float + FloatConst + FromPrimitive>(_p: &dyn SHCoordinates<T>) ->
 }
 
 pub fn sh1n1<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
-    (T::from_f64(3.0 / 4.0).unwrap() * T::FRAC_1_PI()).sqrt() * p.y() / p.r()
+    (T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.y() / p.r()
 }
 
 pub fn sh10<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
-    (T::from_f64(3.0 / 4.0).unwrap() * T::FRAC_1_PI()).sqrt() * p.z() / p.r()
+    (T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.z() / p.r()
 }
 
 pub fn sh1p1<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
-    (T::from_f64(3.0 / 4.0).unwrap() * T::FRAC_1_PI()).sqrt() * p.x() / p.r()
+    (T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.x() / p.r()
 }
 
 pub fn sh2n2<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
@@ -123,11 +123,6 @@ pub fn sh3p3<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) ->
 }
 
 #[inline]
-pub fn sh99p98<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
-    real_SH(99, 98, p)
-}
-
-#[inline]
 fn factorial(n: u64) -> u64 {
     (1..=n).product()
 }
@@ -191,10 +186,8 @@ pub fn SH<T: Float + FloatConst + FromPrimitive>(
     } else {
         K::<T>(l, -m) * P(l, -m, p.theta_cos())
     };
-    Complex::new(
-        v * (T::from_i64(m).unwrap() * p.phi()).sin(),
-        v * (T::from_i64(m).unwrap() * p.phi()).cos(),
-    )
+    let tmp = T::from_i64(m).unwrap() * p.phi();
+    Complex::new(v * tmp.sin(), v * tmp.cos())
 }
 
 #[allow(non_snake_case)]
@@ -227,15 +220,19 @@ pub fn real_SH_hardcoded<T: Float + FloatConst + FromPrimitive>(
     p: &dyn SHCoordinates<T>,
 ) -> T {
     match (l, m) {
+        // 0th order
         (0, 0) => sh00(p),
+        // 1st order
         (1, -1) => sh1n1(p),
         (1, 0) => sh10(p),
         (1, 1) => sh1p1(p),
+        // 2nd order
         (2, -2) => sh2n2(p),
         (2, -1) => sh2n1(p),
         (2, 0) => sh20(p),
         (2, 1) => sh2p1(p),
         (2, 2) => sh2p2(p),
+        // 3rd order
         (3, -3) => sh3n3(p),
         (3, -2) => sh3n2(p),
         (3, -1) => sh3n1(p),
@@ -243,6 +240,7 @@ pub fn real_SH_hardcoded<T: Float + FloatConst + FromPrimitive>(
         (3, 1) => sh3p1(p),
         (3, 2) => sh3p2(p),
         (3, 3) => sh3p3(p),
+        // the rest
         _ => real_SH(l, m, p),
     }
 }
