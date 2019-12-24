@@ -97,6 +97,215 @@ mod tests {
     }
 
     #[bench]
+    fn eval_order_01(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 1;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_02(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 2;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_03(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 3;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_04(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 4;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_05(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 5;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_06(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 6;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_07(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 7;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_08(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 8;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_09(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 9;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_10(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 10;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_11(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 11;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_12(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 12;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_13(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 13;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_14(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 14;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_15(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 15;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_16(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 16;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_17(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 17;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_18(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 18;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
+    fn eval_order_19(b: &mut Bencher) {
+        let sh_type = RealSHType::Standard;
+        let order = 19;
+        let sh = RealSphericalHarmonics::new(order, sh_type);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        b.iter(|| {
+            black_box(sh.eval(&p));
+        });
+    }
+
+    #[bench]
     fn eval_order_20(b: &mut Bencher) {
         let sh_type = RealSHType::Standard;
         let order = 20;
