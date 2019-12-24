@@ -30,6 +30,7 @@ impl RealSHType {
     where
         T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
     {
+        assert!(m.abs() <= l);
         match self {
             RealSHType::Standard => real_SH_hardcoded(l, m, p),
             RealSHType::RegularSolid => real_regular_solid_SH(l, m, p),
