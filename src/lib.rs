@@ -7,8 +7,6 @@
 
 //! todo
 
-// extern crate openblas_src;
-
 pub mod coords;
 pub mod sh;
 
@@ -33,7 +31,7 @@ impl RealSHType {
         T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
     {
         match self {
-            RealSHType::Standard => real_SH_hc(l, m, p),
+            RealSHType::Standard => real_SH_hardcoded(l, m, p),
             RealSHType::RegularSolid => real_regular_solid_SH(l, m, p),
             RealSHType::IrregularSolid => real_irregular_solid_SH(l, m, p),
         }

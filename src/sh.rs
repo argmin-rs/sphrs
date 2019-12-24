@@ -221,7 +221,7 @@ pub fn real_SH<T: Float + FloatConst + FromPrimitive>(
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn real_SH_hc<T: Float + FloatConst + FromPrimitive>(
+pub fn real_SH_hardcoded<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
     p: &dyn SHCoordinates<T>,
@@ -282,7 +282,7 @@ pub fn real_regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 ) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         * p.r().powi(l as i32)
-        * real_SH_hc(l, m, p)
+        * real_SH_hardcoded(l, m, p)
 }
 
 #[allow(non_snake_case)]
@@ -294,5 +294,5 @@ pub fn real_irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 ) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         / p.r().powi(l as i32)
-        * real_SH_hc(l, m, p)
+        * real_SH_hardcoded(l, m, p)
 }
