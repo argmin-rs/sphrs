@@ -20,14 +20,6 @@ mod tests {
     use test::{black_box, Bencher};
 
     #[bench]
-    fn sh_1(b: &mut Bencher) {
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        b.iter(|| {
-            black_box(real_regular_solid_SH(99, 98, &p));
-        });
-    }
-
-    #[bench]
     fn k_1(b: &mut Bencher) {
         b.iter(|| {
             black_box(K::<f64>(99, 98));
@@ -35,42 +27,13 @@ mod tests {
     }
 
     #[bench]
-    fn sh_1_static(b: &mut Bencher) {
+    fn eval_single(b: &mut Bencher) {
+        let sh = RealSHType::Standard;
+        let l = 4;
+        let m = -1;
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
-            black_box(sh99p98(&p));
-        });
-    }
-
-    #[bench]
-    fn sh2p1_gen(b: &mut Bencher) {
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        b.iter(|| {
-            black_box(real_regular_solid_SH(2, 1, &p));
-        });
-    }
-
-    #[bench]
-    fn sh2p1_hc(b: &mut Bencher) {
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        b.iter(|| {
-            black_box(sh2p1(&p));
-        });
-    }
-
-    #[bench]
-    fn sh3p3_gen(b: &mut Bencher) {
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        b.iter(|| {
-            black_box(real_regular_solid_SH(3, 3, &p));
-        });
-    }
-
-    #[bench]
-    fn sh3p3_hc(b: &mut Bencher) {
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        b.iter(|| {
-            black_box(sh3p3(&p));
+            black_box(sh.eval(l, m, &p));
         });
     }
 
