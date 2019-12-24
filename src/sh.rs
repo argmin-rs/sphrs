@@ -128,7 +128,7 @@ pub fn sh99p98<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) 
 }
 
 #[inline]
-fn factorial(n: i64) -> i64 {
+fn factorial(n: u64) -> u64 {
     (1..=n).product()
 }
 
@@ -137,8 +137,8 @@ fn factorial(n: i64) -> i64 {
 pub fn K<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64) -> T {
     let m = m.abs();
     (T::FRAC_1_PI() * T::from_i64(2 * l + 1).unwrap() / T::from_f64(4.0).unwrap()
-        * T::from_i64(factorial(l - m)).unwrap()
-        / T::from_i64(factorial(l + m)).unwrap())
+        * T::from_u64(factorial((l - m).abs() as u64)).unwrap()
+        / T::from_u64(factorial((l + m).abs() as u64)).unwrap())
     .sqrt()
 }
 
@@ -198,7 +198,7 @@ pub fn SH<T: Float + FloatConst + FromPrimitive>(
 }
 
 #[allow(non_snake_case)]
-#[inline]
+#[inline(always)]
 pub fn real_SH<T: Float + FloatConst + FromPrimitive>(
     l: i64,
     m: i64,
