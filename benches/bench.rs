@@ -35,15 +35,6 @@ mod tests {
     }
 
     #[bench]
-    fn full_set(b: &mut Bencher) {
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        let s: RealSphericalHarmonics<f64> = RealSphericalHarmonics::new(3, RealSHType::Standard);
-        b.iter(|| {
-            black_box(s.eval(&p));
-        });
-    }
-
-    #[bench]
     fn sh_1_static(b: &mut Bencher) {
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
@@ -83,103 +74,12 @@ mod tests {
         });
     }
 
-    // #[bench]
-    // fn sph_mat_1(b: &mut Bencher) {
-    //     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-    //     let fu = vec![p; 10000];
-    //     b.iter(|| {
-    //         black_box(sph_mat(3, &fu, RealSHType::Standard));
-    //     });
-    // }
-    //
-    // #[bench]
-    // fn sph_mat_2(b: &mut Bencher) {
-    //     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-    //     let fu = vec![p; 1000];
-    //     b.iter(|| {
-    //         black_box(sph_mat(3, &fu, RealSHType::Standard));
-    //     });
-    // }
-    //
-    // #[bench]
-    // fn sph_mat_3(b: &mut Bencher) {
-    //     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-    //     let fu = vec![p; 10000];
-    //     b.iter(|| {
-    //         black_box(sph_mat(4, &fu, RealSHType::Standard));
-    //     });
-    // }
-    //
-    // #[bench]
-    // fn sph_mat_4(b: &mut Bencher) {
-    //     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-    //     let fu = vec![p; 1000];
-    //     b.iter(|| {
-    //         black_box(sph_mat(4, &fu, RealSHType::Standard));
-    //     });
-    // }
-
-    // #[bench]
-    // fn sph_mat_5(b: &mut Bencher) {
-    //     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-    //     let fu = vec![p; 10000];
-    //     b.iter(|| {
-    //         black_box(sph_mat(5, &fu, RealSHType::Standard));
-    //     });
-    // }
-    //
-    // #[bench]
-    // fn sph_mat_6(b: &mut Bencher) {
-    //     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-    //     let fu = vec![p; 1000];
-    //     b.iter(|| {
-    //         black_box(sph_mat(5, &fu, RealSHType::Standard));
-    //     });
-    // }
-
-    #[bench]
-    fn eval_indiv_plain(b: &mut Bencher) {
-        let sh_type = RealSHType::Standard;
-        let order = 5;
-        let sh = RealSphericalHarmonics::new(order, sh_type);
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        // let fu = vec![p; 10000];
-        b.iter(|| {
-            black_box(sh.eval_indiv_plain(&p));
-        });
-    }
-
-    #[bench]
-    fn eval_indiv(b: &mut Bencher) {
-        let sh_type = RealSHType::Standard;
-        let order = 5;
-        let sh = RealSphericalHarmonics::new(order, sh_type);
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        // let fu = vec![p; 10000];
-        b.iter(|| {
-            black_box(sh.eval_indiv(&p));
-        });
-    }
-
-    #[bench]
-    fn eval_plain(b: &mut Bencher) {
-        let sh_type = RealSHType::Standard;
-        let order = 5;
-        let sh = RealSphericalHarmonics::new(order, sh_type);
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        // let fu = vec![p; 10000];
-        b.iter(|| {
-            black_box(sh.eval_plain(&p));
-        });
-    }
-
     #[bench]
     fn eval(b: &mut Bencher) {
         let sh_type = RealSHType::Standard;
         let order = 5;
         let sh = RealSphericalHarmonics::new(order, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        // let fu = vec![p; 10000];
         b.iter(|| {
             black_box(sh.eval(&p));
         });
@@ -191,7 +91,6 @@ mod tests {
         let order = 5;
         let sh = RealSphericalHarmonics::new(order, sh_type);
         let p = Coordinates::spherical(1.0f32, PI32 / 2.0f32, 0.0f32);
-        // let fu = vec![p; 10000];
         b.iter(|| {
             black_box(sh.eval(&p));
         });
@@ -203,7 +102,6 @@ mod tests {
         let order = 20;
         let sh = RealSphericalHarmonics::new(order, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        // let fu = vec![p; 10000];
         b.iter(|| {
             black_box(sh.eval(&p));
         });

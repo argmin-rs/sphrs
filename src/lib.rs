@@ -46,7 +46,7 @@ where
 {
     order: usize,
     num_sh: usize,
-    coeffs: Vec<T>,
+    coefficients: Option<Vec<T>>,
     sh: RealSHType,
 }
 
@@ -54,32 +54,38 @@ impl<'a, T> RealSphericalHarmonics<T>
 where
     T: Float + FromPrimitive + FloatConst + AddAssign + std::iter::Sum + Debug,
 {
-    #[inline]
-    pub fn eval_vec(&self, p: &[impl SHCoordinates<T>]) -> Vec<T> {
-        p.iter().map(|pi| self.eval(pi)).collect()
+    pub fn new(order: usize, sh_type: RealSHType) -> RealSphericalHarmonics<T> {
+        let n = (0..=order).map(|o| (2 * o + 1)).sum();
+
+        RealSphericalHarmonics {
+            order,
+            num_sh: n,
+            coefficients: None,
+            sh: sh_type,
+        }
+    }
+
+    pub fn with_coefficients(&mut self, coefficients: Vec<T>) -> &mut Self {
+        assert_eq!(coefficients.len(), self.num_sh);
+        self.coefficients = Some(coefficients);
+        self
     }
 
     #[inline]
-    pub fn eval(&self, p: &dyn SHCoordinates<T>) -> T {
-        self.eval_indiv(p).into_iter().sum()
+    pub fn eval(&self, p: &dyn SHCoordinates<T>) -> Vec<T> {
+        if let Some(ref coefficients) = self.coefficients {
+            self.eval_internal(p)
+                .iter()
+                .zip(coefficients.iter())
+                .map(|(&a, &b)| a * b)
+                .collect()
+        } else {
+            self.eval_internal(p)
+        }
     }
 
     #[inline]
-    pub fn eval_plain(&self, p: &dyn SHCoordinates<T>) -> T {
-        self.eval_indiv_plain(p).into_iter().sum()
-    }
-
-    #[inline]
-    pub fn eval_indiv(&self, p: &dyn SHCoordinates<T>) -> Vec<T> {
-        self.eval_indiv_plain(p)
-            .iter()
-            .zip(self.coeffs.iter())
-            .map(|(&a, &b)| a * b)
-            .collect()
-    }
-
-    #[inline]
-    pub fn eval_indiv_plain(&self, p: &dyn SHCoordinates<T>) -> Vec<T> {
+    fn eval_internal(&self, p: &dyn SHCoordinates<T>) -> Vec<T> {
         let mut sh = Vec::with_capacity(self.num_sh);
         sh.push(self.sh.eval(0, 0, p));
 
@@ -142,22 +148,6 @@ where
 
         sh
     }
-
-    pub fn new(order: usize, sh_type: RealSHType) -> RealSphericalHarmonics<T> {
-        let n = (0..=order).map(|o| (2 * o + 1)).sum();
-
-        RealSphericalHarmonics {
-            order,
-            num_sh: n,
-            coeffs: vec![T::one(); n],
-            sh: sh_type,
-        }
-    }
-
-    pub fn set_coeffs(&mut self, coeffs: Vec<T>) {
-        assert_eq!(coeffs.len(), self.num_sh);
-        self.coeffs = coeffs;
-    }
 }
 
 // use ndarray::{s, Array1, Array2};
@@ -182,15 +172,6 @@ where
 mod tests {
     use super::*;
     use std::f64::consts::PI;
-
-    // #[test]
-    // fn it_works() {
-    //     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-    //     let v = sh10(&p);
-    //     // let bla: SphericalHarmonics<f64> = SphericalHarmonics::new(3, );
-    //     // println!("p: {:?} | v: {}", p, v);
-    //     assert_eq!(2 + 2, 4);
-    // }
 
     #[test]
     fn comp() {
