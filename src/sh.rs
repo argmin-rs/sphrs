@@ -10,115 +10,112 @@
 #![allow(clippy::comparison_chain)]
 
 use crate::coords::*;
-use num::{Float, FromPrimitive};
+use crate::SphrsFloat;
 use num_complex::Complex;
-use num_traits::float::FloatConst;
 
-pub fn sh00<T: Float + FloatConst + FromPrimitive>(_p: &dyn SHCoordinates<T>) -> T {
+pub fn sh00<T: SphrsFloat>(_p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.5).unwrap() * T::FRAC_1_PI().sqrt()
 }
 
-pub fn sh1n1<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
-    (T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.y() / p.r()
+pub fn sh1n1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
+    -(T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.y() / p.r()
 }
 
-pub fn sh10<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
+pub fn sh10<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     (T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.z() / p.r()
 }
 
-pub fn sh1p1<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
-    (T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.x() / p.r()
+pub fn sh1p1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
+    -(T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.x() / p.r()
 }
 
-pub fn sh2n2<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
+pub fn sh2n2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x() * p.y())
         / p.r().powi(2)
 }
 
-pub fn sh2n1<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
-    T::from_f64(0.5).unwrap()
+pub fn sh2n1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
+    -T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.y() * p.z())
         / p.r().powi(2)
 }
 
-pub fn sh20<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
+pub fn sh20<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
-        * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
-        * (-p.x().powi(2) - p.y().powi(2) * T::from_f64(2.0).unwrap() * p.z().powi(2))
+        * (T::from_f64(5.0).unwrap() * T::FRAC_1_PI()).sqrt()
+        * (-p.x().powi(2) - p.y().powi(2) + T::from_f64(2.0).unwrap() * p.z().powi(2))
         / p.r().powi(2)
 }
 
-pub fn sh2p1<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
-    T::from_f64(0.5).unwrap()
+pub fn sh2p1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
+    -T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.z() * p.x())
         / p.r().powi(2)
 }
 
-pub fn sh2p2<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
+pub fn sh2p2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
-        * (p.x().powi(2) * p.y().powi(2))
+        * (p.x().powi(2) - p.y().powi(2))
         / p.r().powi(2)
 }
 
-pub fn sh3n3<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
-    T::from_f64(0.25).unwrap()
+pub fn sh3n3<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
+    -T::from_f64(0.25).unwrap()
         * (T::from_f64(35.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (T::from_f64(3.0).unwrap() * p.x().powi(2) - p.y().powi(2))
         * p.y()
         / p.r().powi(3)
 }
 
-pub fn sh3n2<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
+pub fn sh3n2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.5).unwrap()
         * (T::from_f64(105.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x() * p.y() * p.z())
         / p.r().powi(3)
 }
 
-pub fn sh3n1<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
-    T::from_f64(0.25).unwrap()
+pub fn sh3n1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
+    -T::from_f64(0.25).unwrap()
         * (T::from_f64(21.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * p.y()
         * (T::from_f64(4.0).unwrap() * p.z().powi(2) - p.x().powi(2) - p.y().powi(2))
         / p.r().powi(3)
 }
 
-pub fn sh30<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
+pub fn sh30<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(7.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * p.z()
-        * (T::from_f64(2.0).unwrap() * p.z().powi(2)
-            - T::from_f64(3.0).unwrap() * p.x().powi(2)
-            - T::from_f64(3.0).unwrap() * p.y().powi(2))
+        * (T::from_f64(5.0).unwrap() * p.z().powi(2) - T::from_f64(3.0).unwrap() * p.r().powi(2))
         / p.r().powi(3)
 }
 
-pub fn sh3p1<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
-    T::from_f64(0.25).unwrap()
-        * (T::from_f64(21.0 / 2.0).unwrap() * T::FRAC_1_PI())
+pub fn sh3p1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
+    -T::from_f64(0.25).unwrap()
+        * (T::from_f64(21.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * p.x()
         * (T::from_f64(4.0).unwrap() * p.z().powi(2) - p.x().powi(2) - p.y().powi(2))
         / p.r().powi(3)
 }
 
-pub fn sh3p2<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
+pub fn sh3p2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
-        * (T::from_f64(105.0).unwrap() * T::FRAC_1_PI())
+        * (T::from_f64(105.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x().powi(2) - p.y().powi(2))
         * p.z()
         / p.r().powi(3)
 }
 
-pub fn sh3p3<T: Float + FloatConst + FromPrimitive>(p: &dyn SHCoordinates<T>) -> T {
-    T::from_f64(0.25).unwrap()
-        * (T::from_f64(35.0 / 2.0).unwrap() * T::FRAC_1_PI())
+pub fn sh3p3<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
+    -T::from_f64(0.25).unwrap()
+        * (T::from_f64(35.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x().powi(2) - T::from_f64(3.0).unwrap() * p.y().powi(2))
-        * p.x().powi(2)
+        * p.x()
         / p.r().powi(3)
 }
 
@@ -129,17 +126,24 @@ fn factorial(n: u64) -> u64 {
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn K<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64) -> T {
-    let m = m.abs();
-    (T::FRAC_1_PI() * T::from_i64(2 * l + 1).unwrap() / T::from_f64(4.0).unwrap()
+pub fn K<T: SphrsFloat>(l: i64, m: i64) -> T {
+    ((T::from_f64(2.0).unwrap() * T::from_i64(l).unwrap() + T::one())
         * T::from_u64(factorial((l - m).abs() as u64)).unwrap()
-        / T::from_u64(factorial((l + m).abs() as u64)).unwrap())
+        / (T::from_f64(4.0).unwrap()
+            * T::PI()
+            * T::from_u64(factorial((l + m).abs() as u64)).unwrap()))
     .sqrt()
+
+    // let m = m.abs();
+    // (T::FRAC_1_PI() * T::from_i64(2 * l + 1).unwrap() / T::from_f64(4.0).unwrap()
+    //     * T::from_u64(factorial((l - m).abs() as u64)).unwrap()
+    //     / T::from_u64(factorial((l + m).abs() as u64)).unwrap())
+    // .sqrt()
 }
 
 #[allow(non_snake_case)]
 #[inline]
-fn P<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, x: T) -> T {
+fn P<T: SphrsFloat>(l: i64, m: i64, x: T) -> T {
     let mut pmm = T::one();
 
     if m > 0 {
@@ -162,7 +166,7 @@ fn P<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, x: T) -> T {
     }
 
     let mut pll = T::zero();
-    for ll in (m + 2 + 1)..=l {
+    for ll in (m + 2)..=l {
         pll = (T::from_i64(2 * ll - 1).unwrap() * x * pmmp1
             - (T::from_i64(ll + m - 1)).unwrap() * pmm)
             / T::from_i64(ll - m).unwrap();
@@ -174,11 +178,7 @@ fn P<T: Float + FloatConst + FromPrimitive>(l: i64, m: i64, x: T) -> T {
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn SH<T: Float + FloatConst + FromPrimitive>(
-    l: i64,
-    m: i64,
-    p: &dyn SHCoordinates<T>,
-) -> Complex<T> {
+pub fn SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T> {
     let v: T = if m == 0 {
         K::<T>(l, 0) * P(l, m, p.theta_cos())
     } else if m > 0 {
@@ -192,11 +192,7 @@ pub fn SH<T: Float + FloatConst + FromPrimitive>(
 
 #[allow(non_snake_case)]
 #[inline(always)]
-pub fn real_SH<T: Float + FloatConst + FromPrimitive>(
-    l: i64,
-    m: i64,
-    p: &dyn SHCoordinates<T>,
-) -> T {
+pub fn real_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
     if m == 0 {
         K::<T>(l, 0) * P(l, m, p.theta_cos())
     } else if m > 0 {
@@ -214,11 +210,7 @@ pub fn real_SH<T: Float + FloatConst + FromPrimitive>(
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn real_SH_hardcoded<T: Float + FloatConst + FromPrimitive>(
-    l: i64,
-    m: i64,
-    p: &dyn SHCoordinates<T>,
-) -> T {
+pub fn real_SH_hardcoded<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
     match (l, m) {
         // 0th order
         (0, 0) => sh00(p),
@@ -247,11 +239,7 @@ pub fn real_SH_hardcoded<T: Float + FloatConst + FromPrimitive>(
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
-    l: i64,
-    m: i64,
-    p: &dyn SHCoordinates<T>,
-) -> Complex<T> {
+pub fn regular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T> {
     let scaling = ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         * p.r().powi(l as i32);
     let sh = SH(l, m, p);
@@ -260,11 +248,7 @@ pub fn regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
-    l: i64,
-    m: i64,
-    p: &dyn SHCoordinates<T>,
-) -> Complex<T> {
+pub fn irregular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T> {
     let scaling = ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         / p.r().powi((l + 1) as i32);
     let sh = SH(l, m, p);
@@ -273,11 +257,7 @@ pub fn irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn real_regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
-    l: i64,
-    m: i64,
-    p: &dyn SHCoordinates<T>,
-) -> T {
+pub fn real_regular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         * p.r().powi(l as i32)
         * real_SH_hardcoded(l, m, p)
@@ -285,12 +265,56 @@ pub fn real_regular_solid_SH<T: Float + FloatConst + FromPrimitive>(
 
 #[allow(non_snake_case)]
 #[inline]
-pub fn real_irregular_solid_SH<T: Float + FloatConst + FromPrimitive>(
-    l: i64,
-    m: i64,
-    p: &dyn SHCoordinates<T>,
-) -> T {
+pub fn real_irregular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         / p.r().powi(l as i32)
         * real_SH_hardcoded(l, m, p)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::f64::consts::PI;
+
+    #[test]
+    fn compare_hardcoded_full() {
+        let tol = 10.0 * std::f64::EPSILON;
+        let c = [
+            Coordinates::spherical(1.0, PI / 4.0, PI / 2.0),
+            Coordinates::spherical(2.0, PI / 4.0, PI / 2.0),
+            Coordinates::spherical(2.0, PI / 2.0, PI / 4.0),
+            Coordinates::spherical(0.5, 0.0, PI / 4.0),
+            Coordinates::spherical(0.75, PI / 2.0, 0.0),
+            Coordinates::cartesian(1.0, 1.0, 0.3),
+            Coordinates::cartesian(1.0, 0.0, 0.0),
+            Coordinates::cartesian(0.0, 1.0, 0.0),
+            Coordinates::cartesian(0.0, 0.0, 1.0),
+        ];
+
+        for p in c.iter() {
+            // println!("{:?}", p);
+            // println!("{:?} | {:?}", real_SH(2, 2, p), sh2p2(p));
+            // println!("{:?}", (real_SH(2, 2, p) - sh2p2(p)).abs());
+            // 0th order
+            assert!((real_SH(0, 0, p) - sh00(p)).abs() < tol);
+            // 1st order
+            assert!((real_SH(1, -1, p) - sh1n1(p)).abs() < tol);
+            assert!((real_SH(1, 0, p) - sh10(p)).abs() < tol);
+            assert!((real_SH(1, 1, p) - sh1p1(p)).abs() < tol);
+            // 2nd order
+            assert!((real_SH(2, -2, p) - sh2n2(p)).abs() < tol);
+            assert!((real_SH(2, -1, p) - sh2n1(p)).abs() < tol);
+            assert!((real_SH(2, 0, p) - sh20(p)).abs() < tol);
+            assert!((real_SH(2, 1, p) - sh2p1(p)).abs() < tol);
+            assert!((real_SH(2, 2, p) - sh2p2(p)).abs() < tol);
+            // 3rd order
+            assert!((real_SH(3, -3, p) - sh3n3(p)).abs() < tol);
+            assert!((real_SH(3, -2, p) - sh3n2(p)).abs() < tol);
+            assert!((real_SH(3, -1, p) - sh3n1(p)).abs() < tol);
+            assert!((real_SH(3, 0, p) - sh30(p)).abs() < tol);
+            assert!((real_SH(3, 1, p) - sh3p1(p)).abs() < tol);
+            assert!((real_SH(3, 2, p) - sh3p2(p)).abs() < tol);
+            assert!((real_SH(3, 3, p) - sh3p3(p)).abs() < tol);
+        }
+    }
 }

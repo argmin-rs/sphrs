@@ -5,12 +5,11 @@
 // http://opensource.org/licenses/MIT>, at your option. This file may not be
 // copied, modified, or distributed except according to those terms.
 
-use num::{Float, FromPrimitive};
-use num_traits::FloatConst;
+use crate::SphrsFloat;
 
 pub trait SHCoordinates<T>
 where
-    T: Float + FloatConst + FromPrimitive,
+    T: SphrsFloat,
 {
     fn theta(&self) -> T;
     fn phi(&self) -> T;
@@ -24,7 +23,7 @@ where
 #[derive(Default, Clone, Debug)]
 pub struct Coordinates<T>
 where
-    T: Float + FloatConst + FromPrimitive,
+    T: SphrsFloat,
 {
     r: T,
     theta: T,
@@ -37,12 +36,24 @@ where
 
 impl<T> Coordinates<T>
 where
-    T: Float + FloatConst + FromPrimitive,
+    T: SphrsFloat,
 {
     pub fn cartesian(x: T, y: T, z: T) -> Self {
-        let theta = (z / (x.powi(2) + y.powi(2) + z.powi(2)).sqrt()).acos();
-        let phi = (y / x).atan();
         let r = (x.powi(2) + y.powi(2) + z.powi(2)).sqrt();
+        let theta = (z / r).acos();
+        let phi = y.atan2(x);
+        // let phi = if x.abs() < T::from_f64(10.0.powi(-15)).unwrap() {
+        //     if (x.is_sign_negative() && y.is_sign_negative())
+        //         || (x.is_sign_positive() && y.is_sign_positive())
+        //     {
+        //         T::PI() / T::from_f64(2.0).unwrap()
+        //     } else {
+        //         -T::PI() / T::from_f64(2.0).unwrap()
+        //     }
+        // } else {
+        //     (y / x).atan()
+        // };
+
         let theta_cos = theta.cos();
         Coordinates {
             r,
@@ -74,7 +85,7 @@ where
 
 impl<T> SHCoordinates<T> for Coordinates<T>
 where
-    T: Float + FloatConst + FromPrimitive,
+    T: SphrsFloat,
 {
     #[inline]
     fn theta(&self) -> T {

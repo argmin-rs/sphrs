@@ -17,6 +17,9 @@ use num_traits::float::FloatConst;
 use std::fmt::Debug;
 use std::ops::AddAssign;
 
+pub trait SphrsFloat: Float + FloatConst + FromPrimitive + Debug {}
+impl<I> SphrsFloat for I where I: Float + FloatConst + FromPrimitive + Debug {}
+
 #[derive(Clone, Copy)]
 pub enum RealSHType {
     Standard,
@@ -28,7 +31,7 @@ impl RealSHType {
     #[inline]
     pub fn eval<T>(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T
     where
-        T: Float + FromPrimitive + FloatConst + AddAssign + Debug,
+        T: SphrsFloat + AddAssign + Debug,
     {
         assert!(m.abs() <= l);
         match self {
@@ -41,7 +44,7 @@ impl RealSHType {
 
 pub struct RealSphericalHarmonics<T>
 where
-    T: Float + FromPrimitive + FloatConst + AddAssign + std::iter::Sum + Debug,
+    T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
 {
     order: usize,
     num_sh: usize,
@@ -51,7 +54,7 @@ where
 
 impl<'a, T> RealSphericalHarmonics<T>
 where
-    T: Float + FromPrimitive + FloatConst + AddAssign + std::iter::Sum + Debug,
+    T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
 {
     pub fn new(order: usize, sh_type: RealSHType) -> RealSphericalHarmonics<T> {
         let n = (0..=order).map(|o| (2 * o + 1)).sum();
@@ -147,50 +150,4 @@ where
 
         sh
     }
-}
-
-// use ndarray::{s, Array1, Array2};
-// pub fn sph_mat<
-//     'a,
-//     T: 'a + Float + FromPrimitive + FloatConst + AddAssign + std::iter::Sum + Debug,
-// >(
-//     order: usize,
-//     pos: &[impl SHCoordinates<T>],
-//     sh_type: RealSHType,
-// ) -> Array2<T> {
-//     let sh = RealSphericalHarmonics::new(order, sh_type);
-//     let mut mat = unsafe { Array2::uninitialized((pos.len(), sh.num_sh)) };
-//     for (i, item) in pos.iter().enumerate() {
-//         mat.slice_mut(s![i, ..])
-//             .assign(&Array1::from(sh.eval_indiv_plain(item)));
-//     }
-//     mat
-// }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::f64::consts::PI;
-
-    #[test]
-    fn comp() {
-        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-        // let p = Coordinates::cartesian(1.0, 1.0, 0.3);
-        assert!((real_SH(2, 1, &p) - sh2p1(&p)) < std::f64::EPSILON);
-        assert!((real_SH(3, -2, &p) - sh3n2(&p)) < std::f64::EPSILON);
-    }
-
-    // #[test]
-    // fn sph_mat_test() {
-    //     let p1 = Coordinates::spherical(1.0, PI / 2.0, 0.0);
-    //     let p1 = p1.finalize();
-    //     let p2 = Coordinates::spherical(0.7, PI / 4.0, 0.0);
-    //     let p2 = p2.finalize();
-    //     let fu = vec![&p1, &p2];
-    //     let bla = sph_mat(1, &fu);
-    //     println!("{:#?}", bla);
-    //
-    //     // assert!((real_SH(2, 1, &p) - sh2p1(&p)) < std::f64::EPSILON);
-    //     // assert!((real_SH(3, -2, &p) - sh3n2(&p)) < std::f64::EPSILON);
-    // }
 }
