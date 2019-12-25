@@ -42,17 +42,6 @@ where
         let r = (x.powi(2) + y.powi(2) + z.powi(2)).sqrt();
         let theta = (z / r).acos();
         let phi = y.atan2(x);
-        // let phi = if x.abs() < T::from_f64(10.0.powi(-15)).unwrap() {
-        //     if (x.is_sign_negative() && y.is_sign_negative())
-        //         || (x.is_sign_positive() && y.is_sign_positive())
-        //     {
-        //         T::PI() / T::from_f64(2.0).unwrap()
-        //     } else {
-        //         -T::PI() / T::from_f64(2.0).unwrap()
-        //     }
-        // } else {
-        //     (y / x).atan()
-        // };
 
         let theta_cos = theta.cos();
         Coordinates {
