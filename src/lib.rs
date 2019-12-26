@@ -14,7 +14,7 @@
 //!
 //! This crate supports these types of real SH via the enum `RealSHType`:
 //!
-//! * [Standard](https://en.wikipedia.org/wiki/Spherical_harmonics)
+//! * [Spherical](https://en.wikipedia.org/wiki/Spherical_harmonics)
 //! * [RegularSolid and IrregularSolid](https://en.wikipedia.org/wiki/Solid_harmonics)
 //!
 //! TODO: complex SH
@@ -33,11 +33,11 @@
 //! Compute the sum of all real SH up to 5th order at position (1, 0, 0):
 //!
 //! ```rust
-//! let sh_type = RealSHType::Standard;
+//! use sphrs::{RealSHType, RealHarmonics, Coordinates};
 //! let order = 5;
-//! let sh = RealSphericalHarmonics::new(order, sh_type);
+//! let sh = RealHarmonics::new(order, RealSHType::Spherical);
 //! let p = Coordinates::cartesian(1.0, 0.0, 0.0);
-//! println!("Sum of SH up to order {}: {}", order, sh.eval(&p));
+//! println!("SH up to order {}: {:?}", order, sh.eval(&p));
 //! ```
 //!
 //! # Acknowledgements
@@ -72,9 +72,11 @@
 //! in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above,
 //! without any additional terms or conditions.
 
-// #![warn(missing_docs)]
+#![warn(missing_docs)]
 
+/// Coordi
 pub mod coords;
+/// Spherical/solid harmonics
 pub mod sh;
 
 pub use crate::coords::*;
@@ -84,17 +86,23 @@ use num_traits::float::FloatConst;
 use std::fmt::Debug;
 use std::ops::AddAssign;
 
+/// Trait alias to simplify common trait bounds
 pub trait SphrsFloat: Float + FloatConst + FromPrimitive + Debug {}
 impl<I> SphrsFloat for I where I: Float + FloatConst + FromPrimitive + Debug {}
 
+/// Available types of real spherical harmonics and solid harmonics
 #[derive(Clone, Copy)]
 pub enum RealSHType {
-    Standard,
+    /// Spherical harmonics
+    Spherical,
+    /// Regular solid harmonics
     RegularSolid,
+    /// Irregular solid harmonics
     IrregularSolid,
 }
 
 impl RealSHType {
+    /// Evaluate SH (l, m) at position `p`
     #[inline]
     pub fn eval<T>(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T
     where
@@ -102,31 +110,37 @@ impl RealSHType {
     {
         assert!(m.abs() <= l);
         match self {
-            RealSHType::Standard => real_SH_hardcoded(l, m, p),
+            RealSHType::Spherical => real_SH_hardcoded(l, m, p),
             RealSHType::RegularSolid => real_regular_solid_SH(l, m, p),
             RealSHType::IrregularSolid => real_irregular_solid_SH(l, m, p),
         }
     }
 }
 
-pub struct RealSphericalHarmonics<T>
+/// Real spherical/solid harmonics
+pub struct RealHarmonics<T>
 where
     T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
 {
+    /// Order
     order: usize,
+    /// Total number of harmonics
     num_sh: usize,
+    /// Optional coefficients
     coefficients: Option<Vec<T>>,
+    /// Type of harmonic
     sh: RealSHType,
 }
 
-impl<'a, T> RealSphericalHarmonics<T>
+impl<'a, T> RealHarmonics<T>
 where
     T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
 {
-    pub fn new(order: usize, sh_type: RealSHType) -> RealSphericalHarmonics<T> {
+    /// Create new `RealHarmonics` struct
+    pub fn new(order: usize, sh_type: RealSHType) -> RealHarmonics<T> {
         let n = (0..=order).map(|o| (2 * o + 1)).sum();
 
-        RealSphericalHarmonics {
+        RealHarmonics {
             order,
             num_sh: n,
             coefficients: None,
@@ -134,12 +148,14 @@ where
         }
     }
 
+    /// Add coefficients
     pub fn with_coefficients(&mut self, coefficients: Vec<T>) -> &mut Self {
         assert_eq!(coefficients.len(), self.num_sh);
         self.coefficients = Some(coefficients);
         self
     }
 
+    /// Evaluate harmonics at postion `p`. This will respect coefficients if they are provided.
     #[inline]
     pub fn eval(&self, p: &dyn SHCoordinates<T>) -> Vec<T> {
         if let Some(ref coefficients) = self.coefficients {
@@ -153,11 +169,15 @@ where
         }
     }
 
+    /// Evaluate harmonics at postion `p`. If available, hardcoded SH functions will be used.
     #[inline]
     fn eval_internal(&self, p: &dyn SHCoordinates<T>) -> Vec<T> {
         let mut sh = Vec::with_capacity(self.num_sh);
         sh.push(self.sh.eval(0, 0, p));
 
+        // TODO: Check if this is necessary. I think my hope was that explicitly stating m and l
+        // will allow the compiler to evaluate the code partially. I'll have to check if this is
+        // the case (I doubt it).
         if self.order >= 1 {
             sh.push(self.sh.eval(1, -1, p));
             sh.push(self.sh.eval(1, 0, p));

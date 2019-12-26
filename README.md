@@ -11,7 +11,7 @@ Documentation: [stable](https://doc.rs/sphrs/latest/sphrs),
 
 This crate supports these types of real SH via the enum `RealSHType`:
 
-* [Standard](https://en.wikipedia.org/wiki/Spherical_harmonics)
+* [Spherical](https://en.wikipedia.org/wiki/Spherical_harmonics)
 * [RegularSolid and IrregularSolid](https://en.wikipedia.org/wiki/Solid_harmonics)
 
 TODO: complex SH
@@ -30,11 +30,11 @@ sphrs = "*"
 Compute the sum of all real SH up to 5th order at position (1, 0, 0):
 
 ```rust
-let sh_type = RealSHType::Standard;
+use sphrs::{RealSHType, RealHarmonics, Coordinates};
 let order = 5;
-let sh = RealSphericalHarmonics::new(order, sh_type);
+let sh = RealHarmonics::new(order, RealSHType::Spherical);
 let p = Coordinates::cartesian(1.0, 0.0, 0.0);
-println!("Sum of SH up to order {}: {}", order, sh.eval(&p));
+println!("SH up to order {}: {:?}", order, sh.eval(&p));
 ```
 
 ## Acknowledgements

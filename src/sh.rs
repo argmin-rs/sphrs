@@ -13,22 +13,27 @@ use crate::coords::*;
 use crate::SphrsFloat;
 use num_complex::Complex;
 
+/// Hardcoded SH (l=0,m=0)
 pub fn sh00<T: SphrsFloat>(_p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.5).unwrap() * T::FRAC_1_PI().sqrt()
 }
 
+/// Hardcoded SH (l=1,m=-1)
 pub fn sh1n1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     -(T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.y() / p.r()
 }
 
+/// Hardcoded SH (l=1,m=0)
 pub fn sh10<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     (T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.z() / p.r()
 }
 
+/// Hardcoded SH (l=1,m=1)
 pub fn sh1p1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     -(T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.x() / p.r()
 }
 
+/// Hardcoded SH (l=2,m=-2)
 pub fn sh2n2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -36,6 +41,7 @@ pub fn sh2n2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
         / p.r().powi(2)
 }
 
+/// Hardcoded SH (l=2,m=-1)
 pub fn sh2n1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     -T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -43,6 +49,7 @@ pub fn sh2n1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
         / p.r().powi(2)
 }
 
+/// Hardcoded SH (l=2,m=0)
 pub fn sh20<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(5.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -50,6 +57,7 @@ pub fn sh20<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
         / p.r().powi(2)
 }
 
+/// Hardcoded SH (l=2,m=1)
 pub fn sh2p1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     -T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -57,6 +65,7 @@ pub fn sh2p1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
         / p.r().powi(2)
 }
 
+/// Hardcoded SH (l=2,m=2)
 pub fn sh2p2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -64,6 +73,7 @@ pub fn sh2p2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
         / p.r().powi(2)
 }
 
+/// Hardcoded SH (l=3,m=-3)
 pub fn sh3n3<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     -T::from_f64(0.25).unwrap()
         * (T::from_f64(35.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -72,6 +82,7 @@ pub fn sh3n3<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
+/// Hardcoded SH (l=3,m=-2)
 pub fn sh3n2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.5).unwrap()
         * (T::from_f64(105.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -79,6 +90,7 @@ pub fn sh3n2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
+/// Hardcoded SH (l=3,m=-1)
 pub fn sh3n1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     -T::from_f64(0.25).unwrap()
         * (T::from_f64(21.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -87,6 +99,7 @@ pub fn sh3n1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
+/// Hardcoded SH (l=3,m=0)
 pub fn sh30<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(7.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -95,6 +108,7 @@ pub fn sh30<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
+/// Hardcoded SH (l=3,m=1)
 pub fn sh3p1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     -T::from_f64(0.25).unwrap()
         * (T::from_f64(21.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -103,6 +117,7 @@ pub fn sh3p1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
+/// Hardcoded SH (l=3,m=2)
 pub fn sh3p2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(105.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -111,6 +126,7 @@ pub fn sh3p2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
+/// Hardcoded SH (l=3,m=3)
 pub fn sh3p3<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
     -T::from_f64(0.25).unwrap()
         * (T::from_f64(35.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -119,14 +135,16 @@ pub fn sh3p3<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
+/// Factorial
 #[inline]
 fn factorial(n: u64) -> u64 {
     (1..=n).product()
 }
 
+/// Normalization factor
 #[allow(non_snake_case)]
 #[inline]
-pub fn K<T: SphrsFloat>(l: i64, m: i64) -> T {
+fn K<T: SphrsFloat>(l: i64, m: i64) -> T {
     ((T::from_f64(2.0).unwrap() * T::from_i64(l).unwrap() + T::one())
         * T::from_u64(factorial((l - m).abs() as u64)).unwrap()
         / (T::from_f64(4.0).unwrap()
@@ -141,6 +159,7 @@ pub fn K<T: SphrsFloat>(l: i64, m: i64) -> T {
     // .sqrt()
 }
 
+/// Legendre polynomials
 #[allow(non_snake_case)]
 #[inline]
 fn P<T: SphrsFloat>(l: i64, m: i64, x: T) -> T {
@@ -176,6 +195,7 @@ fn P<T: SphrsFloat>(l: i64, m: i64, x: T) -> T {
     pll
 }
 
+/// Complex spherical harmonics
 #[allow(non_snake_case)]
 #[inline]
 pub fn SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T> {
@@ -190,6 +210,7 @@ pub fn SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T>
     Complex::new(v * tmp.sin(), v * tmp.cos())
 }
 
+/// Real spherical harmonics (recursive implementation)
 #[allow(non_snake_case)]
 #[inline(always)]
 pub fn real_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
@@ -208,6 +229,8 @@ pub fn real_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
     }
 }
 
+/// Spherical harmonics. This will use the hardcoded functions if available and the recursive
+/// implementation otherwise.
 #[allow(non_snake_case)]
 #[inline]
 pub fn real_SH_hardcoded<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
@@ -237,6 +260,7 @@ pub fn real_SH_hardcoded<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>
     }
 }
 
+/// Complex regular solid harmonics
 #[allow(non_snake_case)]
 #[inline]
 pub fn regular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T> {
@@ -246,6 +270,7 @@ pub fn regular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>)
     Complex::new(sh.re * scaling, sh.im * scaling)
 }
 
+/// Complex irregular solid harmonics
 #[allow(non_snake_case)]
 #[inline]
 pub fn irregular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T> {
@@ -255,6 +280,7 @@ pub fn irregular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T
     Complex::new(sh.re * scaling, sh.im * scaling)
 }
 
+/// Real regular solid harmonics
 #[allow(non_snake_case)]
 #[inline]
 pub fn real_regular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
@@ -263,6 +289,7 @@ pub fn real_regular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinate
         * real_SH_hardcoded(l, m, p)
 }
 
+/// Real irregular solid harmonics
 #[allow(non_snake_case)]
 #[inline]
 pub fn real_irregular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {

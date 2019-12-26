@@ -7,30 +7,46 @@
 
 use crate::SphrsFloat;
 
+/// SHCoordinates trait
 pub trait SHCoordinates<T>
 where
     T: SphrsFloat,
 {
+    /// Return `theta`
     fn theta(&self) -> T;
+    /// Return `phi`
     fn phi(&self) -> T;
+    /// Return `r`
     fn r(&self) -> T;
+    /// Return `x`
     fn x(&self) -> T;
+    /// Return `y`
     fn y(&self) -> T;
+    /// Return `z`
     fn z(&self) -> T;
+    /// Return `cos(theta)`
     fn theta_cos(&self) -> T;
 }
 
+/// Coordinates struct
 #[derive(Default, Clone, Debug)]
 pub struct Coordinates<T>
 where
     T: SphrsFloat,
 {
+    /// radius (spherical coordinates)
     r: T,
+    /// theta (spherical coordinates)
     theta: T,
+    /// phi (spherical coordinates)
     phi: T,
+    /// x (cartesian coordinates)
     x: T,
+    /// y (cartesian coordinates)
     y: T,
+    /// z (cartesian coordinates)
     z: T,
+    /// cos(theta)
     theta_cos: T,
 }
 
@@ -38,6 +54,7 @@ impl<T> Coordinates<T>
 where
     T: SphrsFloat,
 {
+    /// Create `Coordinates` struct from cartesian coordinates
     pub fn cartesian(x: T, y: T, z: T) -> Self {
         let r = (x.powi(2) + y.powi(2) + z.powi(2)).sqrt();
         let theta = (z / r).acos();
@@ -55,6 +72,7 @@ where
         }
     }
 
+    /// Create `Coordinates` struct from spherical coordinates
     pub fn spherical(r: T, theta: T, phi: T) -> Self {
         let x = r * theta.sin() * phi.cos();
         let y = r * theta.sin() * phi.sin();
