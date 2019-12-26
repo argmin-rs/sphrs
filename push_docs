@@ -29,7 +29,7 @@ cp -r ../target/doc/* .
 touch .nojekyll
 cat <<EOF > index.html
 <!doctype html>
-<meta http-equiv="refresh" content="0; ./argmin/">
+<meta http-equiv="refresh" content="0; ./sphrs/">
 EOF
 
 # add and commit all
