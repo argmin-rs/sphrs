@@ -74,7 +74,7 @@
 
 #![warn(missing_docs)]
 
-/// Coordi
+/// Coordinates
 pub mod coords;
 /// Spherical/solid harmonics
 pub mod sh;
