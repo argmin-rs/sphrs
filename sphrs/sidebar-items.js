@@ -1,1 +1,1 @@
-initSidebarItems({"enum":[["RealSHType",""]],"fn":[["sph_mat",""]],"mod":[["coords",""],["sh",""]],"struct":[["RealSphericalHarmonics",""]]});
+initSidebarItems({"enum":[["RealSHType","Available types of real spherical harmonics and solid harmonics"]],"mod":[["coords","Coordi"],["sh","Spherical/solid harmonics"]],"struct":[["RealHarmonics","Real spherical/solid harmonics"]],"trait":[["SphrsFloat","Trait alias to simplify common trait bounds"]]});

@@ -216,101 +216,216 @@
 <span id="216">216</span>
 <span id="217">217</span>
 <span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
+<span id="240">240</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="comment">// Copyright 2018 Stefan Kroboth</span>
+<span class="comment">// Copyright 2018-2020 Stefan Kroboth</span>
 <span class="comment">//</span>
 <span class="comment">// Licensed under the Apache License, Version 2.0 &lt;LICENSE-APACHE or</span>
 <span class="comment">// http://apache.org/licenses/LICENSE-2.0&gt; or the MIT license &lt;LICENSE-MIT or</span>
 <span class="comment">// http://opensource.org/licenses/MIT&gt;, at your option. This file may not be</span>
 <span class="comment">// copied, modified, or distributed except according to those terms.</span>
 
-<span class="doccomment">//! todo</span>
+<span class="doccomment">//! A (work in progress) general purpose spherical/solid harmonics library in Rust.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Documentation: [stable](https://doc.rs/sphrs/latest/sphrs),</span>
+<span class="doccomment">//! [master](https://argmin-rs.github.io/sphrs/sphrs/).</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Types of spherical/solid harmonics</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! This crate supports these types of real SH via the enum `RealSHType`:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * [Spherical](https://en.wikipedia.org/wiki/Spherical_harmonics)</span>
+<span class="doccomment">//! * [RegularSolid and IrregularSolid](https://en.wikipedia.org/wiki/Solid_harmonics)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! TODO: complex SH</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Usage</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Add this to your `Cargo.toml`:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```toml</span>
+<span class="doccomment">//! [dependencies]</span>
+<span class="doccomment">//! sphrs = &quot;*&quot;</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Example</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Compute the sum of all real SH up to 5th order at position (1, 0, 0):</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```rust</span>
+<span class="doccomment">//! use sphrs::{RealSHType, RealHarmonics, Coordinates};</span>
+<span class="doccomment">//! let order = 5;</span>
+<span class="doccomment">//! let sh = RealHarmonics::new(order, RealSHType::Spherical);</span>
+<span class="doccomment">//! let p = Coordinates::cartesian(1.0, 0.0, 0.0);</span>
+<span class="doccomment">//! println!(&quot;SH up to order {}: {:?}&quot;, order, sh.eval(&amp;p));</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # Acknowledgements</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! This crate is heavily inspired by Google&#39;s</span>
+<span class="doccomment">//! [spherical-harmonics](https://github.com/google/spherical-harmonics) library and follows the</span>
+<span class="doccomment">//! design documented</span>
+<span class="doccomment">//! [here](https://pdfs.semanticscholar.org/83d9/28031e78f15d9813061b53d25a4e0274c751.pdf).</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # References</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! * Robin Green, [&quot;Spherical Harmonic Lighting: The Gritty Details&quot;](http://silviojemma.com/public/papers/lighting/spherical-harmonic-lighting.pdf)</span>
+<span class="doccomment">//! * [Spherical harmonics (Wikipedia)](https://en.wikipedia.org/wiki/Spherical_harmonics)</span>
+<span class="doccomment">//! * [Solid harmonics (Wikipedia)](https://en.wikipedia.org/wiki/Spherical_harmonics)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! # License</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Licensed under either of</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!   * Apache License, Version 2.0,</span>
+<span class="doccomment">//!     ([LICENSE-APACHE](https://github.com/argmin-rs/argmin/blob/master/LICENSE-APACHE) or</span>
+<span class="doccomment">//!     http://www.apache.org/licenses/LICENSE-2.0)</span>
+<span class="doccomment">//!   * MIT License ([LICENSE-MIT](https://github.com/argmin-rs/argmin/blob/master/LICENSE-MIT) or</span>
+<span class="doccomment">//!     http://opensource.org/licenses/MIT)</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! at your option.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Contribution</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion</span>
+<span class="doccomment">//! in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above,</span>
+<span class="doccomment">//! without any additional terms or conditions.</span>
 
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">openblas_src</span>;
+<span class="attribute">#![<span class="ident">warn</span>(<span class="ident">missing_docs</span>)]</span>
 
+<span class="doccomment">/// Coordi</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">coords</span>;
+<span class="doccomment">/// Spherical/solid harmonics</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">sh</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">coords</span>::<span class="kw-2">*</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">sh</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">ndarray</span>::{<span class="ident">s</span>, <span class="ident">Array1</span>, <span class="ident">Array2</span>};
 <span class="kw">use</span> <span class="ident">num</span>::{<span class="ident">Float</span>, <span class="ident">FromPrimitive</span>};
-<span class="comment">// use num_complex::Complex;</span>
 <span class="kw">use</span> <span class="ident">num_traits</span>::<span class="ident">float</span>::<span class="ident">FloatConst</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="ident">AddAssign</span>;
 
+<span class="doccomment">/// Trait alias to simplify common trait bounds</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">SphrsFloat</span>: <span class="ident">Float</span> <span class="op">+</span> <span class="ident">FloatConst</span> <span class="op">+</span> <span class="ident">FromPrimitive</span> <span class="op">+</span> <span class="ident">Debug</span> {}
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> <span class="ident">SphrsFloat</span> <span class="kw">for</span> <span class="ident">I</span> <span class="kw">where</span> <span class="ident">I</span>: <span class="ident">Float</span> <span class="op">+</span> <span class="ident">FloatConst</span> <span class="op">+</span> <span class="ident">FromPrimitive</span> <span class="op">+</span> <span class="ident">Debug</span> {}
+
+<span class="doccomment">/// Available types of real spherical harmonics and solid harmonics</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">RealSHType</span> {
-    <span class="ident">Standard</span>,
+    <span class="doccomment">/// Spherical harmonics</span>
+    <span class="ident">Spherical</span>,
+    <span class="doccomment">/// Regular solid harmonics</span>
     <span class="ident">RegularSolid</span>,
+    <span class="doccomment">/// Irregular solid harmonics</span>
     <span class="ident">IrregularSolid</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">RealSHType</span> {
+    <span class="doccomment">/// Evaluate SH (l, m) at position `p`</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eval</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">m</span>: <span class="ident">i64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">T</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eval</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">m</span>: <span class="ident">i64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
     <span class="kw">where</span>
-        <span class="ident">T</span>: <span class="ident">Float</span> <span class="op">+</span> <span class="ident">FromPrimitive</span> <span class="op">+</span> <span class="ident">FloatConst</span> <span class="op">+</span> <span class="ident">AddAssign</span> <span class="op">+</span> <span class="ident">Debug</span>,
+        <span class="ident">T</span>: <span class="ident">SphrsFloat</span> <span class="op">+</span> <span class="ident">AddAssign</span> <span class="op">+</span> <span class="ident">Debug</span>,
     {
-        <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">RealSHType</span>::<span class="ident">Standard</span> <span class="op">=&gt;</span> <span class="ident">real_SH_hc</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>),
-            <span class="ident">RealSHType</span>::<span class="ident">RegularSolid</span> <span class="op">=&gt;</span> <span class="ident">real_regular_solid_SH</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>),
-            <span class="ident">RealSHType</span>::<span class="ident">IrregularSolid</span> <span class="op">=&gt;</span> <span class="ident">real_irregular_solid_SH</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>),
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m</span>.<span class="ident">abs</span>() <span class="op">&lt;</span><span class="op">=</span> <span class="ident">l</span>);
+        <span class="kw">match</span> <span class="self">self</span> {
+            <span class="ident">RealSHType</span>::<span class="ident">Spherical</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">real_SH_hardcoded</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>),
+            <span class="ident">RealSHType</span>::<span class="ident">RegularSolid</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">real_regular_solid_SH</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>),
+            <span class="ident">RealSHType</span>::<span class="ident">IrregularSolid</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">real_irregular_solid_SH</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>),
         }
     }
 }
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RealSphericalHarmonics</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+<span class="doccomment">/// Real spherical/solid harmonics</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">RealHarmonics</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">Float</span> <span class="op">+</span> <span class="ident">FromPrimitive</span> <span class="op">+</span> <span class="ident">FloatConst</span> <span class="op">+</span> <span class="ident">AddAssign</span> <span class="op">+</span> <span class="ident">std</span>::<span class="ident">iter</span>::<span class="ident">Sum</span> <span class="op">+</span> <span class="ident">Debug</span>,
+    <span class="ident">T</span>: <span class="ident">SphrsFloat</span> <span class="op">+</span> <span class="ident">AddAssign</span> <span class="op">+</span> <span class="ident">std</span>::<span class="ident">iter</span>::<span class="ident">Sum</span> <span class="op">+</span> <span class="ident">Debug</span>,
 {
+    <span class="doccomment">/// Order</span>
     <span class="ident">order</span>: <span class="ident">usize</span>,
+    <span class="doccomment">/// Total number of harmonics</span>
     <span class="ident">num_sh</span>: <span class="ident">usize</span>,
-    <span class="ident">coeffs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Optional coefficients</span>
+    <span class="ident">coefficients</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="doccomment">/// Type of harmonic</span>
     <span class="ident">sh</span>: <span class="ident">RealSHType</span>,
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">RealSphericalHarmonics</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">RealHarmonics</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">Float</span> <span class="op">+</span> <span class="ident">FromPrimitive</span> <span class="op">+</span> <span class="ident">FloatConst</span> <span class="op">+</span> <span class="ident">AddAssign</span> <span class="op">+</span> <span class="ident">std</span>::<span class="ident">iter</span>::<span class="ident">Sum</span> <span class="op">+</span> <span class="ident">Debug</span>,
+    <span class="ident">T</span>: <span class="ident">SphrsFloat</span> <span class="op">+</span> <span class="ident">AddAssign</span> <span class="op">+</span> <span class="ident">std</span>::<span class="ident">iter</span>::<span class="ident">Sum</span> <span class="op">+</span> <span class="ident">Debug</span>,
 {
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eval_vec</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="ident">p</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">pi</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">eval</span>(<span class="ident">pi</span>)).<span class="ident">collect</span>()
+    <span class="doccomment">/// Create new `RealHarmonics` struct</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">order</span>: <span class="ident">usize</span>, <span class="ident">sh_type</span>: <span class="ident">RealSHType</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RealHarmonics</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> (<span class="number">0</span>..<span class="op">=</span><span class="ident">order</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">o</span><span class="op">|</span> (<span class="number">2</span> <span class="op">*</span> <span class="ident">o</span> <span class="op">+</span> <span class="number">1</span>)).<span class="ident">sum</span>();
+
+        <span class="ident">RealHarmonics</span> {
+            <span class="ident">order</span>,
+            <span class="ident">num_sh</span>: <span class="ident">n</span>,
+            <span class="ident">coefficients</span>: <span class="prelude-val">None</span>,
+            <span class="ident">sh</span>: <span class="ident">sh_type</span>,
+        }
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eval</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">T</span> {
-        <span class="self">self</span>.<span class="ident">eval_indiv</span>(<span class="ident">p</span>).<span class="ident">into_iter</span>().<span class="ident">sum</span>()
+    <span class="doccomment">/// Add coefficients</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_coefficients</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">coefficients</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">coefficients</span>.<span class="ident">len</span>(), <span class="self">self</span>.<span class="ident">num_sh</span>);
+        <span class="self">self</span>.<span class="ident">coefficients</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">coefficients</span>);
+        <span class="self">self</span>
     }
 
+    <span class="doccomment">/// Evaluate harmonics at postion `p`. This will respect coefficients if they are provided.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eval_plain</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">T</span> {
-        <span class="self">self</span>.<span class="ident">eval_indiv_plain</span>(<span class="ident">p</span>).<span class="ident">into_iter</span>().<span class="ident">sum</span>()
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eval</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">coefficients</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">coefficients</span> {
+            <span class="self">self</span>.<span class="ident">eval_internal</span>(<span class="ident">p</span>)
+                .<span class="ident">iter</span>()
+                .<span class="ident">zip</span>(<span class="ident">coefficients</span>.<span class="ident">iter</span>())
+                .<span class="ident">map</span>(<span class="op">|</span>(<span class="kw-2">&amp;</span><span class="ident">a</span>, <span class="kw-2">&amp;</span><span class="ident">b</span>)<span class="op">|</span> <span class="ident">a</span> <span class="op">*</span> <span class="ident">b</span>)
+                .<span class="ident">collect</span>()
+        } <span class="kw">else</span> {
+            <span class="self">self</span>.<span class="ident">eval_internal</span>(<span class="ident">p</span>)
+        }
     }
 
+    <span class="doccomment">/// Evaluate harmonics at postion `p`. If available, hardcoded SH functions will be used.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eval_indiv</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">eval_indiv_plain</span>(<span class="ident">p</span>)
-            .<span class="ident">iter</span>()
-            .<span class="ident">zip</span>(<span class="self">self</span>.<span class="ident">coeffs</span>.<span class="ident">iter</span>())
-            .<span class="ident">map</span>(<span class="op">|</span>(<span class="kw-2">&amp;</span><span class="ident">a</span>, <span class="kw-2">&amp;</span><span class="ident">b</span>)<span class="op">|</span> <span class="ident">a</span> <span class="op">*</span> <span class="ident">b</span>)
-            .<span class="ident">collect</span>()
-    }
-
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eval_indiv_plain</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">eval_internal</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sh</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="self">self</span>.<span class="ident">num_sh</span>);
         <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="ident">p</span>));
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">order</span> <span class="op">&gt;=</span> <span class="number">1</span> {
+        <span class="comment">// TODO: Check if this is necessary. I think my hope was that explicitly stating m and l</span>
+        <span class="comment">// will allow the compiler to evaluate the code partially. I&#39;ll have to check if this is</span>
+        <span class="comment">// the case (I doubt it).</span>
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">order</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">1</span> {
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">1</span>, <span class="op">-</span><span class="number">1</span>, <span class="ident">p</span>));
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">1</span>, <span class="number">0</span>, <span class="ident">p</span>));
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="ident">p</span>));
         }
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">order</span> <span class="op">&gt;=</span> <span class="number">2</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">order</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">2</span> {
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">2</span>, <span class="op">-</span><span class="number">2</span>, <span class="ident">p</span>));
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">2</span>, <span class="op">-</span><span class="number">1</span>, <span class="ident">p</span>));
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">2</span>, <span class="number">0</span>, <span class="ident">p</span>));
@@ -318,7 +433,7 @@
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">2</span>, <span class="number">2</span>, <span class="ident">p</span>));
         }
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">order</span> <span class="op">&gt;=</span> <span class="number">3</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">order</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">3</span> {
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">3</span>, <span class="op">-</span><span class="number">3</span>, <span class="ident">p</span>));
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">3</span>, <span class="op">-</span><span class="number">2</span>, <span class="ident">p</span>));
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">3</span>, <span class="op">-</span><span class="number">1</span>, <span class="ident">p</span>));
@@ -328,7 +443,7 @@
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">3</span>, <span class="number">3</span>, <span class="ident">p</span>));
         }
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">order</span> <span class="op">&gt;=</span> <span class="number">4</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">order</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">4</span> {
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">4</span>, <span class="op">-</span><span class="number">4</span>, <span class="ident">p</span>));
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">4</span>, <span class="op">-</span><span class="number">3</span>, <span class="ident">p</span>));
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">4</span>, <span class="op">-</span><span class="number">2</span>, <span class="ident">p</span>));
@@ -340,7 +455,7 @@
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">4</span>, <span class="number">4</span>, <span class="ident">p</span>));
         }
 
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">order</span> <span class="op">&gt;=</span> <span class="number">5</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">order</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">5</span> {
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">5</span>, <span class="op">-</span><span class="number">5</span>, <span class="ident">p</span>));
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">5</span>, <span class="op">-</span><span class="number">4</span>, <span class="ident">p</span>));
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">5</span>, <span class="op">-</span><span class="number">3</span>, <span class="ident">p</span>));
@@ -354,86 +469,15 @@
             <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="number">5</span>, <span class="number">5</span>, <span class="ident">p</span>));
         }
 
-        <span class="kw">for</span> <span class="ident">l</span> <span class="kw">in</span> <span class="number">6</span>..=<span class="self">self</span>.<span class="ident">order</span> {
+        <span class="kw">for</span> <span class="ident">l</span> <span class="kw">in</span> <span class="number">6</span>..<span class="op">=</span><span class="self">self</span>.<span class="ident">order</span> {
             <span class="kw">let</span> <span class="ident">l</span> <span class="op">=</span> <span class="ident">l</span> <span class="kw">as</span> <span class="ident">i64</span>;
-            <span class="kw">for</span> <span class="ident">m</span> <span class="kw">in</span> <span class="op">-</span><span class="ident">l</span>..=<span class="ident">l</span> {
+            <span class="kw">for</span> <span class="ident">m</span> <span class="kw">in</span> <span class="op">-</span><span class="ident">l</span>..<span class="op">=</span><span class="ident">l</span> {
                 <span class="ident">sh</span>.<span class="ident">push</span>(<span class="self">self</span>.<span class="ident">sh</span>.<span class="ident">eval</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>));
             }
         }
 
         <span class="ident">sh</span>
     }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">order</span>: <span class="ident">usize</span>, <span class="ident">sh_type</span>: <span class="ident">RealSHType</span>) <span class="op">-&gt;</span> <span class="ident">RealSphericalHarmonics</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> (<span class="number">0</span>..=<span class="ident">order</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">o</span><span class="op">|</span> (<span class="number">2</span> <span class="op">*</span> <span class="ident">o</span> <span class="op">+</span> <span class="number">1</span>)).<span class="ident">sum</span>();
-
-        <span class="ident">RealSphericalHarmonics</span> {
-            <span class="ident">order</span>,
-            <span class="ident">num_sh</span>: <span class="ident">n</span>,
-            <span class="ident">coeffs</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="ident">T</span>::<span class="ident">one</span>(); <span class="ident">n</span>],
-            <span class="ident">sh</span>: <span class="ident">sh_type</span>,
-        }
-    }
-
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_coeffs</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">coeffs</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">coeffs</span>.<span class="ident">len</span>(), <span class="self">self</span>.<span class="ident">num_sh</span>);
-        <span class="self">self</span>.<span class="ident">coeffs</span> <span class="op">=</span> <span class="ident">coeffs</span>;
-    }
-}
-
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sph_mat</span><span class="op">&lt;</span>
-    <span class="lifetime">&#39;a</span>,
-    <span class="ident">T</span>: <span class="lifetime">&#39;a</span> <span class="op">+</span> <span class="ident">Float</span> <span class="op">+</span> <span class="ident">FromPrimitive</span> <span class="op">+</span> <span class="ident">FloatConst</span> <span class="op">+</span> <span class="ident">AddAssign</span> <span class="op">+</span> <span class="ident">std</span>::<span class="ident">iter</span>::<span class="ident">Sum</span> <span class="op">+</span> <span class="ident">Debug</span>,
-<span class="op">&gt;</span>(
-    <span class="ident">order</span>: <span class="ident">usize</span>,
-    <span class="ident">pos</span>: <span class="kw-2">&amp;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span>,
-    <span class="ident">sh_type</span>: <span class="ident">RealSHType</span>,
-) <span class="op">-&gt;</span> <span class="ident">Array2</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">sh</span> <span class="op">=</span> <span class="ident">RealSphericalHarmonics</span>::<span class="ident">new</span>(<span class="ident">order</span>, <span class="ident">sh_type</span>);
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">mat</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">Array2</span>::<span class="ident">uninitialized</span>((<span class="ident">pos</span>.<span class="ident">len</span>(), <span class="ident">sh</span>.<span class="ident">num_sh</span>)) };
-    <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">pos</span>.<span class="ident">len</span>() {
-        <span class="kw">let</span> <span class="ident">bla</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">pos</span>[<span class="ident">i</span>];
-        <span class="ident">mat</span>.<span class="ident">slice_mut</span>(<span class="macro">s</span><span class="macro">!</span>[<span class="ident">i</span>, ..])
-            .<span class="ident">assign</span>(<span class="kw-2">&amp;</span><span class="ident">Array1</span>::<span class="ident">from</span>(<span class="ident">sh</span>.<span class="ident">eval_indiv_plain</span>(<span class="ident">bla</span>)));
-    }
-    <span class="ident">mat</span>
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">f64</span>::<span class="ident">consts</span>::<span class="ident">PI</span>;
-
-    <span class="comment">// #[test]</span>
-    <span class="comment">// fn it_works() {</span>
-    <span class="comment">//     let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);</span>
-    <span class="comment">//     let v = sh10(&amp;p);</span>
-    <span class="comment">//     // let bla: SphericalHarmonics&lt;f64&gt; = SphericalHarmonics::new(3, );</span>
-    <span class="comment">//     // println!(&quot;p: {:?} | v: {}&quot;, p, v);</span>
-    <span class="comment">//     assert_eq!(2 + 2, 4);</span>
-    <span class="comment">// }</span>
-
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">comp</span>() {
-        <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">Coordinates</span>::<span class="ident">spherical</span>(<span class="number">1.0</span>, <span class="ident">PI</span> <span class="op">/</span> <span class="number">2.0</span>, <span class="number">0.0</span>);
-        <span class="comment">// let p = Coordinates::cartesian(1.0, 1.0, 0.3);</span>
-        <span class="macro">assert</span><span class="macro">!</span>((<span class="ident">real_SH</span>(<span class="number">2</span>, <span class="number">1</span>, <span class="kw-2">&amp;</span><span class="ident">p</span>) <span class="op">-</span> <span class="ident">sh2p1</span>(<span class="kw-2">&amp;</span><span class="ident">p</span>)) <span class="op">&lt;</span> <span class="ident">std</span>::<span class="ident">f64</span>::<span class="ident">EPSILON</span>);
-        <span class="macro">assert</span><span class="macro">!</span>((<span class="ident">real_SH</span>(<span class="number">3</span>, <span class="op">-</span><span class="number">2</span>, <span class="kw-2">&amp;</span><span class="ident">p</span>) <span class="op">-</span> <span class="ident">sh3n2</span>(<span class="kw-2">&amp;</span><span class="ident">p</span>)) <span class="op">&lt;</span> <span class="ident">std</span>::<span class="ident">f64</span>::<span class="ident">EPSILON</span>);
-    }
-
-    <span class="comment">// #[test]</span>
-    <span class="comment">// fn sph_mat_test() {</span>
-    <span class="comment">//     let p1 = Coordinates::spherical(1.0, PI / 2.0, 0.0);</span>
-    <span class="comment">//     let p1 = p1.finalize();</span>
-    <span class="comment">//     let p2 = Coordinates::spherical(0.7, PI / 4.0, 0.0);</span>
-    <span class="comment">//     let p2 = p2.finalize();</span>
-    <span class="comment">//     let fu = vec![&amp;p1, &amp;p2];</span>
-    <span class="comment">//     let bla = sph_mat(1, &amp;fu);</span>
-    <span class="comment">//     println!(&quot;{:#?}&quot;, bla);</span>
-    <span class="comment">//</span>
-    <span class="comment">//     // assert!((real_SH(2, 1, &amp;p) - sh2p1(&amp;p)) &lt; std::f64::EPSILON);</span>
-    <span class="comment">//     // assert!((real_SH(3, -2, &amp;p) - sh3n2(&amp;p)) &lt; std::f64::EPSILON);</span>
-    <span class="comment">// }</span>
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g., <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g., <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g., <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../../";window.currentCrate = "sphrs";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "sphrs";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
