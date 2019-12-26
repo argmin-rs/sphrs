@@ -81,7 +81,7 @@ pub mod sh;
 
 pub use crate::coords::*;
 pub use crate::sh::*;
-use num::{Float, FromPrimitive};
+use num::{Complex, Float, FromPrimitive};
 use num_traits::float::FloatConst;
 use std::fmt::Debug;
 use std::ops::AddAssign;
@@ -101,8 +101,19 @@ pub enum RealSHType {
     IrregularSolid,
 }
 
+/// Available types of complex spherical harmonics and solid harmonics
+#[derive(Clone, Copy)]
+pub enum ComplexSHType {
+    /// Spherical harmonics
+    Spherical,
+    /// Regular solid harmonics
+    RegularSolid,
+    /// Irregular solid harmonics
+    IrregularSolid,
+}
+
 impl RealSHType {
-    /// Evaluate SH (l, m) at position `p`
+    /// Evaluate real SH (l, m) at position `p`
     #[inline]
     pub fn eval<T>(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T
     where
@@ -113,6 +124,22 @@ impl RealSHType {
             RealSHType::Spherical => real_SH_hardcoded(l, m, p),
             RealSHType::RegularSolid => real_regular_solid_SH(l, m, p),
             RealSHType::IrregularSolid => real_irregular_solid_SH(l, m, p),
+        }
+    }
+}
+
+impl ComplexSHType {
+    /// Evaluate complex SH (l, m) at position `p`
+    #[inline]
+    pub fn eval<T>(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T>
+    where
+        T: SphrsFloat + AddAssign + Debug,
+    {
+        assert!(m.abs() <= l);
+        match self {
+            ComplexSHType::Spherical => SH(l, m, p),
+            ComplexSHType::RegularSolid => regular_solid_SH(l, m, p),
+            ComplexSHType::IrregularSolid => irregular_solid_SH(l, m, p),
         }
     }
 }
@@ -229,6 +256,73 @@ where
         }
 
         for l in 6..=self.order {
+            let l = l as i64;
+            for m in -l..=l {
+                sh.push(self.sh.eval(l, m, p));
+            }
+        }
+
+        sh
+    }
+}
+
+/// Complex spherical/solid harmonics
+pub struct ComplexHarmonics<T>
+where
+    T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
+{
+    /// Order
+    order: usize,
+    /// Total number of harmonics
+    num_sh: usize,
+    /// Optional coefficients
+    coefficients: Option<Vec<Complex<T>>>,
+    /// Type of harmonic
+    sh: ComplexSHType,
+}
+
+impl<'a, T> ComplexHarmonics<T>
+where
+    T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
+{
+    /// Create new `ComplexHarmonics` struct
+    pub fn new(order: usize, sh_type: RealSHType) -> RealHarmonics<T> {
+        let n = (0..=order).map(|o| (2 * o + 1)).sum();
+
+        RealHarmonics {
+            order,
+            num_sh: n,
+            coefficients: None,
+            sh: sh_type,
+        }
+    }
+
+    /// Add coefficients
+    pub fn with_coefficients(&mut self, coefficients: Vec<Complex<T>>) -> &mut Self {
+        assert_eq!(coefficients.len(), self.num_sh);
+        self.coefficients = Some(coefficients);
+        self
+    }
+
+    /// Evaluate harmonics at postion `p`. This will respect coefficients if they are provided.
+    #[inline]
+    pub fn eval(&self, p: &dyn SHCoordinates<T>) -> Vec<Complex<T>> {
+        if let Some(ref coefficients) = self.coefficients {
+            self.eval_internal(p)
+                .iter()
+                .zip(coefficients.iter())
+                .map(|(&a, &b)| a * b)
+                .collect()
+        } else {
+            self.eval_internal(p)
+        }
+    }
+
+    /// Evaluate harmonics at postion `p`.
+    #[inline]
+    fn eval_internal(&self, p: &dyn SHCoordinates<T>) -> Vec<Complex<T>> {
+        let mut sh = Vec::with_capacity(self.num_sh);
+        for l in 0..=self.order {
             let l = l as i64;
             for m in -l..=l {
                 sh.push(self.sh.eval(l, m, p));
