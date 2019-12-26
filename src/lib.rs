@@ -5,9 +5,12 @@
 // http://opensource.org/licenses/MIT>, at your option. This file may not be
 // copied, modified, or distributed except according to those terms.
 
-//! A general purpose spherical harmonics library in Rust.
+//! A (work in progress) general purpose spherical/solid harmonics library in Rust.
 //!
-//! # Types of SH
+//! Documentation: [stable](https://doc.rs/sphrs/latest/sphrs),
+//! [master](https://argmin-rs.github.io/sphrs/sphrs/).
+//!
+//! # Types of spherical/solid harmonics
 //!
 //! This crate supports these types of real SH via the enum `RealSHType`:
 //!
@@ -44,6 +47,12 @@
 //! design documented
 //! [here](https://pdfs.semanticscholar.org/83d9/28031e78f15d9813061b53d25a4e0274c751.pdf).
 //!
+//! # References
+//!
+//! * Robin Green, ["Spherical Harmonic Lighting: The Gritty Details"](http://silviojemma.com/public/papers/lighting/spherical-harmonic-lighting.pdf)
+//! * [Spherical harmonics (Wikipedia)](https://en.wikipedia.org/wiki/Spherical_harmonics)
+//! * [Solid harmonics (Wikipedia)](https://en.wikipedia.org/wiki/Spherical_harmonics)
+//!
 //! # License
 //!
 //! Licensed under either of
@@ -62,6 +71,8 @@
 //! Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion
 //! in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above,
 //! without any additional terms or conditions.
+
+// #![warn(missing_docs)]
 
 pub mod coords;
 pub mod sh;
