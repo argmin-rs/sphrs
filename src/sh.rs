@@ -199,6 +199,8 @@ fn P<T: SphrsFloat>(l: i64, m: i64, x: T) -> T {
 #[allow(non_snake_case)]
 #[inline]
 pub fn SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T> {
+    assert!(l >= 0);
+    assert!(m.abs() <= l);
     let v: T = if m == 0 {
         K::<T>(l, 0) * P(l, m, p.theta_cos())
     } else if m > 0 {
@@ -206,8 +208,13 @@ pub fn SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T>
     } else {
         K::<T>(l, -m) * P(l, -m, p.theta_cos())
     };
+    let sign = if m < 0 {
+        T::from_f64((-1f64).powi(m.abs() as i32)).unwrap()
+    } else {
+        T::from_f64(1.0).unwrap()
+    };
     let tmp = T::from_i64(m).unwrap() * p.phi();
-    Complex::new(v * tmp.sin(), v * tmp.cos())
+    Complex::new(sign * v * tmp.cos(), sign * v * tmp.sin())
 }
 
 /// Real spherical harmonics (recursive implementation)
@@ -304,7 +311,7 @@ mod tests {
     use std::f64::consts::PI;
 
     #[test]
-    fn compare_hardcoded_full() {
+    fn compare_hardcoded_and_recursive() {
         let tol = 10.0 * std::f64::EPSILON;
         let c = [
             Coordinates::spherical(1.0, PI / 4.0, PI / 2.0),
@@ -342,6 +349,35 @@ mod tests {
             assert!((real_SH(3, 1, p) - sh3p1(p)).abs() < tol);
             assert!((real_SH(3, 2, p) - sh3p2(p)).abs() < tol);
             assert!((real_SH(3, 3, p) - sh3p3(p)).abs() < tol);
+        }
+    }
+
+    #[test]
+    fn compare_recursive_complex_and_scipy() {
+        use csv;
+        use std::fs::File;
+
+        let tol = 10.0 * std::f64::EPSILON;
+        let file = File::open("test_helpers/scipy.csv").unwrap();
+        let mut rdr = csv::Reader::from_reader(file);
+        for (_idx, result) in rdr.records().enumerate() {
+            let record = result.unwrap();
+            let l: i64 = record[0].parse().ok().unwrap();
+            let m: i64 = record[1].parse().ok().unwrap();
+            let phi: f64 = record[2].parse().ok().unwrap();
+            let theta: f64 = record[3].parse().ok().unwrap();
+            let scipy_res: Complex<f64> = Complex::new(
+                record[4].parse().ok().unwrap(),
+                record[5].parse().ok().unwrap(),
+            );
+            let coords = Coordinates::spherical(1.0, theta, phi);
+            let sphrs_res = SH(l, m, &coords);
+            // println!(
+            //     "{:?} | l: {:?}, m: {:?}, phi: {:?}, theta: {:?}, {:?} - {:?}",
+            //     idx, l, m, phi, theta, scipy_res, sphrs_res
+            // );
+            assert!((sphrs_res.re - scipy_res.re).abs() < tol);
+            assert!((sphrs_res.im - scipy_res.im).abs() < tol);
         }
     }
 }
