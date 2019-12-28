@@ -187,7 +187,7 @@ where
 
     /// Evaluate harmonics at postion `p`. This will respect coefficients if they are provided.
     #[inline]
-    pub fn eval(&self, p: &dyn SHCoordinates<T>) -> Vec<T> {
+    pub fn eval<C: SHCoordinates<T>>(&self, p: &C) -> Vec<T> {
         if let Some(ref coefficients) = self.coefficients {
             self.eval_internal(p)
                 .iter()
@@ -201,7 +201,7 @@ where
 
     /// Evaluate harmonics at postion `p`. If available, hardcoded SH functions will be used.
     #[inline]
-    fn eval_internal(&self, p: &dyn SHCoordinates<T>) -> Vec<T> {
+    fn eval_internal<C: SHCoordinates<T>>(&self, p: &C) -> Vec<T> {
         let mut sh = Vec::with_capacity(self.num_sh);
         sh.push(self.sh.eval(0, 0, p));
 
