@@ -33,9 +33,9 @@
 //! Compute the sum of all real SH up to 5th degree at position (1, 0, 0):
 //!
 //! ```rust
-//! use sphrs::{RealSHType, RealHarmonics, Coordinates};
+//! use sphrs::{RealSHType, HarmonicsSet, Coordinates};
 //! let degree = 5;
-//! let sh: RealHarmonics<f64, _, _> = RealHarmonics::new(degree, RealSHType::Spherical);
+//! let sh: HarmonicsSet<f64, _, _> = HarmonicsSet::new(degree, RealSHType::Spherical);
 //! let p = Coordinates::cartesian(1.0, 0.0, 0.0);
 //! println!("SH up to degree {}: {:?}", degree, sh.eval(&p));
 //! ```
@@ -150,7 +150,7 @@ where
 }
 
 /// Real spherical/solid harmonics
-pub struct RealHarmonics<T, E, O> {
+pub struct HarmonicsSet<T, E, O> {
     /// degree
     degree: usize,
     /// Total number of harmonics
@@ -163,18 +163,18 @@ pub struct RealHarmonics<T, E, O> {
     ttt: std::marker::PhantomData<T>,
 }
 
-impl<T, E, O> RealHarmonics<T, E, O>
+impl<T, E, O> HarmonicsSet<T, E, O>
 where
     T: SphrsFloat,
     O: std::ops::Mul + Copy,
     Vec<O>: std::iter::FromIterator<<O as std::ops::Mul>::Output>,
     E: SHEval<T, O>,
 {
-    /// Create new `RealHarmonics` struct
-    pub fn new(degree: usize, sh_type: E) -> RealHarmonics<T, E, O> {
+    /// Create new `HarmonicsSet` struct
+    pub fn new(degree: usize, sh_type: E) -> HarmonicsSet<T, E, O> {
         let num_sh = (0..=degree).map(|o| (2 * o + 1)).sum();
 
-        RealHarmonics {
+        HarmonicsSet {
             degree,
             num_sh,
             coefficients: None,
@@ -698,70 +698,6 @@ where
             sh.push(self.sh.eval(20, 20, p));
         }
         for l in 21..=self.degree {
-            let l = l as i64;
-            for m in -l..=l {
-                sh.push(self.sh.eval(l, m, p));
-            }
-        }
-
-        sh
-    }
-}
-
-/// Complex spherical/solid harmonics
-pub struct ComplexHarmonics<T> {
-    /// degree
-    degree: usize,
-    /// Total number of harmonics
-    num_sh: usize,
-    /// Optional coefficients
-    coefficients: Option<Vec<Complex<T>>>,
-    /// Type of harmonic
-    sh: ComplexSHType,
-}
-
-impl<T> ComplexHarmonics<T>
-where
-    T: SphrsFloat,
-{
-    /// Create new `ComplexHarmonics` struct
-    pub fn new(degree: usize, sh_type: ComplexSHType) -> ComplexHarmonics<T> {
-        let num_sh = (0..=degree).map(|o| (2 * o + 1)).sum();
-
-        ComplexHarmonics {
-            degree,
-            num_sh,
-            coefficients: None,
-            sh: sh_type,
-        }
-    }
-
-    /// Add coefficients
-    pub fn with_coefficients(&mut self, coefficients: Vec<Complex<T>>) -> &mut Self {
-        assert_eq!(coefficients.len(), self.num_sh);
-        self.coefficients = Some(coefficients);
-        self
-    }
-
-    /// Evaluate harmonics at postion `p`. This will respect coefficients if they are provided.
-    #[inline]
-    pub fn eval(&self, p: &dyn SHCoordinates<T>) -> Vec<Complex<T>> {
-        if let Some(ref coefficients) = self.coefficients {
-            self.eval_internal(p)
-                .iter()
-                .zip(coefficients.iter())
-                .map(|(&a, &b)| a * b)
-                .collect()
-        } else {
-            self.eval_internal(p)
-        }
-    }
-
-    /// Evaluate harmonics at postion `p`.
-    #[inline]
-    fn eval_internal(&self, p: &dyn SHCoordinates<T>) -> Vec<Complex<T>> {
-        let mut sh = Vec::with_capacity(self.num_sh);
-        for l in 0..=self.degree {
             let l = l as i64;
             for m in -l..=l {
                 sh.push(self.sh.eval(l, m, p));
