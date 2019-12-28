@@ -114,7 +114,7 @@ pub enum ComplexSHType {
 /// SH eval trait (TODO)
 pub trait SHEval<T: SphrsFloat, U> {
     /// Evaluate SH (l, m) at position `p`
-    fn eval(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> U;
+    fn eval(&self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> U;
 }
 
 impl<T> SHEval<T, T> for RealSHType
@@ -123,12 +123,12 @@ where
 {
     /// Evaluate real SH (l, m) at position `p`
     #[inline]
-    fn eval(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
+    fn eval(&self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
         debug_assert!(m.abs() <= l);
         match self {
-            RealSHType::Spherical => real_SH_hardcoded(l, m, p),
-            RealSHType::RegularSolid => real_regular_solid_SH(l, m, p),
-            RealSHType::IrregularSolid => real_irregular_solid_SH(l, m, p),
+            Self::Spherical => real_SH_hardcoded(l, m, p),
+            Self::RegularSolid => real_regular_solid_SH(l, m, p),
+            Self::IrregularSolid => real_irregular_solid_SH(l, m, p),
         }
     }
 }
@@ -139,18 +139,18 @@ where
 {
     /// Evaluate complex SH (l, m) at position `p`
     #[inline]
-    fn eval(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T> {
+    fn eval(&self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T> {
         debug_assert!(m.abs() <= l);
         match self {
-            ComplexSHType::Spherical => SH(l, m, p),
-            ComplexSHType::RegularSolid => regular_solid_SH(l, m, p),
-            ComplexSHType::IrregularSolid => irregular_solid_SH(l, m, p),
+            Self::Spherical => SH(l, m, p),
+            Self::RegularSolid => regular_solid_SH(l, m, p),
+            Self::IrregularSolid => irregular_solid_SH(l, m, p),
         }
     }
 }
 
 /// Real spherical/solid harmonics
-pub struct RealHarmonics<T> {
+pub struct RealHarmonics<T, E> {
     /// degree
     degree: usize,
     /// Total number of harmonics
@@ -158,15 +158,16 @@ pub struct RealHarmonics<T> {
     /// Optional coefficients
     coefficients: Option<Vec<T>>,
     /// Type of harmonic
-    sh: RealSHType,
+    sh: E,
 }
 
-impl<T> RealHarmonics<T>
+impl<T, E> RealHarmonics<T, E>
 where
     T: SphrsFloat,
+    E: SHEval<T, T>,
 {
     /// Create new `RealHarmonics` struct
-    pub fn new(degree: usize, sh_type: RealSHType) -> RealHarmonics<T> {
+    pub fn new(degree: usize, sh_type: E) -> RealHarmonics<T, E> {
         let num_sh = (0..=degree).map(|o| (2 * o + 1)).sum();
 
         RealHarmonics {
