@@ -310,6 +310,14 @@ mod tests {
     use super::*;
     use std::f64::consts::PI;
 
+    macro_rules! comp {
+        ($l:expr, $m:expr, $p:tt, $hcf:expr, $tol:tt) => {
+            let rsh: f64 = real_SH($l, $m, $p);
+            let hsh: f64 = $hcf($p);
+            assert!((rsh - hsh).abs() < $tol);
+        };
+    }
+
     #[test]
     fn compare_hardcoded_and_recursive() {
         let tol = 10.0 * std::f64::EPSILON;
@@ -330,25 +338,25 @@ mod tests {
             // println!("{:?} | {:?}", real_SH(2, 2, p), sh2p2(p));
             // println!("{:?}", (real_SH(2, 2, p) - sh2p2(p)).abs());
             // 0th degree
-            assert!((real_SH(0, 0, p) - sh00(p)).abs() < tol);
+            comp!(0, 0, p, sh00, tol);
             // 1st degree
-            assert!((real_SH(1, -1, p) - sh1n1(p)).abs() < tol);
-            assert!((real_SH(1, 0, p) - sh10(p)).abs() < tol);
-            assert!((real_SH(1, 1, p) - sh1p1(p)).abs() < tol);
+            comp!(1, -1, p, sh1n1, tol);
+            comp!(1, 0, p, sh10, tol);
+            comp!(1, 1, p, sh1p1, tol);
             // 2nd degree
-            assert!((real_SH(2, -2, p) - sh2n2(p)).abs() < tol);
-            assert!((real_SH(2, -1, p) - sh2n1(p)).abs() < tol);
-            assert!((real_SH(2, 0, p) - sh20(p)).abs() < tol);
-            assert!((real_SH(2, 1, p) - sh2p1(p)).abs() < tol);
-            assert!((real_SH(2, 2, p) - sh2p2(p)).abs() < tol);
+            comp!(2, -2, p, sh2n2, tol);
+            comp!(2, -1, p, sh2n1, tol);
+            comp!(2, 0, p, sh20, tol);
+            comp!(2, 1, p, sh2p1, tol);
+            comp!(2, 2, p, sh2p2, tol);
             // 3rd degree
-            assert!((real_SH(3, -3, p) - sh3n3(p)).abs() < tol);
-            assert!((real_SH(3, -2, p) - sh3n2(p)).abs() < tol);
-            assert!((real_SH(3, -1, p) - sh3n1(p)).abs() < tol);
-            assert!((real_SH(3, 0, p) - sh30(p)).abs() < tol);
-            assert!((real_SH(3, 1, p) - sh3p1(p)).abs() < tol);
-            assert!((real_SH(3, 2, p) - sh3p2(p)).abs() < tol);
-            assert!((real_SH(3, 3, p) - sh3p3(p)).abs() < tol);
+            comp!(3, -3, p, sh3n3, tol);
+            comp!(3, -2, p, sh3n2, tol);
+            comp!(3, -1, p, sh3n1, tol);
+            comp!(3, 0, p, sh30, tol);
+            comp!(3, 1, p, sh3p1, tol);
+            comp!(3, 2, p, sh3p2, tol);
+            comp!(3, 3, p, sh3p3, tol);
         }
     }
 
@@ -371,7 +379,7 @@ mod tests {
                 record[5].parse().ok().unwrap(),
             );
             let coords = Coordinates::spherical(1.0, theta, phi);
-            let sphrs_res = SH(l, m, &coords);
+            let sphrs_res: Complex<f64> = SH(l, m, &coords);
             // println!(
             //     "{:?} | l: {:?}, m: {:?}, phi: {:?}, theta: {:?}, {:?} - {:?}",
             //     idx, l, m, phi, theta, scipy_res, sphrs_res
