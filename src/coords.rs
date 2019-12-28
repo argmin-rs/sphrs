@@ -8,10 +8,7 @@
 use crate::SphrsFloat;
 
 /// SHCoordinates trait
-pub trait SHCoordinates<T>
-where
-    T: SphrsFloat,
-{
+pub trait SHCoordinates<T> {
     /// Return `theta`
     fn theta(&self) -> T;
     /// Return `phi`
@@ -52,7 +49,10 @@ where
     T: SphrsFloat,
 {
     /// Create `Coordinates` struct from cartesian coordinates
-    pub fn cartesian(x: T, y: T, z: T) -> Self {
+    pub fn cartesian<U: Into<T>>(x: U, y: U, z: U) -> Self {
+        let x: T = x.into();
+        let y: T = y.into();
+        let z: T = z.into();
         let r = (x.powi(2) + y.powi(2) + z.powi(2)).sqrt();
         let theta = (z / r).acos();
         let phi = y.atan2(x);
@@ -70,7 +70,10 @@ where
     }
 
     /// Create `Coordinates` struct from spherical coordinates
-    pub fn spherical(r: T, theta: T, phi: T) -> Self {
+    pub fn spherical<U: Into<T>>(r: U, theta: U, phi: U) -> Self {
+        let r: T = r.into();
+        let theta: T = theta.into();
+        let phi: T = phi.into();
         let x = r * theta.sin() * phi.cos();
         let y = r * theta.sin() * phi.sin();
         let theta_cos = theta.cos();
