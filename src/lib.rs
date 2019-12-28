@@ -118,7 +118,7 @@ impl RealSHType {
     where
         T: SphrsFloat,
     {
-        assert!(m.abs() <= l);
+        debug_assert!(m.abs() <= l);
         match self {
             RealSHType::Spherical => real_SH_hardcoded(l, m, p),
             RealSHType::RegularSolid => real_regular_solid_SH(l, m, p),
@@ -134,7 +134,7 @@ impl ComplexSHType {
     where
         T: SphrsFloat,
     {
-        assert!(m.abs() <= l);
+        debug_assert!(m.abs() <= l);
         match self {
             ComplexSHType::Spherical => SH(l, m, p),
             ComplexSHType::RegularSolid => regular_solid_SH(l, m, p),
@@ -279,10 +279,10 @@ where
     T: SphrsFloat,
 {
     /// Create new `ComplexHarmonics` struct
-    pub fn new(degree: usize, sh_type: RealSHType) -> RealHarmonics<T> {
+    pub fn new(degree: usize, sh_type: ComplexSHType) -> ComplexHarmonics<T> {
         let num_sh = (0..=degree).map(|o| (2 * o + 1)).sum();
 
-        RealHarmonics {
+        ComplexHarmonics {
             degree,
             num_sh,
             coefficients: None,
