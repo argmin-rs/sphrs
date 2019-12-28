@@ -111,13 +111,19 @@ pub enum ComplexSHType {
     IrregularSolid,
 }
 
-impl RealSHType {
+/// SH eval trait (TODO)
+pub trait SHEval<T: SphrsFloat, U> {
+    /// Evaluate SH (l, m) at position `p`
+    fn eval(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> U;
+}
+
+impl<T> SHEval<T, T> for RealSHType
+where
+    T: SphrsFloat,
+{
     /// Evaluate real SH (l, m) at position `p`
     #[inline]
-    pub fn eval<T>(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T
-    where
-        T: SphrsFloat,
-    {
+    fn eval(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
         debug_assert!(m.abs() <= l);
         match self {
             RealSHType::Spherical => real_SH_hardcoded(l, m, p),
@@ -127,13 +133,13 @@ impl RealSHType {
     }
 }
 
-impl ComplexSHType {
+impl<T> SHEval<T, Complex<T>> for ComplexSHType
+where
+    T: SphrsFloat,
+{
     /// Evaluate complex SH (l, m) at position `p`
     #[inline]
-    pub fn eval<T>(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T>
-    where
-        T: SphrsFloat,
-    {
+    fn eval(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T> {
         debug_assert!(m.abs() <= l);
         match self {
             ComplexSHType::Spherical => SH(l, m, p),
