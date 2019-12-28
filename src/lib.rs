@@ -35,7 +35,7 @@
 //! ```rust
 //! use sphrs::{RealSHType, RealHarmonics, Coordinates};
 //! let degree = 5;
-//! let sh = RealHarmonics::new(degree, RealSHType::Spherical);
+//! let sh: RealHarmonics<f64> = RealHarmonics::new(degree, RealSHType::Spherical);
 //! let p = Coordinates::cartesian(1.0, 0.0, 0.0);
 //! println!("SH up to degree {}: {:?}", degree, sh.eval(&p));
 //! ```
