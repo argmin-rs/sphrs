@@ -84,7 +84,6 @@ pub use crate::sh::*;
 use num::{Complex, Float, FromPrimitive};
 use num_traits::float::FloatConst;
 use std::fmt::Debug;
-use std::ops::AddAssign;
 
 /// Trait alias to simplify common trait bounds
 pub trait SphrsFloat: Float + FloatConst + FromPrimitive + Debug {}
@@ -117,7 +116,7 @@ impl RealSHType {
     #[inline]
     pub fn eval<T>(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T
     where
-        T: SphrsFloat + AddAssign + Debug,
+        T: SphrsFloat,
     {
         assert!(m.abs() <= l);
         match self {
@@ -133,7 +132,7 @@ impl ComplexSHType {
     #[inline]
     pub fn eval<T>(self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T>
     where
-        T: SphrsFloat + AddAssign + Debug,
+        T: SphrsFloat,
     {
         assert!(m.abs() <= l);
         match self {
@@ -145,10 +144,7 @@ impl ComplexSHType {
 }
 
 /// Real spherical/solid harmonics
-pub struct RealHarmonics<T>
-where
-    T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
-{
+pub struct RealHarmonics<T> {
     /// degree
     degree: usize,
     /// Total number of harmonics
@@ -159,17 +155,17 @@ where
     sh: RealSHType,
 }
 
-impl<'a, T> RealHarmonics<T>
+impl<T> RealHarmonics<T>
 where
-    T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
+    T: SphrsFloat,
 {
     /// Create new `RealHarmonics` struct
     pub fn new(degree: usize, sh_type: RealSHType) -> RealHarmonics<T> {
-        let n = (0..=degree).map(|o| (2 * o + 1)).sum();
+        let num_sh = (0..=degree).map(|o| (2 * o + 1)).sum();
 
         RealHarmonics {
             degree,
-            num_sh: n,
+            num_sh,
             coefficients: None,
             sh: sh_type,
         }
@@ -267,10 +263,7 @@ where
 }
 
 /// Complex spherical/solid harmonics
-pub struct ComplexHarmonics<T>
-where
-    T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
-{
+pub struct ComplexHarmonics<T> {
     /// degree
     degree: usize,
     /// Total number of harmonics
@@ -281,17 +274,17 @@ where
     sh: ComplexSHType,
 }
 
-impl<'a, T> ComplexHarmonics<T>
+impl<T> ComplexHarmonics<T>
 where
-    T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
+    T: SphrsFloat,
 {
     /// Create new `ComplexHarmonics` struct
     pub fn new(degree: usize, sh_type: RealSHType) -> RealHarmonics<T> {
-        let n = (0..=degree).map(|o| (2 * o + 1)).sum();
+        let num_sh = (0..=degree).map(|o| (2 * o + 1)).sum();
 
         RealHarmonics {
             degree,
-            num_sh: n,
+            num_sh,
             coefficients: None,
             sh: sh_type,
         }

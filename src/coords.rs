@@ -30,10 +30,7 @@ where
 
 /// Coordinates struct
 #[derive(Default, Clone, Debug)]
-pub struct Coordinates<T>
-where
-    T: SphrsFloat,
-{
+pub struct Coordinates<T> {
     /// radius (spherical coordinates)
     r: T,
     /// theta (spherical coordinates)
