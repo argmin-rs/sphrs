@@ -30,14 +30,14 @@
 //!
 //! # Example
 //!
-//! Compute the sum of all real SH up to 5th order at position (1, 0, 0):
+//! Compute the sum of all real SH up to 5th degree at position (1, 0, 0):
 //!
 //! ```rust
 //! use sphrs::{RealSHType, RealHarmonics, Coordinates};
-//! let order = 5;
-//! let sh = RealHarmonics::new(order, RealSHType::Spherical);
+//! let degree = 5;
+//! let sh = RealHarmonics::new(degree, RealSHType::Spherical);
 //! let p = Coordinates::cartesian(1.0, 0.0, 0.0);
-//! println!("SH up to order {}: {:?}", order, sh.eval(&p));
+//! println!("SH up to degree {}: {:?}", degree, sh.eval(&p));
 //! ```
 //!
 //! # Acknowledgements
@@ -149,8 +149,8 @@ pub struct RealHarmonics<T>
 where
     T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
 {
-    /// Order
-    order: usize,
+    /// degree
+    degree: usize,
     /// Total number of harmonics
     num_sh: usize,
     /// Optional coefficients
@@ -164,11 +164,11 @@ where
     T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
 {
     /// Create new `RealHarmonics` struct
-    pub fn new(order: usize, sh_type: RealSHType) -> RealHarmonics<T> {
-        let n = (0..=order).map(|o| (2 * o + 1)).sum();
+    pub fn new(degree: usize, sh_type: RealSHType) -> RealHarmonics<T> {
+        let n = (0..=degree).map(|o| (2 * o + 1)).sum();
 
         RealHarmonics {
-            order,
+            degree,
             num_sh: n,
             coefficients: None,
             sh: sh_type,
@@ -205,13 +205,13 @@ where
         // TODO: Check if this is necessary. I think my hope was that explicitly stating m and l
         // will allow the compiler to evaluate the code partially. I'll have to check if this is
         // the case (I doubt it).
-        if self.order >= 1 {
+        if self.degree >= 1 {
             sh.push(self.sh.eval(1, -1, p));
             sh.push(self.sh.eval(1, 0, p));
             sh.push(self.sh.eval(1, 1, p));
         }
 
-        if self.order >= 2 {
+        if self.degree >= 2 {
             sh.push(self.sh.eval(2, -2, p));
             sh.push(self.sh.eval(2, -1, p));
             sh.push(self.sh.eval(2, 0, p));
@@ -219,7 +219,7 @@ where
             sh.push(self.sh.eval(2, 2, p));
         }
 
-        if self.order >= 3 {
+        if self.degree >= 3 {
             sh.push(self.sh.eval(3, -3, p));
             sh.push(self.sh.eval(3, -2, p));
             sh.push(self.sh.eval(3, -1, p));
@@ -229,7 +229,7 @@ where
             sh.push(self.sh.eval(3, 3, p));
         }
 
-        if self.order >= 4 {
+        if self.degree >= 4 {
             sh.push(self.sh.eval(4, -4, p));
             sh.push(self.sh.eval(4, -3, p));
             sh.push(self.sh.eval(4, -2, p));
@@ -241,7 +241,7 @@ where
             sh.push(self.sh.eval(4, 4, p));
         }
 
-        if self.order >= 5 {
+        if self.degree >= 5 {
             sh.push(self.sh.eval(5, -5, p));
             sh.push(self.sh.eval(5, -4, p));
             sh.push(self.sh.eval(5, -3, p));
@@ -255,7 +255,7 @@ where
             sh.push(self.sh.eval(5, 5, p));
         }
 
-        for l in 6..=self.order {
+        for l in 6..=self.degree {
             let l = l as i64;
             for m in -l..=l {
                 sh.push(self.sh.eval(l, m, p));
@@ -271,8 +271,8 @@ pub struct ComplexHarmonics<T>
 where
     T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
 {
-    /// Order
-    order: usize,
+    /// degree
+    degree: usize,
     /// Total number of harmonics
     num_sh: usize,
     /// Optional coefficients
@@ -286,11 +286,11 @@ where
     T: SphrsFloat + AddAssign + std::iter::Sum + Debug,
 {
     /// Create new `ComplexHarmonics` struct
-    pub fn new(order: usize, sh_type: RealSHType) -> RealHarmonics<T> {
-        let n = (0..=order).map(|o| (2 * o + 1)).sum();
+    pub fn new(degree: usize, sh_type: RealSHType) -> RealHarmonics<T> {
+        let n = (0..=degree).map(|o| (2 * o + 1)).sum();
 
         RealHarmonics {
-            order,
+            degree,
             num_sh: n,
             coefficients: None,
             sh: sh_type,
@@ -322,7 +322,7 @@ where
     #[inline]
     fn eval_internal(&self, p: &dyn SHCoordinates<T>) -> Vec<Complex<T>> {
         let mut sh = Vec::with_capacity(self.num_sh);
-        for l in 0..=self.order {
+        for l in 0..=self.degree {
             let l = l as i64;
             for m in -l..=l {
                 sh.push(self.sh.eval(l, m, p));

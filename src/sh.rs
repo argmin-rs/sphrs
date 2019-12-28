@@ -242,19 +242,19 @@ pub fn real_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
 #[inline]
 pub fn real_SH_hardcoded<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
     match (l, m) {
-        // 0th order
+        // 0th degree
         (0, 0) => sh00(p),
-        // 1st order
+        // 1st degree
         (1, -1) => sh1n1(p),
         (1, 0) => sh10(p),
         (1, 1) => sh1p1(p),
-        // 2nd order
+        // 2nd degree
         (2, -2) => sh2n2(p),
         (2, -1) => sh2n1(p),
         (2, 0) => sh20(p),
         (2, 1) => sh2p1(p),
         (2, 2) => sh2p2(p),
-        // 3rd order
+        // 3rd degree
         (3, -3) => sh3n3(p),
         (3, -2) => sh3n2(p),
         (3, -1) => sh3n1(p),
@@ -329,19 +329,19 @@ mod tests {
             // println!("{:?}", p);
             // println!("{:?} | {:?}", real_SH(2, 2, p), sh2p2(p));
             // println!("{:?}", (real_SH(2, 2, p) - sh2p2(p)).abs());
-            // 0th order
+            // 0th degree
             assert!((real_SH(0, 0, p) - sh00(p)).abs() < tol);
-            // 1st order
+            // 1st degree
             assert!((real_SH(1, -1, p) - sh1n1(p)).abs() < tol);
             assert!((real_SH(1, 0, p) - sh10(p)).abs() < tol);
             assert!((real_SH(1, 1, p) - sh1p1(p)).abs() < tol);
-            // 2nd order
+            // 2nd degree
             assert!((real_SH(2, -2, p) - sh2n2(p)).abs() < tol);
             assert!((real_SH(2, -1, p) - sh2n1(p)).abs() < tol);
             assert!((real_SH(2, 0, p) - sh20(p)).abs() < tol);
             assert!((real_SH(2, 1, p) - sh2p1(p)).abs() < tol);
             assert!((real_SH(2, 2, p) - sh2p2(p)).abs() < tol);
-            // 3rd order
+            // 3rd degree
             assert!((real_SH(3, -3, p) - sh3n3(p)).abs() < tol);
             assert!((real_SH(3, -2, p) - sh3n2(p)).abs() < tol);
             assert!((real_SH(3, -1, p) - sh3n1(p)).abs() < tol);

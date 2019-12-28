@@ -33,8 +33,8 @@ mod tests {
     #[bench]
     fn eval(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 5;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 5;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -44,8 +44,8 @@ mod tests {
     #[bench]
     fn eval_f32(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 5;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 5;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0f32, PI32 / 2.0f32, 0.0f32);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -53,10 +53,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_01(b: &mut Bencher) {
+    fn eval_degree_01(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 1;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 1;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -64,10 +64,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_02(b: &mut Bencher) {
+    fn eval_degree_02(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 2;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 2;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -75,10 +75,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_03(b: &mut Bencher) {
+    fn eval_degree_03(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 3;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 3;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -86,10 +86,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_04(b: &mut Bencher) {
+    fn eval_degree_04(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 4;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 4;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -97,10 +97,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_05(b: &mut Bencher) {
+    fn eval_degree_05(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 5;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 5;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -108,10 +108,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_06(b: &mut Bencher) {
+    fn eval_degree_06(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 6;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 6;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -119,10 +119,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_07(b: &mut Bencher) {
+    fn eval_degree_07(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 7;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 7;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -130,10 +130,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_08(b: &mut Bencher) {
+    fn eval_degree_08(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 8;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 8;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -141,10 +141,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_09(b: &mut Bencher) {
+    fn eval_degree_09(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 9;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 9;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -152,10 +152,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_10(b: &mut Bencher) {
+    fn eval_degree_10(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 10;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 10;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -163,10 +163,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_11(b: &mut Bencher) {
+    fn eval_degree_11(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 11;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 11;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -174,10 +174,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_12(b: &mut Bencher) {
+    fn eval_degree_12(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 12;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 12;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -185,10 +185,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_13(b: &mut Bencher) {
+    fn eval_degree_13(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 13;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 13;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -196,10 +196,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_14(b: &mut Bencher) {
+    fn eval_degree_14(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 14;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 14;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -207,10 +207,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_15(b: &mut Bencher) {
+    fn eval_degree_15(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 15;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 15;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -218,10 +218,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_16(b: &mut Bencher) {
+    fn eval_degree_16(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 16;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 16;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -229,10 +229,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_17(b: &mut Bencher) {
+    fn eval_degree_17(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 17;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 17;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -240,10 +240,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_18(b: &mut Bencher) {
+    fn eval_degree_18(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 18;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 18;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -251,10 +251,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_19(b: &mut Bencher) {
+    fn eval_degree_19(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 19;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 19;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
@@ -262,10 +262,10 @@ mod tests {
     }
 
     #[bench]
-    fn eval_order_20(b: &mut Bencher) {
+    fn eval_degree_20(b: &mut Bencher) {
         let sh_type = RealSHType::Spherical;
-        let order = 20;
-        let sh = RealHarmonics::new(order, sh_type);
+        let degree = 20;
+        let sh = RealHarmonics::new(degree, sh_type);
         let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(&p));
