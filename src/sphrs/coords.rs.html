@@ -140,10 +140,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">SphrsFloat</span>;
 
 <span class="doccomment">/// SHCoordinates trait</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">SphrsFloat</span>,
-{
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Return `theta`</span>
     <span class="kw">fn</span> <span class="ident">theta</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>;
     <span class="doccomment">/// Return `phi`</span>
@@ -162,10 +159,7 @@
 
 <span class="doccomment">/// Coordinates struct</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Coordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">SphrsFloat</span>,
-{
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Coordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// radius (spherical coordinates)</span>
     <span class="ident">r</span>: <span class="ident">T</span>,
     <span class="doccomment">/// theta (spherical coordinates)</span>
@@ -187,7 +181,10 @@
     <span class="ident">T</span>: <span class="ident">SphrsFloat</span>,
 {
     <span class="doccomment">/// Create `Coordinates` struct from cartesian coordinates</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cartesian</span>(<span class="ident">x</span>: <span class="ident">T</span>, <span class="ident">y</span>: <span class="ident">T</span>, <span class="ident">z</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cartesian</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">x</span>: <span class="ident">U</span>, <span class="ident">y</span>: <span class="ident">U</span>, <span class="ident">z</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="ident">x</span>: <span class="ident">T</span> <span class="op">=</span> <span class="ident">x</span>.<span class="ident">into</span>();
+        <span class="kw">let</span> <span class="ident">y</span>: <span class="ident">T</span> <span class="op">=</span> <span class="ident">y</span>.<span class="ident">into</span>();
+        <span class="kw">let</span> <span class="ident">z</span>: <span class="ident">T</span> <span class="op">=</span> <span class="ident">z</span>.<span class="ident">into</span>();
         <span class="kw">let</span> <span class="ident">r</span> <span class="op">=</span> (<span class="ident">x</span>.<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">+</span> <span class="ident">y</span>.<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">+</span> <span class="ident">z</span>.<span class="ident">powi</span>(<span class="number">2</span>)).<span class="ident">sqrt</span>();
         <span class="kw">let</span> <span class="ident">theta</span> <span class="op">=</span> (<span class="ident">z</span> <span class="op">/</span> <span class="ident">r</span>).<span class="ident">acos</span>();
         <span class="kw">let</span> <span class="ident">phi</span> <span class="op">=</span> <span class="ident">y</span>.<span class="ident">atan2</span>(<span class="ident">x</span>);
@@ -205,7 +202,10 @@
     }
 
     <span class="doccomment">/// Create `Coordinates` struct from spherical coordinates</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">spherical</span>(<span class="ident">r</span>: <span class="ident">T</span>, <span class="ident">theta</span>: <span class="ident">T</span>, <span class="ident">phi</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">spherical</span><span class="op">&lt;</span><span class="ident">U</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">r</span>: <span class="ident">U</span>, <span class="ident">theta</span>: <span class="ident">U</span>, <span class="ident">phi</span>: <span class="ident">U</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="ident">r</span>: <span class="ident">T</span> <span class="op">=</span> <span class="ident">r</span>.<span class="ident">into</span>();
+        <span class="kw">let</span> <span class="ident">theta</span>: <span class="ident">T</span> <span class="op">=</span> <span class="ident">theta</span>.<span class="ident">into</span>();
+        <span class="kw">let</span> <span class="ident">phi</span>: <span class="ident">T</span> <span class="op">=</span> <span class="ident">phi</span>.<span class="ident">into</span>();
         <span class="kw">let</span> <span class="ident">x</span> <span class="op">=</span> <span class="ident">r</span> <span class="op">*</span> <span class="ident">theta</span>.<span class="ident">sin</span>() <span class="op">*</span> <span class="ident">phi</span>.<span class="ident">cos</span>();
         <span class="kw">let</span> <span class="ident">y</span> <span class="op">=</span> <span class="ident">r</span> <span class="op">*</span> <span class="ident">theta</span>.<span class="ident">sin</span>() <span class="op">*</span> <span class="ident">phi</span>.<span class="ident">sin</span>();
         <span class="kw">let</span> <span class="ident">theta_cos</span> <span class="op">=</span> <span class="ident">theta</span>.<span class="ident">cos</span>();
