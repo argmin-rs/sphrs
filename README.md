@@ -9,12 +9,11 @@ Documentation: [stable](https://doc.rs/sphrs/latest/sphrs),
 
 ## Types of spherical/solid harmonics
 
-This crate supports these types of real SH via the enum `RealSHType`:
+This crate supports these types of real and complex functions via the enums `RealSHType` and
+`ComplexSHType`:
 
 * [Spherical](https://en.wikipedia.org/wiki/Spherical_harmonics)
 * [RegularSolid and IrregularSolid](https://en.wikipedia.org/wiki/Solid_harmonics)
-
-TODO: complex SH
 
 ## Usage
 
@@ -25,16 +24,30 @@ Add this to your `Cargo.toml`:
 sphrs = "*"
 ```
 
-## Example
+## Examples
 
-Compute the sum of all real SH up to 5th order at position (1, 0, 0):
+Compute the complex spherical harmonic function of degree 2 and order 1 at (spherical) position
+(r = 1.0, theta = PI/4, phi = PI/4):
 
 ```rust
-use sphrs::{RealSHType, RealHarmonics, Coordinates};
-let order = 5;
-let sh = RealHarmonics::new(order, RealSHType::Spherical);
+use sphrs::{ComplexSHType, Coordinates, SHEval};
+use std::f64::consts::PI;
+
+let sh = ComplexSHType::Spherical;
+let degree = 2;
+let order = 1;
+let p: Coordinates<f64> = Coordinates::spherical(1.0, PI/4.0, PI/8.0);
+println!("SH ({}, {}): {:?}", degree, order, sh.eval(degree, order, &p));
+```
+
+Compute all real SH up to 5th degree at (Cartesian) position (1, 0, 0):
+
+```rust
+use sphrs::{RealSHType, HarmonicsSet, Coordinates};
+let degree = 5;
+let sh: HarmonicsSet<f64, _, _> = HarmonicsSet::new(degree, RealSHType::Spherical);
 let p = Coordinates::cartesian(1.0, 0.0, 0.0);
-println!("SH up to order {}: {:?}", order, sh.eval(&p));
+println!("SH up to degree {}: {:?}", degree, sh.eval(&p));
 ```
 
 ## Acknowledgements
@@ -42,7 +55,7 @@ println!("SH up to order {}: {:?}", order, sh.eval(&p));
 This crate is heavily inspired by Google's
 [spherical-harmonics](https://github.com/google/spherical-harmonics) library and follows the
 design documented
-[here](https://pdfs.semanticscholar.org/83d9/28031e78f15d9813061b53d25a4e0274c751.pdf).
+[here](http://silviojemma.com/public/papers/lighting/spherical-harmonic-lighting.pdf).
 
 ## References
 

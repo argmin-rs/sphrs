@@ -12,12 +12,11 @@
 //!
 //! # Types of spherical/solid harmonics
 //!
-//! This crate supports these types of real SH via the enum `RealSHType`:
+//! This crate supports these types of real and complex functions via the enums `RealSHType` and
+//! `ComplexSHType`:
 //!
 //! * [Spherical](https://en.wikipedia.org/wiki/Spherical_harmonics)
 //! * [RegularSolid and IrregularSolid](https://en.wikipedia.org/wiki/Solid_harmonics)
-//!
-//! TODO: complex SH
 //!
 //! # Usage
 //!
@@ -28,9 +27,23 @@
 //! sphrs = "*"
 //! ```
 //!
-//! # Example
+//! # Examples
 //!
-//! Compute the sum of all real SH up to 5th degree at position (1, 0, 0):
+//! Compute the complex spherical harmonic function of degree 2 and order 1 at (spherical) position
+//! (r = 1.0, theta = PI/4, phi = PI/4):
+//!
+//! ```rust
+//! use sphrs::{ComplexSHType, Coordinates, SHEval};
+//! use std::f64::consts::PI;
+//!
+//! let sh = ComplexSHType::Spherical;
+//! let degree = 2;
+//! let order = 1;
+//! let p: Coordinates<f64> = Coordinates::spherical(1.0, PI/4.0, PI/8.0);
+//! println!("SH ({}, {}): {:?}", degree, order, sh.eval(degree, order, &p));
+//! ```
+//!
+//! Compute all real SH up to 5th degree at (Cartesian) position (1, 0, 0):
 //!
 //! ```rust
 //! use sphrs::{RealSHType, HarmonicsSet, Coordinates};
@@ -45,7 +58,7 @@
 //! This crate is heavily inspired by Google's
 //! [spherical-harmonics](https://github.com/google/spherical-harmonics) library and follows the
 //! design documented
-//! [here](https://pdfs.semanticscholar.org/83d9/28031e78f15d9813061b53d25a4e0274c751.pdf).
+//! [here](http://silviojemma.com/public/papers/lighting/spherical-harmonic-lighting.pdf).
 //!
 //! # References
 //!
@@ -195,9 +208,9 @@ where
     pub fn eval<C: SHCoordinates<T>>(&self, p: &C) -> Vec<O> {
         if let Some(ref coefficients) = self.coefficients {
             self.eval_internal(p)
-                .iter()
+                .into_iter()
                 .zip(coefficients.iter())
-                .map(|(&a, &b)| a * b)
+                .map(|(a, &b)| a * b)
                 .collect()
         } else {
             self.eval_internal(p)
