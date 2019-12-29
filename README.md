@@ -21,7 +21,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-sphrs = "*"
+sphrs = "0.1.0"
 ```
 
 ## Examples
