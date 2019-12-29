@@ -4,7 +4,7 @@
 
 A (work in progress) general purpose spherical/solid harmonics library in Rust.
 
-Documentation: [stable](https://doc.rs/sphrs/latest/sphrs),
+Documentation: [stable](https://docs.rs/sphrs/latest/sphrs),
 [master](https://argmin-rs.github.io/sphrs/sphrs/).
 
 ## Types of spherical/solid harmonics
@@ -21,7 +21,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-sphrs = "0.1.0"
+sphrs = "0.1.1"
 ```
 
 ## Examples
