@@ -1,10 +1,10 @@
 [package]
 name = "sphrs"
-version = "0.0.1"
+version = "0.1.0"
 authors = ["Stefan Kroboth <stefan.kroboth@gmail.com>"]
 edition = "2018"
 license = "MIT OR Apache-2.0"
-description = "[WIP] Spherical harmonics"
+description = "Spherical harmonics and solid harmonics"
 documentation = "https://docs.rs/sphrs/latest/sphrs/"
 homepage = "http://argmin-rs.org"
 repository = "https://github.com/argmin-rs/sphrs"
@@ -18,8 +18,8 @@ exclude = [
 
 [dependencies]
 num = "0.2.0"
-num-complex = "0.2.1"
-num-traits = "0.2"
+num-complex = "0.2.3"
+num-traits = "0.2.10"
 
 [dev-dependencies]
 csv = "1"

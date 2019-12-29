@@ -24,7 +24,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! sphrs = "*"
+//! sphrs = "0.1.0"
 //! ```
 //!
 //! # Examples
