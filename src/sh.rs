@@ -20,7 +20,7 @@ pub fn sh00<T: SphrsFloat>(_p: &dyn SHCoordinates<T>) -> T {
 
 /// Hardcoded SH (l=1,m=-1)
 pub fn sh1n1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
-    -(T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.y() / p.r()
+    (T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.y() / p.r()
 }
 
 /// Hardcoded SH (l=1,m=0)
@@ -30,7 +30,7 @@ pub fn sh10<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
 
 /// Hardcoded SH (l=1,m=1)
 pub fn sh1p1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
-    -(T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.x() / p.r()
+    (T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.x() / p.r()
 }
 
 /// Hardcoded SH (l=2,m=-2)
@@ -43,7 +43,7 @@ pub fn sh2n2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
 
 /// Hardcoded SH (l=2,m=-1)
 pub fn sh2n1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
-    -T::from_f64(0.5).unwrap()
+    T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.y() * p.z())
         / p.r().powi(2)
@@ -59,7 +59,7 @@ pub fn sh20<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
 
 /// Hardcoded SH (l=2,m=1)
 pub fn sh2p1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
-    -T::from_f64(0.5).unwrap()
+    T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.z() * p.x())
         / p.r().powi(2)
@@ -75,7 +75,7 @@ pub fn sh2p2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
 
 /// Hardcoded SH (l=3,m=-3)
 pub fn sh3n3<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
-    -T::from_f64(0.25).unwrap()
+    T::from_f64(0.25).unwrap()
         * (T::from_f64(35.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (T::from_f64(3.0).unwrap() * p.x().powi(2) - p.y().powi(2))
         * p.y()
@@ -92,7 +92,7 @@ pub fn sh3n2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
 
 /// Hardcoded SH (l=3,m=-1)
 pub fn sh3n1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
-    -T::from_f64(0.25).unwrap()
+    T::from_f64(0.25).unwrap()
         * (T::from_f64(21.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * p.y()
         * (T::from_f64(4.0).unwrap() * p.z().powi(2) - p.x().powi(2) - p.y().powi(2))
@@ -110,7 +110,7 @@ pub fn sh30<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
 
 /// Hardcoded SH (l=3,m=1)
 pub fn sh3p1<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
-    -T::from_f64(0.25).unwrap()
+    T::from_f64(0.25).unwrap()
         * (T::from_f64(21.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * p.x()
         * (T::from_f64(4.0).unwrap() * p.z().powi(2) - p.x().powi(2) - p.y().powi(2))
@@ -128,7 +128,7 @@ pub fn sh3p2<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
 
 /// Hardcoded SH (l=3,m=3)
 pub fn sh3p3<T: SphrsFloat>(p: &dyn SHCoordinates<T>) -> T {
-    -T::from_f64(0.25).unwrap()
+    T::from_f64(0.25).unwrap()
         * (T::from_f64(35.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x().powi(2) - T::from_f64(3.0).unwrap() * p.y().powi(2))
         * p.x()
@@ -221,19 +221,20 @@ pub fn SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T>
 #[allow(non_snake_case)]
 #[inline(always)]
 pub fn real_SH<T: SphrsFloat>(l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
-    if m == 0 {
-        K::<T>(l, 0) * P(l, m, p.theta_cos())
-    } else if m > 0 {
-        T::SQRT_2()
-            * K::<T>(l, m)
-            * (T::from_i64(m).unwrap() * p.phi()).cos()
-            * P(l, m, p.theta_cos())
-    } else {
-        T::SQRT_2()
-            * K::<T>(l, -m)
-            * (T::from_i64(-m).unwrap() * p.phi()).sin()
-            * P(l, -m, p.theta_cos())
-    }
+    T::from_f64((-1f64).powi(m.abs() as i32)).unwrap()
+        * if m == 0 {
+            K::<T>(l, 0) * P(l, m, p.theta_cos())
+        } else if m > 0 {
+            T::SQRT_2()
+                * K::<T>(l, m)
+                * (T::from_i64(m).unwrap() * p.phi()).cos()
+                * P(l, m, p.theta_cos())
+        } else {
+            T::SQRT_2()
+                * K::<T>(l, -m)
+                * (T::from_i64(-m).unwrap() * p.phi()).sin()
+                * P(l, -m, p.theta_cos())
+        }
 }
 
 /// Spherical harmonics. This will use the hardcoded functions if available and the recursive
