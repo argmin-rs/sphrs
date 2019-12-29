@@ -162,7 +162,7 @@ where
     }
 }
 
-/// Real spherical/solid harmonics
+/// A set of spherical/solid harmonics up to a given degree
 pub struct HarmonicsSet<T, E, O> {
     /// degree
     degree: usize,
