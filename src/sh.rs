@@ -146,10 +146,10 @@ fn factorial(n: u64) -> u64 {
 #[inline]
 fn K<T: SphrsFloat>(l: i64, m: i64) -> T {
     ((T::from_f64(2.0).unwrap() * T::from_i64(l).unwrap() + T::one())
-        * T::from_u64(factorial((l - m).abs() as u64)).unwrap()
+        * T::from_u64(factorial((l - m.abs()) as u64)).unwrap()
         / (T::from_f64(4.0).unwrap()
             * T::PI()
-            * T::from_u64(factorial((l + m).abs() as u64)).unwrap()))
+            * T::from_u64(factorial((l + m.abs()) as u64)).unwrap()))
     .sqrt()
 
     // let m = m.abs();
