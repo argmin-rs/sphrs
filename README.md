@@ -2,7 +2,7 @@
 
 # sphrs
 
-A (work in progress) general purpose spherical/solid harmonics library in Rust.
+sphrs is a general purpose spherical/solid harmonics library in Rust.
 
 Documentation: [stable](https://docs.rs/sphrs/latest/sphrs),
 [master](https://argmin-rs.github.io/sphrs/sphrs/).
