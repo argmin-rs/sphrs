@@ -1,9 +1,3 @@
 (function() {var implementors = {};
-implementors["sphrs"] = [{text:"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html\" title=\"trait core::marker::Copy\">Copy</a> for <a class=\"enum\" href=\"sphrs/enum.RealSHType.html\" title=\"enum sphrs::RealSHType\">RealSHType</a>",synthetic:false,types:["sphrs::RealSHType"]},{text:"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html\" title=\"trait core::marker::Copy\">Copy</a> for <a class=\"enum\" href=\"sphrs/enum.ComplexSHType.html\" title=\"enum sphrs::ComplexSHType\">ComplexSHType</a>",synthetic:false,types:["sphrs::ComplexSHType"]},];
-
-            if (window.register_implementors) {
-                window.register_implementors(implementors);
-            } else {
-                window.pending_implementors = implementors;
-            }
-        })()
+implementors["sphrs"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html\" title=\"trait core::marker::Copy\">Copy</a> for <a class=\"enum\" href=\"sphrs/enum.RealSHType.html\" title=\"enum sphrs::RealSHType\">RealSHType</a>","synthetic":false,"types":["sphrs::RealSHType"]},{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html\" title=\"trait core::marker::Copy\">Copy</a> for <a class=\"enum\" href=\"sphrs/enum.ComplexSHType.html\" title=\"enum sphrs::ComplexSHType\">ComplexSHType</a>","synthetic":false,"types":["sphrs::ComplexSHType"]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
