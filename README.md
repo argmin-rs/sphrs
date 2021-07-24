@@ -1,4 +1,5 @@
 [![sphrs CI](https://github.com/argmin-rs/sphrs/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/argmin-rs/sphrs/actions/workflows/ci.yml)
+[![Gitter chat](https://badges.gitter.im/argmin-rs/community.png)](https://gitter.im/argmin-rs/community)
 
 # sphrs
 
