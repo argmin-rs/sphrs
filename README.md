@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/argmin-rs/sphrs.svg?branch=master)](https://travis-ci.org/argmin-rs/sphrs)
+[![sphrs CI](https://github.com/argmin-rs/sphrs/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/argmin-rs/sphrs/actions/workflows/ci.yml)
 
 # sphrs
 

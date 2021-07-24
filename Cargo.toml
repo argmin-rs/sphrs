@@ -25,5 +25,4 @@ num-traits = "0.2.10"
 csv = "1"
 
 [badges]
-travis-ci = { repository = "argmin-rs/sphrs", branch = "master" }
 maintenance = { status = "actively-developed" }
