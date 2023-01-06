@@ -1,4 +1,4 @@
-[![sphrs CI](https://github.com/argmin-rs/sphrs/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/argmin-rs/sphrs/actions/workflows/ci.yml)
+[![sphrs CI](https://github.com/argmin-rs/sphrs/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/argmin-rs/sphrs/actions/workflows/ci.yml)
 [![Gitter chat](https://badges.gitter.im/argmin-rs/community.png)](https://gitter.im/argmin-rs/community)
 
 # sphrs
@@ -6,7 +6,7 @@
 sphrs is a general purpose spherical/solid harmonics library in Rust.
 
 Documentation: [stable](https://docs.rs/sphrs/latest/sphrs),
-[master](https://argmin-rs.github.io/sphrs/sphrs/).
+[main](https://argmin-rs.github.io/sphrs/sphrs/).
 
 ## Types of spherical/solid harmonics
 
@@ -69,9 +69,9 @@ design documented
 Licensed under either of
 
   * Apache License, Version 2.0,
-    ([LICENSE-APACHE](https://github.com/argmin-rs/argmin/blob/master/LICENSE-APACHE) or
+    ([LICENSE-APACHE](https://github.com/argmin-rs/argmin/blob/main/LICENSE-APACHE) or
     http://www.apache.org/licenses/LICENSE-2.0)
-  * MIT License ([LICENSE-MIT](https://github.com/argmin-rs/argmin/blob/master/LICENSE-MIT) or
+  * MIT License ([LICENSE-MIT](https://github.com/argmin-rs/argmin/blob/main/LICENSE-MIT) or
     http://opensource.org/licenses/MIT)
 
 at your option.
