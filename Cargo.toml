@@ -16,9 +16,9 @@ exclude = [
 ]
 
 [dependencies]
-num = "0.2.0"
-num-complex = "0.2.3"
-num-traits = "0.2.10"
+num = "0.4"
+num-complex = "0.4"
+num-traits = "0.2"
 
 [dev-dependencies]
 csv = "1"
