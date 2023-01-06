@@ -2,9 +2,9 @@ name: sphrs CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 env:
   CARGO_TERM_COLOR: always
@@ -13,33 +13,20 @@ env:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rust:
-          - stable
-          - beta
-          - nightly
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: ${{ matrix.rust }}
-          override: true
-      - run: cargo build --verbose --all --all-features && cargo clean && cargo test --verbose --all --all-features
+      - uses: Swatinem/rust-cache@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Test 
+        run: cargo test --all --all-features
 
   clippy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        rust:
-          - beta
     steps:
       - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
+      - uses: Swatinem/rust-cache@v2
+      - uses: dtolnay/rust-toolchain@beta
         with:
-          profile: minimal
-          toolchain: ${{ matrix.rust }}
-          override: true
           components: clippy
-      - run: cargo clippy
+      - name: Clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
