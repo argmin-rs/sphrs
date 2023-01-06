@@ -8,7 +8,7 @@
 //! A (work in progress) general purpose spherical/solid harmonics library in Rust.
 //!
 //! Documentation: [stable](https://docs.rs/sphrs/latest/sphrs),
-//! [master](https://argmin-rs.github.io/sphrs/sphrs/).
+//! [main](https://argmin-rs.github.io/sphrs/sphrs/).
 //!
 //! # Types of spherical/solid harmonics
 //!
@@ -71,9 +71,9 @@
 //! Licensed under either of
 //!
 //!   * Apache License, Version 2.0,
-//!     ([LICENSE-APACHE](https://github.com/argmin-rs/argmin/blob/master/LICENSE-APACHE) or
+//!     ([LICENSE-APACHE](https://github.com/argmin-rs/argmin/blob/main/LICENSE-APACHE) or
 //!     http://www.apache.org/licenses/LICENSE-2.0)
-//!   * MIT License ([LICENSE-MIT](https://github.com/argmin-rs/argmin/blob/master/LICENSE-MIT) or
+//!   * MIT License ([LICENSE-MIT](https://github.com/argmin-rs/argmin/blob/main/LICENSE-MIT) or
 //!     http://opensource.org/licenses/MIT)
 //!
 //! at your option.
@@ -203,7 +203,7 @@ where
         self
     }
 
-    /// Evaluate harmonics at postion `p`. This will respect coefficients if they are provided.
+    /// Evaluate harmonics at position `p`. This will respect coefficients if they are provided.
     #[inline]
     pub fn eval<C: SHCoordinates<T>>(&self, p: &C) -> Vec<O> {
         if let Some(ref coefficients) = self.coefficients {
@@ -217,7 +217,7 @@ where
         }
     }
 
-    /// Evaluate harmonics at postion `p`. If available, hardcoded SH functions will be used.
+    /// Evaluate harmonics at position `p`. If available, hardcoded SH functions will be used.
     #[inline]
     fn eval_internal<C: SHCoordinates<T>>(&self, p: &C) -> Vec<O> {
         let mut sh = Vec::with_capacity(self.num_sh);
