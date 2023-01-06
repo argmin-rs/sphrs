@@ -5,7 +5,7 @@
 // http://opensource.org/licenses/MIT>, at your option. This file may not be
 // copied, modified, or distributed except according to those terms.
 
-//! A (work in progress) general purpose spherical/solid harmonics library in Rust.
+//! A general purpose spherical/solid harmonics library in Rust.
 //!
 //! Documentation: [stable](https://docs.rs/sphrs/latest/sphrs),
 //! [main](https://argmin-rs.github.io/sphrs/sphrs/).
