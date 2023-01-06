@@ -25,8 +25,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: Swatinem/rust-cache@v2
-      - uses: dtolnay/rust-toolchain@beta
+      - uses: dtolnay/rust-toolchain@nightly
         with:
           components: clippy
       - name: Clippy
-        run: cargo clippy --all-targets --all-features -- -D warnings
+        run: cargo +nightly clippy --all-targets --all-features -- -D warnings
