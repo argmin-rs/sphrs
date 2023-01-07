@@ -9,9 +9,26 @@
 // expressions.
 #![allow(clippy::comparison_chain)]
 
+mod complex;
+mod harmonicsset;
+mod real;
+
+pub use complex::ComplexSH;
+pub use harmonicsset::HarmonicsSet;
+pub use real::RealSH;
+
 use crate::coordinates::SHCoordinates;
 use crate::SphrsFloat;
 use num_complex::Complex;
+
+/// SH eval trait (TODO)
+pub trait SHEval<T> {
+    /// Output type
+    type Output;
+
+    /// Evaluate SH (l, m) at position `p`
+    fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> Self::Output;
+}
 
 /// SH (l=0,m=0)
 pub fn sh00<T: SphrsFloat>(_p: &impl SHCoordinates<T>) -> T {
