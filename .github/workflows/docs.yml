@@ -19,10 +19,10 @@ jobs:
           components: rustfmt,rust-src
 
       - name: Build documentation
-        run: cargo doc --features "argmin-math/latest_all" --no-deps
+        run: cargo doc --all-features --no-deps
 
       - name: Forwarding
-        run: echo '<!doctype html><meta http-equiv="refresh" content="0; ./argmin/">' > ./target/doc/index.html
+        run: echo '<!doctype html><meta http-equiv="refresh" content="0; ./sphrs/">' > ./target/doc/index.html
 
       - name: Deploy docs
         uses: peaceiris/actions-gh-pages@v3
