@@ -242,6 +242,32 @@
 <span id="242">242</span>
 <span id="243">243</span>
 <span id="244">244</span>
+<span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2018-2020 Stefan Kroboth
 //
 // Licensed under the Apache License, Version 2.0 &lt;LICENSE-APACHE or
@@ -252,24 +278,29 @@
 </span><span class="kw">use </span><span class="kw">crate</span>::SphrsFloat;
 
 <span class="doccomment">/// SHCoordinates trait
+///
+/// Every coordinate used in sphrs must implement this trait.
 </span><span class="kw">pub trait </span>SHCoordinates&lt;T&gt; {
-    <span class="doccomment">/// Return `theta`
+    <span class="doccomment">/// Return `theta` (spherical coordinates)
     </span><span class="kw">fn </span>theta(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T;
-    <span class="doccomment">/// Return `phi`
+    <span class="doccomment">/// Return `phi` (spherical coordinates)
     </span><span class="kw">fn </span>phi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T;
-    <span class="doccomment">/// Return `r`
+    <span class="doccomment">/// Return radus `r` (spherical coordinates)
     </span><span class="kw">fn </span>r(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T;
-    <span class="doccomment">/// Return `x`
+    <span class="doccomment">/// Return `x` (Cartesian coordinates)
     </span><span class="kw">fn </span>x(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T;
-    <span class="doccomment">/// Return `y`
+    <span class="doccomment">/// Return `y` (Cartesian coordinates)
     </span><span class="kw">fn </span>y(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T;
-    <span class="doccomment">/// Return `z`
+    <span class="doccomment">/// Return `z` (Cartesian coordinates)
     </span><span class="kw">fn </span>z(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T;
     <span class="doccomment">/// Return `cos(theta)`
     </span><span class="kw">fn </span>theta_cos(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T;
 }
 
-<span class="doccomment">/// Coordinates struct
+<span class="doccomment">/// Representation of coordinates.
+///
+/// Generic over floats. Can be created with [`cartesian`](`Coordinates::cartesian`) (Cartesian
+/// coordinates) or [`spherical`](`Coordinates::spherical`) (spherical coordinates).
 </span><span class="attribute">#[derive(Default, Clone, Debug)]
 </span><span class="kw">pub struct </span>Coordinates&lt;T&gt; {
     <span class="doccomment">/// radius (spherical coordinates)
@@ -292,7 +323,14 @@
 <span class="kw">where
     </span>T: SphrsFloat,
 {
-    <span class="doccomment">/// Create `Coordinates` struct from cartesian coordinates
+    <span class="doccomment">/// Create `Coordinates` struct from Cartesian coordinates
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use sphrs::Coordinates;
+    /// let coords = Coordinates::cartesian(1.0f64, 0.5, 12.0);
+    /// ```
     </span><span class="kw">pub fn </span>cartesian(x: T, y: T, z: T) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>r = (x.powi(<span class="number">2</span>) + y.powi(<span class="number">2</span>) + z.powi(<span class="number">2</span>)).sqrt();
         <span class="kw">let </span>theta = (z / r).acos();
@@ -311,6 +349,13 @@
     }
 
     <span class="doccomment">/// Create `Coordinates` struct from spherical coordinates
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use sphrs::Coordinates;
+    /// let coords = Coordinates::spherical(1.0f64, 0.5, 0.9);
+    /// ```
     </span><span class="kw">pub fn </span>spherical(r: T, theta: T, phi: T) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>x = r * theta.sin() * phi.cos();
         <span class="kw">let </span>y = r * theta.sin() * phi.sin();
@@ -332,37 +377,44 @@
 <span class="kw">where
     </span>T: SphrsFloat,
 {
-    <span class="attribute">#[inline]
+    <span class="doccomment">/// Return angle `theta`
+    </span><span class="attribute">#[inline(always)]
     </span><span class="kw">fn </span>theta(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T {
         <span class="self">self</span>.theta
     }
 
-    <span class="attribute">#[inline]
+    <span class="doccomment">/// Return angle `phi`
+    </span><span class="attribute">#[inline(always)]
     </span><span class="kw">fn </span>phi(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T {
         <span class="self">self</span>.phi
     }
 
-    <span class="attribute">#[inline]
+    <span class="doccomment">/// Return radius `r`
+    </span><span class="attribute">#[inline(always)]
     </span><span class="kw">fn </span>r(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T {
         <span class="self">self</span>.r
     }
 
-    <span class="attribute">#[inline]
+    <span class="doccomment">/// Return coordinate `x`
+    </span><span class="attribute">#[inline(always)]
     </span><span class="kw">fn </span>x(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T {
         <span class="self">self</span>.x
     }
 
-    <span class="attribute">#[inline]
+    <span class="doccomment">/// Return coordinate `y`
+    </span><span class="attribute">#[inline(always)]
     </span><span class="kw">fn </span>y(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T {
         <span class="self">self</span>.y
     }
 
-    <span class="attribute">#[inline]
+    <span class="doccomment">/// Return coordinate `z`
+    </span><span class="attribute">#[inline(always)]
     </span><span class="kw">fn </span>z(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T {
         <span class="self">self</span>.z
     }
 
-    <span class="attribute">#[inline]
+    <span class="doccomment">/// Return `cos(theta)`
+    </span><span class="attribute">#[inline(always)]
     </span><span class="kw">fn </span>theta_cos(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T {
         <span class="self">self</span>.theta_cos
     }
