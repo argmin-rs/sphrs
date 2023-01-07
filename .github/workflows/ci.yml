@@ -39,3 +39,13 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - name: sphrs docs
         run: cargo rustdoc --all-features -- -D warnings
+
+  rustfmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: Swatinem/rust-cache@v2
+      - uses: dtolnay/rust-toolchain@beta
+        with:
+          components: rustfmt
+      - run: cargo fmt --all -- --check
