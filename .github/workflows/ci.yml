@@ -30,3 +30,12 @@ jobs:
           components: clippy
       - name: Clippy
         run: cargo +nightly clippy --all-targets --all-features -- -D warnings
+
+  docs-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: Swatinem/rust-cache@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - name: sphrs docs
+        run: cargo rustdoc --all-features -- -D warnings
