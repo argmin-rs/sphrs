@@ -87,9 +87,7 @@
 
 #![warn(missing_docs)]
 
-/// Coordinates
 mod coords;
-/// Spherical/solid harmonics
 mod sh;
 
 pub use crate::coords::*;
@@ -127,7 +125,7 @@ pub enum ComplexSHType {
 /// SH eval trait (TODO)
 pub trait SHEval<T: SphrsFloat, U> {
     /// Evaluate SH (l, m) at position `p`
-    fn eval(&self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> U;
+    fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> U;
 }
 
 impl<T> SHEval<T, T> for RealSHType
@@ -136,7 +134,7 @@ where
 {
     /// Evaluate real SH (l, m) at position `p`
     #[inline]
-    fn eval(&self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> T {
+    fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
         debug_assert!(m.abs() <= l);
         match self {
             Self::Spherical => real_SH_hardcoded(l, m, p),
@@ -152,7 +150,7 @@ where
 {
     /// Evaluate complex SH (l, m) at position `p`
     #[inline]
-    fn eval(&self, l: i64, m: i64, p: &dyn SHCoordinates<T>) -> Complex<T> {
+    fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
         debug_assert!(m.abs() <= l);
         match self {
             Self::Spherical => SH(l, m, p),
