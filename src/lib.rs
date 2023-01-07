@@ -87,10 +87,10 @@
 
 #![warn(missing_docs)]
 
-mod coords;
+mod coordinates;
 mod sh;
 
-pub use crate::coords::{Coordinates, SHCoordinates};
+pub use crate::coordinates::{Coordinates, SHCoordinates};
 pub use crate::sh::*;
 use num::{Complex, Float, FromPrimitive};
 use num_traits::float::FloatConst;
