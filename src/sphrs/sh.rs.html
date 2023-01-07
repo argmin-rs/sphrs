@@ -390,6 +390,9 @@
 <span id="390">390</span>
 <span id="391">391</span>
 <span id="392">392</span>
+<span id="393">393</span>
+<span id="394">394</span>
+<span id="395">395</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2018-2020 Stefan Kroboth
 //
 // Licensed under the Apache License, Version 2.0 &lt;LICENSE-APACHE or
@@ -406,27 +409,27 @@
 <span class="kw">use </span>num_complex::Complex;
 
 <span class="doccomment">/// Hardcoded SH (l=0,m=0)
-</span><span class="kw">pub fn </span>sh00&lt;T: SphrsFloat&gt;(_p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh00&lt;T: SphrsFloat&gt;(_p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.5</span>).unwrap() * T::FRAC_1_PI().sqrt()
 }
 
 <span class="doccomment">/// Hardcoded SH (l=1,m=-1)
-</span><span class="kw">pub fn </span>sh1n1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh1n1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     (T::from_f64(<span class="number">0.75</span>).unwrap() * T::FRAC_1_PI()).sqrt() * p.y() / p.r()
 }
 
 <span class="doccomment">/// Hardcoded SH (l=1,m=0)
-</span><span class="kw">pub fn </span>sh10&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh10&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     (T::from_f64(<span class="number">0.75</span>).unwrap() * T::FRAC_1_PI()).sqrt() * p.z() / p.r()
 }
 
 <span class="doccomment">/// Hardcoded SH (l=1,m=1)
-</span><span class="kw">pub fn </span>sh1p1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh1p1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     (T::from_f64(<span class="number">0.75</span>).unwrap() * T::FRAC_1_PI()).sqrt() * p.x() / p.r()
 }
 
 <span class="doccomment">/// Hardcoded SH (l=2,m=-2)
-</span><span class="kw">pub fn </span>sh2n2&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh2n2&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.5</span>).unwrap()
         * (T::from_f64(<span class="number">15.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x() * p.y())
@@ -434,7 +437,7 @@
 }
 
 <span class="doccomment">/// Hardcoded SH (l=2,m=-1)
-</span><span class="kw">pub fn </span>sh2n1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh2n1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.5</span>).unwrap()
         * (T::from_f64(<span class="number">15.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.y() * p.z())
@@ -442,7 +445,7 @@
 }
 
 <span class="doccomment">/// Hardcoded SH (l=2,m=0)
-</span><span class="kw">pub fn </span>sh20&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh20&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.25</span>).unwrap()
         * (T::from_f64(<span class="number">5.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
         * (-p.x().powi(<span class="number">2</span>) - p.y().powi(<span class="number">2</span>) + T::from_f64(<span class="number">2.0</span>).unwrap() * p.z().powi(<span class="number">2</span>))
@@ -450,7 +453,7 @@
 }
 
 <span class="doccomment">/// Hardcoded SH (l=2,m=1)
-</span><span class="kw">pub fn </span>sh2p1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh2p1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.5</span>).unwrap()
         * (T::from_f64(<span class="number">15.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.z() * p.x())
@@ -458,7 +461,7 @@
 }
 
 <span class="doccomment">/// Hardcoded SH (l=2,m=2)
-</span><span class="kw">pub fn </span>sh2p2&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh2p2&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.25</span>).unwrap()
         * (T::from_f64(<span class="number">15.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x().powi(<span class="number">2</span>) - p.y().powi(<span class="number">2</span>))
@@ -466,7 +469,7 @@
 }
 
 <span class="doccomment">/// Hardcoded SH (l=3,m=-3)
-</span><span class="kw">pub fn </span>sh3n3&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh3n3&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.25</span>).unwrap()
         * (T::from_f64(<span class="number">35.0 </span>/ <span class="number">2.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
         * (T::from_f64(<span class="number">3.0</span>).unwrap() * p.x().powi(<span class="number">2</span>) - p.y().powi(<span class="number">2</span>))
@@ -475,7 +478,7 @@
 }
 
 <span class="doccomment">/// Hardcoded SH (l=3,m=-2)
-</span><span class="kw">pub fn </span>sh3n2&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh3n2&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.5</span>).unwrap()
         * (T::from_f64(<span class="number">105.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x() * p.y() * p.z())
@@ -483,7 +486,7 @@
 }
 
 <span class="doccomment">/// Hardcoded SH (l=3,m=-1)
-</span><span class="kw">pub fn </span>sh3n1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh3n1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.25</span>).unwrap()
         * (T::from_f64(<span class="number">21.0 </span>/ <span class="number">2.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
         * p.y()
@@ -492,7 +495,7 @@
 }
 
 <span class="doccomment">/// Hardcoded SH (l=3,m=0)
-</span><span class="kw">pub fn </span>sh30&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh30&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.25</span>).unwrap()
         * (T::from_f64(<span class="number">7.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
         * p.z()
@@ -501,7 +504,7 @@
 }
 
 <span class="doccomment">/// Hardcoded SH (l=3,m=1)
-</span><span class="kw">pub fn </span>sh3p1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh3p1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.25</span>).unwrap()
         * (T::from_f64(<span class="number">21.0 </span>/ <span class="number">2.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
         * p.x()
@@ -510,7 +513,7 @@
 }
 
 <span class="doccomment">/// Hardcoded SH (l=3,m=2)
-</span><span class="kw">pub fn </span>sh3p2&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh3p2&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.25</span>).unwrap()
         * (T::from_f64(<span class="number">105.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x().powi(<span class="number">2</span>) - p.y().powi(<span class="number">2</span>))
@@ -519,7 +522,7 @@
 }
 
 <span class="doccomment">/// Hardcoded SH (l=3,m=3)
-</span><span class="kw">pub fn </span>sh3p3&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>sh3p3&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64(<span class="number">0.25</span>).unwrap()
         * (T::from_f64(<span class="number">35.0 </span>/ <span class="number">2.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
         * (p.x().powi(<span class="number">2</span>) - T::from_f64(<span class="number">3.0</span>).unwrap() * p.y().powi(<span class="number">2</span>))
@@ -528,6 +531,9 @@
 }
 
 <span class="doccomment">/// Factorial
+///
+/// The compiler will typically compute this at compile time, hence there is no need to
+/// precompute common values and put them into an array.
 </span><span class="attribute">#[inline]
 </span><span class="kw">fn </span>factorial(n: u64) -&gt; u64 {
     (<span class="number">1</span>..=n).product()
@@ -590,7 +596,7 @@
 <span class="doccomment">/// Complex spherical harmonics
 </span><span class="attribute">#[allow(non_snake_case)]
 #[inline]
-</span><span class="kw">pub fn </span>SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; Complex&lt;T&gt; {
+</span><span class="kw">pub fn </span>SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; Complex&lt;T&gt; {
     <span class="macro">assert!</span>(l &gt;= <span class="number">0</span>);
     <span class="macro">assert!</span>(m.abs() &lt;= l);
     <span class="kw">let </span>v: T = <span class="kw">if </span>m == <span class="number">0 </span>{
@@ -612,7 +618,7 @@
 <span class="doccomment">/// Real spherical harmonics (recursive implementation)
 </span><span class="attribute">#[allow(non_snake_case)]
 #[inline(always)]
-</span><span class="kw">pub fn </span>real_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>real_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     T::from_f64((-<span class="number">1f64</span>).powi(m.abs() <span class="kw">as </span>i32)).unwrap()
         * <span class="kw">if </span>m == <span class="number">0 </span>{
             K::&lt;T&gt;(l, <span class="number">0</span>) * P(l, m, p.theta_cos())
@@ -633,7 +639,7 @@
 /// implementation otherwise.
 </span><span class="attribute">#[allow(non_snake_case)]
 #[inline]
-</span><span class="kw">pub fn </span>real_SH_hardcoded&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>real_SH_hardcoded&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     <span class="kw">match </span>(l, m) {
         <span class="comment">// 0th degree
         </span>(<span class="number">0</span>, <span class="number">0</span>) =&gt; sh00(p),
@@ -663,7 +669,7 @@
 <span class="doccomment">/// Complex regular solid harmonics
 </span><span class="attribute">#[allow(non_snake_case)]
 #[inline]
-</span><span class="kw">pub fn </span>regular_solid_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; Complex&lt;T&gt; {
+</span><span class="kw">pub fn </span>regular_solid_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; Complex&lt;T&gt; {
     <span class="kw">let </span>scaling = ((T::from_f64(<span class="number">4.0</span>).unwrap() * T::PI()) / T::from_i64(<span class="number">2 </span>* l + <span class="number">1</span>).unwrap()).sqrt()
         * p.r().powi(l <span class="kw">as </span>i32);
     <span class="kw">let </span>sh = SH(l, m, p);
@@ -673,7 +679,7 @@
 <span class="doccomment">/// Complex irregular solid harmonics
 </span><span class="attribute">#[allow(non_snake_case)]
 #[inline]
-</span><span class="kw">pub fn </span>irregular_solid_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; Complex&lt;T&gt; {
+</span><span class="kw">pub fn </span>irregular_solid_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; Complex&lt;T&gt; {
     <span class="kw">let </span>scaling = ((T::from_f64(<span class="number">4.0</span>).unwrap() * T::PI()) / T::from_i64(<span class="number">2 </span>* l + <span class="number">1</span>).unwrap()).sqrt()
         / p.r().powi((l + <span class="number">1</span>) <span class="kw">as </span>i32);
     <span class="kw">let </span>sh = SH(l, m, p);
@@ -683,7 +689,7 @@
 <span class="doccomment">/// Real regular solid harmonics
 </span><span class="attribute">#[allow(non_snake_case)]
 #[inline]
-</span><span class="kw">pub fn </span>real_regular_solid_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>real_regular_solid_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     ((T::from_f64(<span class="number">4.0</span>).unwrap() * T::PI()) / T::from_i64(<span class="number">2 </span>* l + <span class="number">1</span>).unwrap()).sqrt()
         * p.r().powi(l <span class="kw">as </span>i32)
         * real_SH_hardcoded(l, m, p)
@@ -692,7 +698,7 @@
 <span class="doccomment">/// Real irregular solid harmonics
 </span><span class="attribute">#[allow(non_snake_case)]
 #[inline]
-</span><span class="kw">pub fn </span>real_irregular_solid_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+</span><span class="kw">pub fn </span>real_irregular_solid_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
     ((T::from_f64(<span class="number">4.0</span>).unwrap() * T::PI()) / T::from_i64(<span class="number">2 </span>* l + <span class="number">1</span>).unwrap()).sqrt()
         / p.r().powi(l <span class="kw">as </span>i32)
         * real_SH_hardcoded(l, m, p)

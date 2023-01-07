@@ -280,7 +280,7 @@
 <span class="doccomment">/// SHCoordinates trait
 ///
 /// Every coordinate used in sphrs must implement this trait.
-</span><span class="kw">pub trait </span>SHCoordinates&lt;T&gt; {
+</span><span class="kw">pub trait </span>SHCoordinates&lt;T&gt;: Sized {
     <span class="doccomment">/// Return `theta` (spherical coordinates)
     </span><span class="kw">fn </span>theta(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T;
     <span class="doccomment">/// Return `phi` (spherical coordinates)
