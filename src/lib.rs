@@ -39,7 +39,7 @@
 //! let sh = ComplexSHType::Spherical;
 //! let degree = 2;
 //! let order = 1;
-//! let p: Coordinates<f64> = Coordinates::spherical(1.0, PI/4.0, PI/8.0);
+//! let p = Coordinates::spherical(1.0, PI/4.0, PI/8.0);
 //! println!("SH ({}, {}): {:?}", degree, order, sh.eval(degree, order, &p));
 //! ```
 //!
