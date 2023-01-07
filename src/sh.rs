@@ -13,27 +13,27 @@ use crate::coordinates::SHCoordinates;
 use crate::SphrsFloat;
 use num_complex::Complex;
 
-/// Hardcoded SH (l=0,m=0)
+/// SH (l=0,m=0)
 pub fn sh00<T: SphrsFloat>(_p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.5).unwrap() * T::FRAC_1_PI().sqrt()
 }
 
-/// Hardcoded SH (l=1,m=-1)
+/// SH (l=1,m=-1)
 pub fn sh1n1<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     (T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.y() / p.r()
 }
 
-/// Hardcoded SH (l=1,m=0)
+/// SH (l=1,m=0)
 pub fn sh10<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     (T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.z() / p.r()
 }
 
-/// Hardcoded SH (l=1,m=1)
+/// SH (l=1,m=1)
 pub fn sh1p1<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     (T::from_f64(0.75).unwrap() * T::FRAC_1_PI()).sqrt() * p.x() / p.r()
 }
 
-/// Hardcoded SH (l=2,m=-2)
+/// SH (l=2,m=-2)
 pub fn sh2n2<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -41,7 +41,7 @@ pub fn sh2n2<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
         / p.r().powi(2)
 }
 
-/// Hardcoded SH (l=2,m=-1)
+/// SH (l=2,m=-1)
 pub fn sh2n1<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -49,7 +49,7 @@ pub fn sh2n1<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
         / p.r().powi(2)
 }
 
-/// Hardcoded SH (l=2,m=0)
+/// SH (l=2,m=0)
 pub fn sh20<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(5.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -57,7 +57,7 @@ pub fn sh20<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
         / p.r().powi(2)
 }
 
-/// Hardcoded SH (l=2,m=1)
+/// SH (l=2,m=1)
 pub fn sh2p1<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.5).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -65,7 +65,7 @@ pub fn sh2p1<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
         / p.r().powi(2)
 }
 
-/// Hardcoded SH (l=2,m=2)
+/// SH (l=2,m=2)
 pub fn sh2p2<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(15.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -73,7 +73,7 @@ pub fn sh2p2<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
         / p.r().powi(2)
 }
 
-/// Hardcoded SH (l=3,m=-3)
+/// SH (l=3,m=-3)
 pub fn sh3n3<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(35.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -82,7 +82,7 @@ pub fn sh3n3<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
-/// Hardcoded SH (l=3,m=-2)
+/// SH (l=3,m=-2)
 pub fn sh3n2<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.5).unwrap()
         * (T::from_f64(105.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -90,7 +90,7 @@ pub fn sh3n2<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
-/// Hardcoded SH (l=3,m=-1)
+/// SH (l=3,m=-1)
 pub fn sh3n1<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(21.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -99,7 +99,7 @@ pub fn sh3n1<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
-/// Hardcoded SH (l=3,m=0)
+/// SH (l=3,m=0)
 pub fn sh30<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(7.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -108,7 +108,7 @@ pub fn sh30<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
-/// Hardcoded SH (l=3,m=1)
+/// SH (l=3,m=1)
 pub fn sh3p1<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(21.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -117,7 +117,7 @@ pub fn sh3p1<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
-/// Hardcoded SH (l=3,m=2)
+/// SH (l=3,m=2)
 pub fn sh3p2<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(105.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -126,7 +126,7 @@ pub fn sh3p2<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
         / p.r().powi(3)
 }
 
-/// Hardcoded SH (l=3,m=3)
+/// SH (l=3,m=3)
 pub fn sh3p3<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
     T::from_f64(0.25).unwrap()
         * (T::from_f64(35.0 / 2.0).unwrap() * T::FRAC_1_PI()).sqrt()
@@ -154,12 +154,6 @@ fn K<T: SphrsFloat>(l: i64, m: i64) -> T {
             * T::PI()
             * T::from_u64(factorial((l + m.abs()) as u64)).unwrap()))
     .sqrt()
-
-    // let m = m.abs();
-    // (T::FRAC_1_PI() * T::from_i64(2 * l + 1).unwrap() / T::from_f64(4.0).unwrap()
-    //     * T::from_u64(factorial((l - m).abs() as u64)).unwrap()
-    //     / T::from_u64(factorial((l + m).abs() as u64)).unwrap())
-    // .sqrt()
 }
 
 /// Legendre polynomials
