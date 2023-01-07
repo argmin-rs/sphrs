@@ -11,9 +11,6 @@ repository = "https://github.com/argmin-rs/sphrs"
 readme = "README.md"
 keywords = ["math", "science"]
 categories = ["science"]
-exclude = [
-	"push_docs",
-]
 
 [dependencies]
 num = "0.4"
