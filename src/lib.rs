@@ -12,8 +12,8 @@
 //!
 //! # Types of spherical/solid harmonics
 //!
-//! This crate supports these types of real and complex functions via the enums `RealSHType` and
-//! `ComplexSHType`:
+//! This crate supports these types of real and complex functions via the enums `RealSH` and
+//! `ComplexSH`:
 //!
 //! * [Spherical](https://en.wikipedia.org/wiki/Spherical_harmonics)
 //! * [RegularSolid and IrregularSolid](https://en.wikipedia.org/wiki/Solid_harmonics)
@@ -33,10 +33,10 @@
 //! (r = 1.0, theta = PI/4, phi = PI/4):
 //!
 //! ```rust
-//! use sphrs::{ComplexSHType, Coordinates, SHEval};
+//! use sphrs::{ComplexSH, Coordinates, SHEval};
 //! use std::f64::consts::PI;
 //!
-//! let sh = ComplexSHType::Spherical;
+//! let sh = ComplexSH::Spherical;
 //! let degree = 2;
 //! let order = 1;
 //! let p = Coordinates::spherical(1.0, PI/4.0, PI/8.0);
@@ -46,9 +46,9 @@
 //! Compute all real SH up to 5th degree at (Cartesian) position (1, 0, 0):
 //!
 //! ```rust
-//! use sphrs::{RealSHType, HarmonicsSet, Coordinates};
+//! use sphrs::{RealSH, HarmonicsSet, Coordinates};
 //! let degree = 5;
-//! let sh: HarmonicsSet<f64, _, _> = HarmonicsSet::new(degree, RealSHType::Spherical);
+//! let sh: HarmonicsSet<f64, _, _> = HarmonicsSet::new(degree, RealSH::Spherical);
 //! let p = Coordinates::cartesian(1.0, 0.0, 0.0);
 //! println!("SH up to degree {}: {:?}", degree, sh.eval(&p));
 //! ```
@@ -102,7 +102,7 @@ impl<I> SphrsFloat for I where I: Float + FloatConst + FromPrimitive + Debug {}
 
 /// Available types of real spherical harmonics and solid harmonics
 #[derive(Clone, Copy)]
-pub enum RealSHType {
+pub enum RealSH {
     /// Spherical harmonics
     Spherical,
     /// Regular solid harmonics
@@ -113,7 +113,7 @@ pub enum RealSHType {
 
 /// Available types of complex spherical harmonics and solid harmonics
 #[derive(Clone, Copy)]
-pub enum ComplexSHType {
+pub enum ComplexSH {
     /// Spherical harmonics
     Spherical,
     /// Regular solid harmonics
@@ -128,7 +128,7 @@ pub trait SHEval<T: SphrsFloat, U> {
     fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> U;
 }
 
-impl<T> SHEval<T, T> for RealSHType
+impl<T> SHEval<T, T> for RealSH
 where
     T: SphrsFloat,
 {
@@ -144,7 +144,7 @@ where
     }
 }
 
-impl<T> SHEval<T, Complex<T>> for ComplexSHType
+impl<T> SHEval<T, Complex<T>> for ComplexSH
 where
     T: SphrsFloat,
 {

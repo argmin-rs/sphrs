@@ -10,8 +10,7 @@ Documentation: [stable](https://docs.rs/sphrs/latest/sphrs),
 
 ## Types of spherical/solid harmonics
 
-This crate supports these types of real and complex functions via the enums `RealSHType` and
-`ComplexSHType`:
+This crate supports these types of real and complex functions via the enums `RealSH` and `ComplexSH`:
 
 * [Spherical](https://en.wikipedia.org/wiki/Spherical_harmonics)
 * [RegularSolid and IrregularSolid](https://en.wikipedia.org/wiki/Solid_harmonics)
@@ -31,10 +30,10 @@ Compute the complex spherical harmonic function of degree 2 and order 1 at (sphe
 (r = 1.0, theta = PI/4, phi = PI/4):
 
 ```rust
-use sphrs::{ComplexSHType, Coordinates, SHEval};
+use sphrs::{ComplexSH, Coordinates, SHEval};
 use std::f64::consts::PI;
 
-let sh = ComplexSHType::Spherical;
+let sh = ComplexSH::Spherical;
 let degree = 2;
 let order = 1;
 let p = Coordinates::spherical(1.0, PI/4.0, PI/8.0);
@@ -44,9 +43,9 @@ println!("SH ({}, {}): {:?}", degree, order, sh.eval(degree, order, &p));
 Compute all real SH up to 5th degree at (Cartesian) position (1, 0, 0):
 
 ```rust
-use sphrs::{RealSHType, HarmonicsSet, Coordinates};
+use sphrs::{RealSH, HarmonicsSet, Coordinates};
 let degree = 5;
-let sh: HarmonicsSet<f64, _, _> = HarmonicsSet::new(degree, RealSHType::Spherical);
+let sh: HarmonicsSet<f64, _, _> = HarmonicsSet::new(degree, RealSH::Spherical);
 let p = Coordinates::cartesian(1.0, 0.0, 0.0);
 println!("SH up to degree {}: {:?}", degree, sh.eval(&p));
 ```

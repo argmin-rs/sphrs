@@ -35,7 +35,7 @@
 //     //     }
 //     // }
 //
-//     let sh_type = RealSHType::RegularSolid;
+//     let sh_type = RealSH::RegularSolid;
 //
 //     let target = RealSphericalHarmonics::new(1, sh_type);
 //     // target.set_coeffs(vec![0.1, 2.0, 8.9, 3.2]);
@@ -67,7 +67,7 @@ fn main() {
 // >(
 //     order: usize,
 //     pos: &[impl SHCoordinates<T>],
-//     sh_type: RealSHType,
+//     sh_type: RealSH,
 // ) -> Array2<T> {
 //     let sh = RealSphericalHarmonics::new(order, sh_type);
 //     let mut mat = unsafe { Array2::uninitialized((pos.len(), sh.num_sh)) };
