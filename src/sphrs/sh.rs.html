@@ -1,105 +1,102 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/sh.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>sh.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../sphrs/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
-                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
-<span id="2">  2</span>
-<span id="3">  3</span>
-<span id="4">  4</span>
-<span id="5">  5</span>
-<span id="6">  6</span>
-<span id="7">  7</span>
-<span id="8">  8</span>
-<span id="9">  9</span>
-<span id="10"> 10</span>
-<span id="11"> 11</span>
-<span id="12"> 12</span>
-<span id="13"> 13</span>
-<span id="14"> 14</span>
-<span id="15"> 15</span>
-<span id="16"> 16</span>
-<span id="17"> 17</span>
-<span id="18"> 18</span>
-<span id="19"> 19</span>
-<span id="20"> 20</span>
-<span id="21"> 21</span>
-<span id="22"> 22</span>
-<span id="23"> 23</span>
-<span id="24"> 24</span>
-<span id="25"> 25</span>
-<span id="26"> 26</span>
-<span id="27"> 27</span>
-<span id="28"> 28</span>
-<span id="29"> 29</span>
-<span id="30"> 30</span>
-<span id="31"> 31</span>
-<span id="32"> 32</span>
-<span id="33"> 33</span>
-<span id="34"> 34</span>
-<span id="35"> 35</span>
-<span id="36"> 36</span>
-<span id="37"> 37</span>
-<span id="38"> 38</span>
-<span id="39"> 39</span>
-<span id="40"> 40</span>
-<span id="41"> 41</span>
-<span id="42"> 42</span>
-<span id="43"> 43</span>
-<span id="44"> 44</span>
-<span id="45"> 45</span>
-<span id="46"> 46</span>
-<span id="47"> 47</span>
-<span id="48"> 48</span>
-<span id="49"> 49</span>
-<span id="50"> 50</span>
-<span id="51"> 51</span>
-<span id="52"> 52</span>
-<span id="53"> 53</span>
-<span id="54"> 54</span>
-<span id="55"> 55</span>
-<span id="56"> 56</span>
-<span id="57"> 57</span>
-<span id="58"> 58</span>
-<span id="59"> 59</span>
-<span id="60"> 60</span>
-<span id="61"> 61</span>
-<span id="62"> 62</span>
-<span id="63"> 63</span>
-<span id="64"> 64</span>
-<span id="65"> 65</span>
-<span id="66"> 66</span>
-<span id="67"> 67</span>
-<span id="68"> 68</span>
-<span id="69"> 69</span>
-<span id="70"> 70</span>
-<span id="71"> 71</span>
-<span id="72"> 72</span>
-<span id="73"> 73</span>
-<span id="74"> 74</span>
-<span id="75"> 75</span>
-<span id="76"> 76</span>
-<span id="77"> 77</span>
-<span id="78"> 78</span>
-<span id="79"> 79</span>
-<span id="80"> 80</span>
-<span id="81"> 81</span>
-<span id="82"> 82</span>
-<span id="83"> 83</span>
-<span id="84"> 84</span>
-<span id="85"> 85</span>
-<span id="86"> 86</span>
-<span id="87"> 87</span>
-<span id="88"> 88</span>
-<span id="89"> 89</span>
-<span id="90"> 90</span>
-<span id="91"> 91</span>
-<span id="92"> 92</span>
-<span id="93"> 93</span>
-<span id="94"> 94</span>
-<span id="95"> 95</span>
-<span id="96"> 96</span>
-<span id="97"> 97</span>
-<span id="98"> 98</span>
-<span id="99"> 99</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/sh.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>sh.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" href="../../normalize.css"><link rel="stylesheet" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" href="../../ayu.css" disabled><link rel="stylesheet" href="../../dark.css" disabled><link rel="stylesheet" href="../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../storage.js"></script><script defer src="../../source-script.js"></script><script defer src="../../source-files.js"></script><script defer src="../../main.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><div class="width-limiter"><nav class="sub"><a class="sub-logo-container" href="../../sphrs/index.html"><img class="rust-logo" src="../../rust-logo.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../wheel.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><span id="1">1</span>
+<span id="2">2</span>
+<span id="3">3</span>
+<span id="4">4</span>
+<span id="5">5</span>
+<span id="6">6</span>
+<span id="7">7</span>
+<span id="8">8</span>
+<span id="9">9</span>
+<span id="10">10</span>
+<span id="11">11</span>
+<span id="12">12</span>
+<span id="13">13</span>
+<span id="14">14</span>
+<span id="15">15</span>
+<span id="16">16</span>
+<span id="17">17</span>
+<span id="18">18</span>
+<span id="19">19</span>
+<span id="20">20</span>
+<span id="21">21</span>
+<span id="22">22</span>
+<span id="23">23</span>
+<span id="24">24</span>
+<span id="25">25</span>
+<span id="26">26</span>
+<span id="27">27</span>
+<span id="28">28</span>
+<span id="29">29</span>
+<span id="30">30</span>
+<span id="31">31</span>
+<span id="32">32</span>
+<span id="33">33</span>
+<span id="34">34</span>
+<span id="35">35</span>
+<span id="36">36</span>
+<span id="37">37</span>
+<span id="38">38</span>
+<span id="39">39</span>
+<span id="40">40</span>
+<span id="41">41</span>
+<span id="42">42</span>
+<span id="43">43</span>
+<span id="44">44</span>
+<span id="45">45</span>
+<span id="46">46</span>
+<span id="47">47</span>
+<span id="48">48</span>
+<span id="49">49</span>
+<span id="50">50</span>
+<span id="51">51</span>
+<span id="52">52</span>
+<span id="53">53</span>
+<span id="54">54</span>
+<span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
+<span id="58">58</span>
+<span id="59">59</span>
+<span id="60">60</span>
+<span id="61">61</span>
+<span id="62">62</span>
+<span id="63">63</span>
+<span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
+<span id="70">70</span>
+<span id="71">71</span>
+<span id="72">72</span>
+<span id="73">73</span>
+<span id="74">74</span>
+<span id="75">75</span>
+<span id="76">76</span>
+<span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
+<span id="81">81</span>
+<span id="82">82</span>
+<span id="83">83</span>
+<span id="84">84</span>
+<span id="85">85</span>
+<span id="86">86</span>
+<span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
+<span id="99">99</span>
 <span id="100">100</span>
 <span id="101">101</span>
 <span id="102">102</span>
@@ -393,399 +390,397 @@
 <span id="390">390</span>
 <span id="391">391</span>
 <span id="392">392</span>
-</pre><div class="example-wrap"><pre class="rust ">
-<span class="comment">// Copyright 2018-2020 Stefan Kroboth</span>
-<span class="comment">//</span>
-<span class="comment">// Licensed under the Apache License, Version 2.0 &lt;LICENSE-APACHE or</span>
-<span class="comment">// http://apache.org/licenses/LICENSE-2.0&gt; or the MIT license &lt;LICENSE-MIT or</span>
-<span class="comment">// http://opensource.org/licenses/MIT&gt;, at your option. This file may not be</span>
-<span class="comment">// copied, modified, or distributed except according to those terms.</span>
+</pre><pre class="rust"><code><span class="comment">// Copyright 2018-2020 Stefan Kroboth
+//
+// Licensed under the Apache License, Version 2.0 &lt;LICENSE-APACHE or
+// http://apache.org/licenses/LICENSE-2.0&gt; or the MIT license &lt;LICENSE-MIT or
+// http://opensource.org/licenses/MIT&gt;, at your option. This file may not be
+// copied, modified, or distributed except according to those terms.
 
-<span class="comment">// Allow comparison chains because benchmarking shows that they are much faster than match</span>
-<span class="comment">// expressions.</span>
-<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::comparison_chain</span>)]</span>
+// Allow comparison chains because benchmarking shows that they are much faster than match
+// expressions.
+</span><span class="attribute">#![allow(clippy::comparison_chain)]
 
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::coords</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::SphrsFloat</span>;
-<span class="kw">use</span> <span class="ident">num_complex::Complex</span>;
+</span><span class="kw">use </span><span class="kw">crate</span>::coords::<span class="kw-2">*</span>;
+<span class="kw">use </span><span class="kw">crate</span>::SphrsFloat;
+<span class="kw">use </span>num_complex::Complex;
 
-<span class="doccomment">/// Hardcoded SH (l=0,m=0)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh00</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">_p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.5</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>().<span class="ident">sqrt</span>()
+<span class="doccomment">/// Hardcoded SH (l=0,m=0)
+</span><span class="kw">pub fn </span>sh00&lt;T: SphrsFloat&gt;(_p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.5</span>).unwrap() * T::FRAC_1_PI().sqrt()
 }
 
-<span class="doccomment">/// Hardcoded SH (l=1,m=-1)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh1n1</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    (<span class="ident">T::from_f64</span>(<span class="number">0.75</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">y</span>() <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>()
+<span class="doccomment">/// Hardcoded SH (l=1,m=-1)
+</span><span class="kw">pub fn </span>sh1n1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    (T::from_f64(<span class="number">0.75</span>).unwrap() * T::FRAC_1_PI()).sqrt() * p.y() / p.r()
 }
 
-<span class="doccomment">/// Hardcoded SH (l=1,m=0)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh10</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    (<span class="ident">T::from_f64</span>(<span class="number">0.75</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">z</span>() <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>()
+<span class="doccomment">/// Hardcoded SH (l=1,m=0)
+</span><span class="kw">pub fn </span>sh10&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    (T::from_f64(<span class="number">0.75</span>).unwrap() * T::FRAC_1_PI()).sqrt() * p.z() / p.r()
 }
 
-<span class="doccomment">/// Hardcoded SH (l=1,m=1)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh1p1</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    (<span class="ident">T::from_f64</span>(<span class="number">0.75</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">x</span>() <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>()
+<span class="doccomment">/// Hardcoded SH (l=1,m=1)
+</span><span class="kw">pub fn </span>sh1p1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    (T::from_f64(<span class="number">0.75</span>).unwrap() * T::FRAC_1_PI()).sqrt() * p.x() / p.r()
 }
 
-<span class="doccomment">/// Hardcoded SH (l=2,m=-2)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh2n2</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.5</span>).<span class="ident">unwrap</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">15.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> (<span class="ident">p</span>.<span class="ident">x</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">y</span>())
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">2</span>)
+<span class="doccomment">/// Hardcoded SH (l=2,m=-2)
+</span><span class="kw">pub fn </span>sh2n2&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.5</span>).unwrap()
+        * (T::from_f64(<span class="number">15.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
+        * (p.x() * p.y())
+        / p.r().powi(<span class="number">2</span>)
 }
 
-<span class="doccomment">/// Hardcoded SH (l=2,m=-1)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh2n1</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.5</span>).<span class="ident">unwrap</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">15.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> (<span class="ident">p</span>.<span class="ident">y</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">z</span>())
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">2</span>)
+<span class="doccomment">/// Hardcoded SH (l=2,m=-1)
+</span><span class="kw">pub fn </span>sh2n1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.5</span>).unwrap()
+        * (T::from_f64(<span class="number">15.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
+        * (p.y() * p.z())
+        / p.r().powi(<span class="number">2</span>)
 }
 
-<span class="doccomment">/// Hardcoded SH (l=2,m=0)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh20</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.25</span>).<span class="ident">unwrap</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">5.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> (<span class="op">-</span><span class="ident">p</span>.<span class="ident">x</span>().<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">-</span> <span class="ident">p</span>.<span class="ident">y</span>().<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">+</span> <span class="ident">T::from_f64</span>(<span class="number">2.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">z</span>().<span class="ident">powi</span>(<span class="number">2</span>))
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">2</span>)
+<span class="doccomment">/// Hardcoded SH (l=2,m=0)
+</span><span class="kw">pub fn </span>sh20&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.25</span>).unwrap()
+        * (T::from_f64(<span class="number">5.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
+        * (-p.x().powi(<span class="number">2</span>) - p.y().powi(<span class="number">2</span>) + T::from_f64(<span class="number">2.0</span>).unwrap() * p.z().powi(<span class="number">2</span>))
+        / p.r().powi(<span class="number">2</span>)
 }
 
-<span class="doccomment">/// Hardcoded SH (l=2,m=1)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh2p1</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.5</span>).<span class="ident">unwrap</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">15.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> (<span class="ident">p</span>.<span class="ident">z</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">x</span>())
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">2</span>)
+<span class="doccomment">/// Hardcoded SH (l=2,m=1)
+</span><span class="kw">pub fn </span>sh2p1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.5</span>).unwrap()
+        * (T::from_f64(<span class="number">15.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
+        * (p.z() * p.x())
+        / p.r().powi(<span class="number">2</span>)
 }
 
-<span class="doccomment">/// Hardcoded SH (l=2,m=2)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh2p2</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.25</span>).<span class="ident">unwrap</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">15.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> (<span class="ident">p</span>.<span class="ident">x</span>().<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">-</span> <span class="ident">p</span>.<span class="ident">y</span>().<span class="ident">powi</span>(<span class="number">2</span>))
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">2</span>)
+<span class="doccomment">/// Hardcoded SH (l=2,m=2)
+</span><span class="kw">pub fn </span>sh2p2&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.25</span>).unwrap()
+        * (T::from_f64(<span class="number">15.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
+        * (p.x().powi(<span class="number">2</span>) - p.y().powi(<span class="number">2</span>))
+        / p.r().powi(<span class="number">2</span>)
 }
 
-<span class="doccomment">/// Hardcoded SH (l=3,m=-3)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh3n3</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.25</span>).<span class="ident">unwrap</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">35.0</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">3.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">x</span>().<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">-</span> <span class="ident">p</span>.<span class="ident">y</span>().<span class="ident">powi</span>(<span class="number">2</span>))
-        <span class="op">*</span> <span class="ident">p</span>.<span class="ident">y</span>()
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">3</span>)
+<span class="doccomment">/// Hardcoded SH (l=3,m=-3)
+</span><span class="kw">pub fn </span>sh3n3&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.25</span>).unwrap()
+        * (T::from_f64(<span class="number">35.0 </span>/ <span class="number">2.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
+        * (T::from_f64(<span class="number">3.0</span>).unwrap() * p.x().powi(<span class="number">2</span>) - p.y().powi(<span class="number">2</span>))
+        * p.y()
+        / p.r().powi(<span class="number">3</span>)
 }
 
-<span class="doccomment">/// Hardcoded SH (l=3,m=-2)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh3n2</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.5</span>).<span class="ident">unwrap</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">105.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> (<span class="ident">p</span>.<span class="ident">x</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">y</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">z</span>())
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">3</span>)
+<span class="doccomment">/// Hardcoded SH (l=3,m=-2)
+</span><span class="kw">pub fn </span>sh3n2&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.5</span>).unwrap()
+        * (T::from_f64(<span class="number">105.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
+        * (p.x() * p.y() * p.z())
+        / p.r().powi(<span class="number">3</span>)
 }
 
-<span class="doccomment">/// Hardcoded SH (l=3,m=-1)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh3n1</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.25</span>).<span class="ident">unwrap</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">21.0</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> <span class="ident">p</span>.<span class="ident">y</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">4.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">z</span>().<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">-</span> <span class="ident">p</span>.<span class="ident">x</span>().<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">-</span> <span class="ident">p</span>.<span class="ident">y</span>().<span class="ident">powi</span>(<span class="number">2</span>))
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">3</span>)
+<span class="doccomment">/// Hardcoded SH (l=3,m=-1)
+</span><span class="kw">pub fn </span>sh3n1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.25</span>).unwrap()
+        * (T::from_f64(<span class="number">21.0 </span>/ <span class="number">2.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
+        * p.y()
+        * (T::from_f64(<span class="number">4.0</span>).unwrap() * p.z().powi(<span class="number">2</span>) - p.x().powi(<span class="number">2</span>) - p.y().powi(<span class="number">2</span>))
+        / p.r().powi(<span class="number">3</span>)
 }
 
-<span class="doccomment">/// Hardcoded SH (l=3,m=0)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh30</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.25</span>).<span class="ident">unwrap</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">7.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> <span class="ident">p</span>.<span class="ident">z</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">5.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">z</span>().<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">-</span> <span class="ident">T::from_f64</span>(<span class="number">3.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">2</span>))
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">3</span>)
+<span class="doccomment">/// Hardcoded SH (l=3,m=0)
+</span><span class="kw">pub fn </span>sh30&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.25</span>).unwrap()
+        * (T::from_f64(<span class="number">7.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
+        * p.z()
+        * (T::from_f64(<span class="number">5.0</span>).unwrap() * p.z().powi(<span class="number">2</span>) - T::from_f64(<span class="number">3.0</span>).unwrap() * p.r().powi(<span class="number">2</span>))
+        / p.r().powi(<span class="number">3</span>)
 }
 
-<span class="doccomment">/// Hardcoded SH (l=3,m=1)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh3p1</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.25</span>).<span class="ident">unwrap</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">21.0</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> <span class="ident">p</span>.<span class="ident">x</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">4.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">z</span>().<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">-</span> <span class="ident">p</span>.<span class="ident">x</span>().<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">-</span> <span class="ident">p</span>.<span class="ident">y</span>().<span class="ident">powi</span>(<span class="number">2</span>))
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">3</span>)
+<span class="doccomment">/// Hardcoded SH (l=3,m=1)
+</span><span class="kw">pub fn </span>sh3p1&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.25</span>).unwrap()
+        * (T::from_f64(<span class="number">21.0 </span>/ <span class="number">2.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
+        * p.x()
+        * (T::from_f64(<span class="number">4.0</span>).unwrap() * p.z().powi(<span class="number">2</span>) - p.x().powi(<span class="number">2</span>) - p.y().powi(<span class="number">2</span>))
+        / p.r().powi(<span class="number">3</span>)
 }
 
-<span class="doccomment">/// Hardcoded SH (l=3,m=2)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh3p2</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.25</span>).<span class="ident">unwrap</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">105.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> (<span class="ident">p</span>.<span class="ident">x</span>().<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">-</span> <span class="ident">p</span>.<span class="ident">y</span>().<span class="ident">powi</span>(<span class="number">2</span>))
-        <span class="op">*</span> <span class="ident">p</span>.<span class="ident">z</span>()
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">3</span>)
+<span class="doccomment">/// Hardcoded SH (l=3,m=2)
+</span><span class="kw">pub fn </span>sh3p2&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.25</span>).unwrap()
+        * (T::from_f64(<span class="number">105.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
+        * (p.x().powi(<span class="number">2</span>) - p.y().powi(<span class="number">2</span>))
+        * p.z()
+        / p.r().powi(<span class="number">3</span>)
 }
 
-<span class="doccomment">/// Hardcoded SH (l=3,m=3)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">sh3p3</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>(<span class="number">0.25</span>).<span class="ident">unwrap</span>()
-        <span class="op">*</span> (<span class="ident">T::from_f64</span>(<span class="number">35.0</span> <span class="op">/</span> <span class="number">2.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::FRAC_1_PI</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> (<span class="ident">p</span>.<span class="ident">x</span>().<span class="ident">powi</span>(<span class="number">2</span>) <span class="op">-</span> <span class="ident">T::from_f64</span>(<span class="number">3.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">y</span>().<span class="ident">powi</span>(<span class="number">2</span>))
-        <span class="op">*</span> <span class="ident">p</span>.<span class="ident">x</span>()
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="number">3</span>)
+<span class="doccomment">/// Hardcoded SH (l=3,m=3)
+</span><span class="kw">pub fn </span>sh3p3&lt;T: SphrsFloat&gt;(p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64(<span class="number">0.25</span>).unwrap()
+        * (T::from_f64(<span class="number">35.0 </span>/ <span class="number">2.0</span>).unwrap() * T::FRAC_1_PI()).sqrt()
+        * (p.x().powi(<span class="number">2</span>) - T::from_f64(<span class="number">3.0</span>).unwrap() * p.y().powi(<span class="number">2</span>))
+        * p.x()
+        / p.r().powi(<span class="number">3</span>)
 }
 
-<span class="doccomment">/// Factorial</span>
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">fn</span> <span class="ident">factorial</span>(<span class="ident">n</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
-    (<span class="number">1</span>..<span class="op">=</span><span class="ident">n</span>).<span class="ident">product</span>()
+<span class="doccomment">/// Factorial
+</span><span class="attribute">#[inline]
+</span><span class="kw">fn </span>factorial(n: u64) -&gt; u64 {
+    (<span class="number">1</span>..=n).product()
 }
 
-<span class="doccomment">/// Normalization factor</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">fn</span> <span class="ident">K</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">m</span>: <span class="ident">i64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    ((<span class="ident">T::from_f64</span>(<span class="number">2.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::from_i64</span>(<span class="ident">l</span>).<span class="ident">unwrap</span>() <span class="op">+</span> <span class="ident">T::one</span>())
-        <span class="op">*</span> <span class="ident">T::from_u64</span>(<span class="ident">factorial</span>((<span class="ident">l</span> <span class="op">-</span> <span class="ident">m</span>.<span class="ident">abs</span>()) <span class="kw">as</span> <span class="ident">u64</span>)).<span class="ident">unwrap</span>()
-        <span class="op">/</span> (<span class="ident">T::from_f64</span>(<span class="number">4.0</span>).<span class="ident">unwrap</span>()
-            <span class="op">*</span> <span class="ident">T::PI</span>()
-            <span class="op">*</span> <span class="ident">T::from_u64</span>(<span class="ident">factorial</span>((<span class="ident">l</span> <span class="op">+</span> <span class="ident">m</span>.<span class="ident">abs</span>()) <span class="kw">as</span> <span class="ident">u64</span>)).<span class="ident">unwrap</span>()))
-    .<span class="ident">sqrt</span>()
+<span class="doccomment">/// Normalization factor
+</span><span class="attribute">#[allow(non_snake_case)]
+#[inline]
+</span><span class="kw">fn </span>K&lt;T: SphrsFloat&gt;(l: i64, m: i64) -&gt; T {
+    ((T::from_f64(<span class="number">2.0</span>).unwrap() * T::from_i64(l).unwrap() + T::one())
+        * T::from_u64(factorial((l - m.abs()) <span class="kw">as </span>u64)).unwrap()
+        / (T::from_f64(<span class="number">4.0</span>).unwrap()
+            * T::PI()
+            * T::from_u64(factorial((l + m.abs()) <span class="kw">as </span>u64)).unwrap()))
+    .sqrt()
 
-    <span class="comment">// let m = m.abs();</span>
-    <span class="comment">// (T::FRAC_1_PI() * T::from_i64(2 * l + 1).unwrap() / T::from_f64(4.0).unwrap()</span>
-    <span class="comment">//     * T::from_u64(factorial((l - m).abs() as u64)).unwrap()</span>
-    <span class="comment">//     / T::from_u64(factorial((l + m).abs() as u64)).unwrap())</span>
-    <span class="comment">// .sqrt()</span>
-}
+    <span class="comment">// let m = m.abs();
+    // (T::FRAC_1_PI() * T::from_i64(2 * l + 1).unwrap() / T::from_f64(4.0).unwrap()
+    //     * T::from_u64(factorial((l - m).abs() as u64)).unwrap()
+    //     / T::from_u64(factorial((l + m).abs() as u64)).unwrap())
+    // .sqrt()
+</span>}
 
-<span class="doccomment">/// Legendre polynomials</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">fn</span> <span class="ident">P</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">m</span>: <span class="ident">i64</span>, <span class="ident">x</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pmm</span> <span class="op">=</span> <span class="ident">T::one</span>();
+<span class="doccomment">/// Legendre polynomials
+</span><span class="attribute">#[allow(non_snake_case)]
+#[inline]
+</span><span class="kw">fn </span>P&lt;T: SphrsFloat&gt;(l: i64, m: i64, x: T) -&gt; T {
+    <span class="kw">let </span><span class="kw-2">mut </span>pmm = T::one();
 
-    <span class="kw">if</span> <span class="ident">m</span> <span class="op">&gt;</span> <span class="number">0</span> {
-        <span class="kw">let</span> <span class="ident">somx2</span> <span class="op">=</span> ((<span class="ident">T::one</span>() <span class="op">-</span> <span class="ident">x</span>) <span class="op">*</span> (<span class="ident">T::one</span>() <span class="op">+</span> <span class="ident">x</span>)).<span class="ident">sqrt</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">fact</span> <span class="op">=</span> <span class="ident">T::one</span>();
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">1</span>..<span class="op">=</span><span class="ident">m</span> {
-            <span class="ident">pmm</span> <span class="op">=</span> <span class="ident">pmm</span> <span class="op">*</span> <span class="op">-</span><span class="ident">fact</span> <span class="op">*</span> <span class="ident">somx2</span>;
-            <span class="ident">fact</span> <span class="op">=</span> <span class="ident">fact</span> <span class="op">+</span> <span class="ident">T::from_f64</span>(<span class="number">2.0</span>).<span class="ident">unwrap</span>();
+    <span class="kw">if </span>m &gt; <span class="number">0 </span>{
+        <span class="kw">let </span>somx2 = ((T::one() - x) * (T::one() + x)).sqrt();
+        <span class="kw">let </span><span class="kw-2">mut </span>fact = T::one();
+        <span class="kw">for _ in </span><span class="number">1</span>..=m {
+            pmm = pmm * -fact * somx2;
+            fact = fact + T::from_f64(<span class="number">2.0</span>).unwrap();
         }
     }
 
-    <span class="kw">if</span> <span class="ident">l</span> <span class="op">=</span><span class="op">=</span> <span class="ident">m</span> {
-        <span class="kw">return</span> <span class="ident">pmm</span>;
+    <span class="kw">if </span>l == m {
+        <span class="kw">return </span>pmm;
     }
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pmmp1</span> <span class="op">=</span> <span class="ident">x</span> <span class="op">*</span> <span class="ident">T::from_i64</span>(<span class="number">2</span> <span class="op">*</span> <span class="ident">m</span> <span class="op">+</span> <span class="number">1</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">pmm</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>pmmp1 = x * T::from_i64(<span class="number">2 </span>* m + <span class="number">1</span>).unwrap() * pmm;
 
-    <span class="kw">if</span> <span class="ident">l</span> <span class="op">=</span><span class="op">=</span> <span class="ident">m</span> <span class="op">+</span> <span class="number">1</span> {
-        <span class="kw">return</span> <span class="ident">pmmp1</span>;
+    <span class="kw">if </span>l == m + <span class="number">1 </span>{
+        <span class="kw">return </span>pmmp1;
     }
 
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pll</span> <span class="op">=</span> <span class="ident">T::zero</span>();
-    <span class="kw">for</span> <span class="ident">ll</span> <span class="kw">in</span> (<span class="ident">m</span> <span class="op">+</span> <span class="number">2</span>)..<span class="op">=</span><span class="ident">l</span> {
-        <span class="ident">pll</span> <span class="op">=</span> (<span class="ident">T::from_i64</span>(<span class="number">2</span> <span class="op">*</span> <span class="ident">ll</span> <span class="op">-</span> <span class="number">1</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">x</span> <span class="op">*</span> <span class="ident">pmmp1</span>
-            <span class="op">-</span> (<span class="ident">T::from_i64</span>(<span class="ident">ll</span> <span class="op">+</span> <span class="ident">m</span> <span class="op">-</span> <span class="number">1</span>)).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">pmm</span>)
-            <span class="op">/</span> <span class="ident">T::from_i64</span>(<span class="ident">ll</span> <span class="op">-</span> <span class="ident">m</span>).<span class="ident">unwrap</span>();
-        <span class="ident">pmm</span> <span class="op">=</span> <span class="ident">pmmp1</span>;
-        <span class="ident">pmmp1</span> <span class="op">=</span> <span class="ident">pll</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>pll = T::zero();
+    <span class="kw">for </span>ll <span class="kw">in </span>(m + <span class="number">2</span>)..=l {
+        pll = (T::from_i64(<span class="number">2 </span>* ll - <span class="number">1</span>).unwrap() * x * pmmp1
+            - (T::from_i64(ll + m - <span class="number">1</span>)).unwrap() * pmm)
+            / T::from_i64(ll - m).unwrap();
+        pmm = pmmp1;
+        pmmp1 = pll;
     }
-    <span class="ident">pll</span>
+    pll
 }
 
-<span class="doccomment">/// Complex spherical harmonics</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">SH</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">m</span>: <span class="ident">i64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Complex</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="macro">assert!</span>(<span class="ident">l</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">0</span>);
-    <span class="macro">assert!</span>(<span class="ident">m</span>.<span class="ident">abs</span>() <span class="op">&lt;</span><span class="op">=</span> <span class="ident">l</span>);
-    <span class="kw">let</span> <span class="ident">v</span>: <span class="ident">T</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">m</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-        <span class="ident">K</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">l</span>, <span class="number">0</span>) <span class="op">*</span> <span class="ident">P</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>.<span class="ident">theta_cos</span>())
-    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">m</span> <span class="op">&gt;</span> <span class="number">0</span> {
-        <span class="ident">K</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">l</span>, <span class="ident">m</span>) <span class="op">*</span> <span class="ident">P</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>.<span class="ident">theta_cos</span>())
-    } <span class="kw">else</span> {
-        <span class="ident">K</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">l</span>, <span class="op">-</span><span class="ident">m</span>) <span class="op">*</span> <span class="ident">P</span>(<span class="ident">l</span>, <span class="op">-</span><span class="ident">m</span>, <span class="ident">p</span>.<span class="ident">theta_cos</span>())
+<span class="doccomment">/// Complex spherical harmonics
+</span><span class="attribute">#[allow(non_snake_case)]
+#[inline]
+</span><span class="kw">pub fn </span>SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; Complex&lt;T&gt; {
+    <span class="macro">assert!</span>(l &gt;= <span class="number">0</span>);
+    <span class="macro">assert!</span>(m.abs() &lt;= l);
+    <span class="kw">let </span>v: T = <span class="kw">if </span>m == <span class="number">0 </span>{
+        K::&lt;T&gt;(l, <span class="number">0</span>) * P(l, m, p.theta_cos())
+    } <span class="kw">else if </span>m &gt; <span class="number">0 </span>{
+        K::&lt;T&gt;(l, m) * P(l, m, p.theta_cos())
+    } <span class="kw">else </span>{
+        K::&lt;T&gt;(l, -m) * P(l, -m, p.theta_cos())
     };
-    <span class="kw">let</span> <span class="ident">sign</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">m</span> <span class="op">&lt;</span> <span class="number">0</span> {
-        <span class="ident">T::from_f64</span>((<span class="op">-</span><span class="number">1f64</span>).<span class="ident">powi</span>(<span class="ident">m</span>.<span class="ident">abs</span>() <span class="kw">as</span> <span class="ident">i32</span>)).<span class="ident">unwrap</span>()
-    } <span class="kw">else</span> {
-        <span class="ident">T::from_f64</span>(<span class="number">1.0</span>).<span class="ident">unwrap</span>()
+    <span class="kw">let </span>sign = <span class="kw">if </span>m &lt; <span class="number">0 </span>{
+        T::from_f64((-<span class="number">1f64</span>).powi(m.abs() <span class="kw">as </span>i32)).unwrap()
+    } <span class="kw">else </span>{
+        T::from_f64(<span class="number">1.0</span>).unwrap()
     };
-    <span class="kw">let</span> <span class="ident">tmp</span> <span class="op">=</span> <span class="ident">T::from_i64</span>(<span class="ident">m</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">phi</span>();
-    <span class="ident">Complex::new</span>(<span class="ident">sign</span> <span class="op">*</span> <span class="ident">v</span> <span class="op">*</span> <span class="ident">tmp</span>.<span class="ident">cos</span>(), <span class="ident">sign</span> <span class="op">*</span> <span class="ident">v</span> <span class="op">*</span> <span class="ident">tmp</span>.<span class="ident">sin</span>())
+    <span class="kw">let </span>tmp = T::from_i64(m).unwrap() * p.phi();
+    Complex::new(sign * v * tmp.cos(), sign * v * tmp.sin())
 }
 
-<span class="doccomment">/// Real spherical harmonics (recursive implementation)</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">real_SH</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">m</span>: <span class="ident">i64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="ident">T::from_f64</span>((<span class="op">-</span><span class="number">1f64</span>).<span class="ident">powi</span>(<span class="ident">m</span>.<span class="ident">abs</span>() <span class="kw">as</span> <span class="ident">i32</span>)).<span class="ident">unwrap</span>()
-        <span class="op">*</span> <span class="kw">if</span> <span class="ident">m</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-            <span class="ident">K</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">l</span>, <span class="number">0</span>) <span class="op">*</span> <span class="ident">P</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>.<span class="ident">theta_cos</span>())
-        } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">m</span> <span class="op">&gt;</span> <span class="number">0</span> {
-            <span class="ident">T::SQRT_2</span>()
-                <span class="op">*</span> <span class="ident">K</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">l</span>, <span class="ident">m</span>)
-                <span class="op">*</span> (<span class="ident">T::from_i64</span>(<span class="ident">m</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">phi</span>()).<span class="ident">cos</span>()
-                <span class="op">*</span> <span class="ident">P</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>.<span class="ident">theta_cos</span>())
-        } <span class="kw">else</span> {
-            <span class="ident">T::SQRT_2</span>()
-                <span class="op">*</span> <span class="ident">K</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">l</span>, <span class="op">-</span><span class="ident">m</span>)
-                <span class="op">*</span> (<span class="ident">T::from_i64</span>(<span class="op">-</span><span class="ident">m</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">p</span>.<span class="ident">phi</span>()).<span class="ident">sin</span>()
-                <span class="op">*</span> <span class="ident">P</span>(<span class="ident">l</span>, <span class="op">-</span><span class="ident">m</span>, <span class="ident">p</span>.<span class="ident">theta_cos</span>())
+<span class="doccomment">/// Real spherical harmonics (recursive implementation)
+</span><span class="attribute">#[allow(non_snake_case)]
+#[inline(always)]
+</span><span class="kw">pub fn </span>real_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    T::from_f64((-<span class="number">1f64</span>).powi(m.abs() <span class="kw">as </span>i32)).unwrap()
+        * <span class="kw">if </span>m == <span class="number">0 </span>{
+            K::&lt;T&gt;(l, <span class="number">0</span>) * P(l, m, p.theta_cos())
+        } <span class="kw">else if </span>m &gt; <span class="number">0 </span>{
+            T::SQRT_2()
+                * K::&lt;T&gt;(l, m)
+                * (T::from_i64(m).unwrap() * p.phi()).cos()
+                * P(l, m, p.theta_cos())
+        } <span class="kw">else </span>{
+            T::SQRT_2()
+                * K::&lt;T&gt;(l, -m)
+                * (T::from_i64(-m).unwrap() * p.phi()).sin()
+                * P(l, -m, p.theta_cos())
         }
 }
 
-<span class="doccomment">/// Spherical harmonics. This will use the hardcoded functions if available and the recursive</span>
-<span class="doccomment">/// implementation otherwise.</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">real_SH_hardcoded</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">m</span>: <span class="ident">i64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    <span class="kw">match</span> (<span class="ident">l</span>, <span class="ident">m</span>) {
-        <span class="comment">// 0th degree</span>
-        (<span class="number">0</span>, <span class="number">0</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh00</span>(<span class="ident">p</span>),
-        <span class="comment">// 1st degree</span>
-        (<span class="number">1</span>, <span class="op">-</span><span class="number">1</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh1n1</span>(<span class="ident">p</span>),
-        (<span class="number">1</span>, <span class="number">0</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh10</span>(<span class="ident">p</span>),
-        (<span class="number">1</span>, <span class="number">1</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh1p1</span>(<span class="ident">p</span>),
-        <span class="comment">// 2nd degree</span>
-        (<span class="number">2</span>, <span class="op">-</span><span class="number">2</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh2n2</span>(<span class="ident">p</span>),
-        (<span class="number">2</span>, <span class="op">-</span><span class="number">1</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh2n1</span>(<span class="ident">p</span>),
-        (<span class="number">2</span>, <span class="number">0</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh20</span>(<span class="ident">p</span>),
-        (<span class="number">2</span>, <span class="number">1</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh2p1</span>(<span class="ident">p</span>),
-        (<span class="number">2</span>, <span class="number">2</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh2p2</span>(<span class="ident">p</span>),
-        <span class="comment">// 3rd degree</span>
-        (<span class="number">3</span>, <span class="op">-</span><span class="number">3</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh3n3</span>(<span class="ident">p</span>),
-        (<span class="number">3</span>, <span class="op">-</span><span class="number">2</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh3n2</span>(<span class="ident">p</span>),
-        (<span class="number">3</span>, <span class="op">-</span><span class="number">1</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh3n1</span>(<span class="ident">p</span>),
-        (<span class="number">3</span>, <span class="number">0</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh30</span>(<span class="ident">p</span>),
-        (<span class="number">3</span>, <span class="number">1</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh3p1</span>(<span class="ident">p</span>),
-        (<span class="number">3</span>, <span class="number">2</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh3p2</span>(<span class="ident">p</span>),
-        (<span class="number">3</span>, <span class="number">3</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">sh3p3</span>(<span class="ident">p</span>),
-        <span class="comment">// the rest</span>
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">real_SH</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>),
+<span class="doccomment">/// Spherical harmonics. This will use the hardcoded functions if available and the recursive
+/// implementation otherwise.
+</span><span class="attribute">#[allow(non_snake_case)]
+#[inline]
+</span><span class="kw">pub fn </span>real_SH_hardcoded&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    <span class="kw">match </span>(l, m) {
+        <span class="comment">// 0th degree
+        </span>(<span class="number">0</span>, <span class="number">0</span>) =&gt; sh00(p),
+        <span class="comment">// 1st degree
+        </span>(<span class="number">1</span>, -<span class="number">1</span>) =&gt; sh1n1(p),
+        (<span class="number">1</span>, <span class="number">0</span>) =&gt; sh10(p),
+        (<span class="number">1</span>, <span class="number">1</span>) =&gt; sh1p1(p),
+        <span class="comment">// 2nd degree
+        </span>(<span class="number">2</span>, -<span class="number">2</span>) =&gt; sh2n2(p),
+        (<span class="number">2</span>, -<span class="number">1</span>) =&gt; sh2n1(p),
+        (<span class="number">2</span>, <span class="number">0</span>) =&gt; sh20(p),
+        (<span class="number">2</span>, <span class="number">1</span>) =&gt; sh2p1(p),
+        (<span class="number">2</span>, <span class="number">2</span>) =&gt; sh2p2(p),
+        <span class="comment">// 3rd degree
+        </span>(<span class="number">3</span>, -<span class="number">3</span>) =&gt; sh3n3(p),
+        (<span class="number">3</span>, -<span class="number">2</span>) =&gt; sh3n2(p),
+        (<span class="number">3</span>, -<span class="number">1</span>) =&gt; sh3n1(p),
+        (<span class="number">3</span>, <span class="number">0</span>) =&gt; sh30(p),
+        (<span class="number">3</span>, <span class="number">1</span>) =&gt; sh3p1(p),
+        (<span class="number">3</span>, <span class="number">2</span>) =&gt; sh3p2(p),
+        (<span class="number">3</span>, <span class="number">3</span>) =&gt; sh3p3(p),
+        <span class="comment">// the rest
+        </span><span class="kw">_ </span>=&gt; real_SH(l, m, p),
     }
 }
 
-<span class="doccomment">/// Complex regular solid harmonics</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">regular_solid_SH</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">m</span>: <span class="ident">i64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Complex</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">scaling</span> <span class="op">=</span> ((<span class="ident">T::from_f64</span>(<span class="number">4.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::PI</span>()) <span class="op">/</span> <span class="ident">T::from_i64</span>(<span class="number">2</span> <span class="op">*</span> <span class="ident">l</span> <span class="op">+</span> <span class="number">1</span>).<span class="ident">unwrap</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="ident">l</span> <span class="kw">as</span> <span class="ident">i32</span>);
-    <span class="kw">let</span> <span class="ident">sh</span> <span class="op">=</span> <span class="ident">SH</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>);
-    <span class="ident">Complex::new</span>(<span class="ident">sh</span>.<span class="ident">re</span> <span class="op">*</span> <span class="ident">scaling</span>, <span class="ident">sh</span>.<span class="ident">im</span> <span class="op">*</span> <span class="ident">scaling</span>)
+<span class="doccomment">/// Complex regular solid harmonics
+</span><span class="attribute">#[allow(non_snake_case)]
+#[inline]
+</span><span class="kw">pub fn </span>regular_solid_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; Complex&lt;T&gt; {
+    <span class="kw">let </span>scaling = ((T::from_f64(<span class="number">4.0</span>).unwrap() * T::PI()) / T::from_i64(<span class="number">2 </span>* l + <span class="number">1</span>).unwrap()).sqrt()
+        * p.r().powi(l <span class="kw">as </span>i32);
+    <span class="kw">let </span>sh = SH(l, m, p);
+    Complex::new(sh.re * scaling, sh.im * scaling)
 }
 
-<span class="doccomment">/// Complex irregular solid harmonics</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">irregular_solid_SH</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">m</span>: <span class="ident">i64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Complex</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="ident">scaling</span> <span class="op">=</span> ((<span class="ident">T::from_f64</span>(<span class="number">4.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::PI</span>()) <span class="op">/</span> <span class="ident">T::from_i64</span>(<span class="number">2</span> <span class="op">*</span> <span class="ident">l</span> <span class="op">+</span> <span class="number">1</span>).<span class="ident">unwrap</span>()).<span class="ident">sqrt</span>()
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>((<span class="ident">l</span> <span class="op">+</span> <span class="number">1</span>) <span class="kw">as</span> <span class="ident">i32</span>);
-    <span class="kw">let</span> <span class="ident">sh</span> <span class="op">=</span> <span class="ident">SH</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>);
-    <span class="ident">Complex::new</span>(<span class="ident">sh</span>.<span class="ident">re</span> <span class="op">*</span> <span class="ident">scaling</span>, <span class="ident">sh</span>.<span class="ident">im</span> <span class="op">*</span> <span class="ident">scaling</span>)
+<span class="doccomment">/// Complex irregular solid harmonics
+</span><span class="attribute">#[allow(non_snake_case)]
+#[inline]
+</span><span class="kw">pub fn </span>irregular_solid_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; Complex&lt;T&gt; {
+    <span class="kw">let </span>scaling = ((T::from_f64(<span class="number">4.0</span>).unwrap() * T::PI()) / T::from_i64(<span class="number">2 </span>* l + <span class="number">1</span>).unwrap()).sqrt()
+        / p.r().powi((l + <span class="number">1</span>) <span class="kw">as </span>i32);
+    <span class="kw">let </span>sh = SH(l, m, p);
+    Complex::new(sh.re * scaling, sh.im * scaling)
 }
 
-<span class="doccomment">/// Real regular solid harmonics</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">real_regular_solid_SH</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">m</span>: <span class="ident">i64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    ((<span class="ident">T::from_f64</span>(<span class="number">4.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::PI</span>()) <span class="op">/</span> <span class="ident">T::from_i64</span>(<span class="number">2</span> <span class="op">*</span> <span class="ident">l</span> <span class="op">+</span> <span class="number">1</span>).<span class="ident">unwrap</span>()).<span class="ident">sqrt</span>()
-        <span class="op">*</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="ident">l</span> <span class="kw">as</span> <span class="ident">i32</span>)
-        <span class="op">*</span> <span class="ident">real_SH_hardcoded</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>)
+<span class="doccomment">/// Real regular solid harmonics
+</span><span class="attribute">#[allow(non_snake_case)]
+#[inline]
+</span><span class="kw">pub fn </span>real_regular_solid_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    ((T::from_f64(<span class="number">4.0</span>).unwrap() * T::PI()) / T::from_i64(<span class="number">2 </span>* l + <span class="number">1</span>).unwrap()).sqrt()
+        * p.r().powi(l <span class="kw">as </span>i32)
+        * real_SH_hardcoded(l, m, p)
 }
 
-<span class="doccomment">/// Real irregular solid harmonics</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="attribute">#[<span class="ident">inline</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">real_irregular_solid_SH</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">SphrsFloat</span><span class="op">&gt;</span>(<span class="ident">l</span>: <span class="ident">i64</span>, <span class="ident">m</span>: <span class="ident">i64</span>, <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">SHCoordinates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-    ((<span class="ident">T::from_f64</span>(<span class="number">4.0</span>).<span class="ident">unwrap</span>() <span class="op">*</span> <span class="ident">T::PI</span>()) <span class="op">/</span> <span class="ident">T::from_i64</span>(<span class="number">2</span> <span class="op">*</span> <span class="ident">l</span> <span class="op">+</span> <span class="number">1</span>).<span class="ident">unwrap</span>()).<span class="ident">sqrt</span>()
-        <span class="op">/</span> <span class="ident">p</span>.<span class="ident">r</span>().<span class="ident">powi</span>(<span class="ident">l</span> <span class="kw">as</span> <span class="ident">i32</span>)
-        <span class="op">*</span> <span class="ident">real_SH_hardcoded</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="ident">p</span>)
+<span class="doccomment">/// Real irregular solid harmonics
+</span><span class="attribute">#[allow(non_snake_case)]
+#[inline]
+</span><span class="kw">pub fn </span>real_irregular_solid_SH&lt;T: SphrsFloat&gt;(l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">dyn </span>SHCoordinates&lt;T&gt;) -&gt; T {
+    ((T::from_f64(<span class="number">4.0</span>).unwrap() * T::PI()) / T::from_i64(<span class="number">2 </span>* l + <span class="number">1</span>).unwrap()).sqrt()
+        / p.r().powi(l <span class="kw">as </span>i32)
+        * real_SH_hardcoded(l, m, p)
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident">std::f64::consts::PI</span>;
+<span class="attribute">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span>std::f64::consts::PI;
 
-    <span class="macro">macro_rules!</span> <span class="ident">comp</span> {
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">l</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">m</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">p</span>:<span class="ident">tt</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">hcf</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tol</span>:<span class="ident">tt</span>) <span class="op">=</span><span class="op">&gt;</span> {
-            <span class="kw">let</span> <span class="ident">rsh</span>: <span class="ident">f64</span> <span class="op">=</span> <span class="ident">real_SH</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">l</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">m</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">p</span>);
-            <span class="kw">let</span> <span class="ident">hsh</span>: <span class="ident">f64</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">hcf</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">p</span>);
-            <span class="macro">assert!</span>((<span class="ident">rsh</span> <span class="op">-</span> <span class="ident">hsh</span>).<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tol</span>);
+    <span class="macro">macro_rules! </span>comp {
+        (<span class="macro-nonterminal">$l</span>:expr, <span class="macro-nonterminal">$m</span>:expr, <span class="macro-nonterminal">$p</span>:tt, <span class="macro-nonterminal">$hcf</span>:expr, <span class="macro-nonterminal">$tol</span>:tt) =&gt; {
+            <span class="kw">let </span>rsh: f64 = real_SH(<span class="macro-nonterminal">$l</span>, <span class="macro-nonterminal">$m</span>, <span class="macro-nonterminal">$p</span>);
+            <span class="kw">let </span>hsh: f64 = <span class="macro-nonterminal">$hcf</span>(<span class="macro-nonterminal">$p</span>);
+            <span class="macro">assert!</span>((rsh - hsh).abs() &lt; <span class="macro-nonterminal">$tol</span>);
         };
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">compare_hardcoded_and_recursive</span>() {
-        <span class="kw">let</span> <span class="ident">tol</span> <span class="op">=</span> <span class="number">10.0</span> <span class="op">*</span> <span class="ident">std::f64::EPSILON</span>;
-        <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> [
-            <span class="ident">Coordinates::spherical</span>(<span class="number">1.0</span>, <span class="ident">PI</span> <span class="op">/</span> <span class="number">4.0</span>, <span class="ident">PI</span> <span class="op">/</span> <span class="number">2.0</span>),
-            <span class="ident">Coordinates::spherical</span>(<span class="number">2.0</span>, <span class="ident">PI</span> <span class="op">/</span> <span class="number">4.0</span>, <span class="ident">PI</span> <span class="op">/</span> <span class="number">2.0</span>),
-            <span class="ident">Coordinates::spherical</span>(<span class="number">2.0</span>, <span class="ident">PI</span> <span class="op">/</span> <span class="number">2.0</span>, <span class="ident">PI</span> <span class="op">/</span> <span class="number">4.0</span>),
-            <span class="ident">Coordinates::spherical</span>(<span class="number">0.5</span>, <span class="number">0.0</span>, <span class="ident">PI</span> <span class="op">/</span> <span class="number">4.0</span>),
-            <span class="ident">Coordinates::spherical</span>(<span class="number">0.75</span>, <span class="ident">PI</span> <span class="op">/</span> <span class="number">2.0</span>, <span class="number">0.0</span>),
-            <span class="ident">Coordinates::cartesian</span>(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">0.3</span>),
-            <span class="ident">Coordinates::cartesian</span>(<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>),
-            <span class="ident">Coordinates::cartesian</span>(<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>),
-            <span class="ident">Coordinates::cartesian</span>(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>),
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>compare_hardcoded_and_recursive() {
+        <span class="kw">let </span>tol = <span class="number">10.0 </span>* std::f64::EPSILON;
+        <span class="kw">let </span>c = [
+            Coordinates::spherical(<span class="number">1.0</span>, PI / <span class="number">4.0</span>, PI / <span class="number">2.0</span>),
+            Coordinates::spherical(<span class="number">2.0</span>, PI / <span class="number">4.0</span>, PI / <span class="number">2.0</span>),
+            Coordinates::spherical(<span class="number">2.0</span>, PI / <span class="number">2.0</span>, PI / <span class="number">4.0</span>),
+            Coordinates::spherical(<span class="number">0.5</span>, <span class="number">0.0</span>, PI / <span class="number">4.0</span>),
+            Coordinates::spherical(<span class="number">0.75</span>, PI / <span class="number">2.0</span>, <span class="number">0.0</span>),
+            Coordinates::cartesian(<span class="number">1.0</span>, <span class="number">1.0</span>, <span class="number">0.3</span>),
+            Coordinates::cartesian(<span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>),
+            Coordinates::cartesian(<span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>),
+            Coordinates::cartesian(<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>),
         ];
 
-        <span class="kw">for</span> <span class="ident">p</span> <span class="kw">in</span> <span class="ident">c</span>.<span class="ident">iter</span>() {
-            <span class="comment">// println!(&quot;{:?}&quot;, p);</span>
-            <span class="comment">// println!(&quot;{:?} | {:?}&quot;, real_SH(2, 2, p), sh2p2(p));</span>
-            <span class="comment">// println!(&quot;{:?}&quot;, (real_SH(2, 2, p) - sh2p2(p)).abs());</span>
-            <span class="comment">// 0th degree</span>
-            <span class="macro">comp!</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="ident">p</span>, <span class="ident">sh00</span>, <span class="ident">tol</span>);
-            <span class="comment">// 1st degree</span>
-            <span class="macro">comp!</span>(<span class="number">1</span>, <span class="op">-</span><span class="number">1</span>, <span class="ident">p</span>, <span class="ident">sh1n1</span>, <span class="ident">tol</span>);
-            <span class="macro">comp!</span>(<span class="number">1</span>, <span class="number">0</span>, <span class="ident">p</span>, <span class="ident">sh10</span>, <span class="ident">tol</span>);
-            <span class="macro">comp!</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="ident">p</span>, <span class="ident">sh1p1</span>, <span class="ident">tol</span>);
-            <span class="comment">// 2nd degree</span>
-            <span class="macro">comp!</span>(<span class="number">2</span>, <span class="op">-</span><span class="number">2</span>, <span class="ident">p</span>, <span class="ident">sh2n2</span>, <span class="ident">tol</span>);
-            <span class="macro">comp!</span>(<span class="number">2</span>, <span class="op">-</span><span class="number">1</span>, <span class="ident">p</span>, <span class="ident">sh2n1</span>, <span class="ident">tol</span>);
-            <span class="macro">comp!</span>(<span class="number">2</span>, <span class="number">0</span>, <span class="ident">p</span>, <span class="ident">sh20</span>, <span class="ident">tol</span>);
-            <span class="macro">comp!</span>(<span class="number">2</span>, <span class="number">1</span>, <span class="ident">p</span>, <span class="ident">sh2p1</span>, <span class="ident">tol</span>);
-            <span class="macro">comp!</span>(<span class="number">2</span>, <span class="number">2</span>, <span class="ident">p</span>, <span class="ident">sh2p2</span>, <span class="ident">tol</span>);
-            <span class="comment">// 3rd degree</span>
-            <span class="macro">comp!</span>(<span class="number">3</span>, <span class="op">-</span><span class="number">3</span>, <span class="ident">p</span>, <span class="ident">sh3n3</span>, <span class="ident">tol</span>);
-            <span class="macro">comp!</span>(<span class="number">3</span>, <span class="op">-</span><span class="number">2</span>, <span class="ident">p</span>, <span class="ident">sh3n2</span>, <span class="ident">tol</span>);
-            <span class="macro">comp!</span>(<span class="number">3</span>, <span class="op">-</span><span class="number">1</span>, <span class="ident">p</span>, <span class="ident">sh3n1</span>, <span class="ident">tol</span>);
-            <span class="macro">comp!</span>(<span class="number">3</span>, <span class="number">0</span>, <span class="ident">p</span>, <span class="ident">sh30</span>, <span class="ident">tol</span>);
-            <span class="macro">comp!</span>(<span class="number">3</span>, <span class="number">1</span>, <span class="ident">p</span>, <span class="ident">sh3p1</span>, <span class="ident">tol</span>);
-            <span class="macro">comp!</span>(<span class="number">3</span>, <span class="number">2</span>, <span class="ident">p</span>, <span class="ident">sh3p2</span>, <span class="ident">tol</span>);
-            <span class="macro">comp!</span>(<span class="number">3</span>, <span class="number">3</span>, <span class="ident">p</span>, <span class="ident">sh3p3</span>, <span class="ident">tol</span>);
+        <span class="kw">for </span>p <span class="kw">in </span>c.iter() {
+            <span class="comment">// println!(&quot;{:?}&quot;, p);
+            // println!(&quot;{:?} | {:?}&quot;, real_SH(2, 2, p), sh2p2(p));
+            // println!(&quot;{:?}&quot;, (real_SH(2, 2, p) - sh2p2(p)).abs());
+            // 0th degree
+            </span><span class="macro">comp!</span>(<span class="number">0</span>, <span class="number">0</span>, p, sh00, tol);
+            <span class="comment">// 1st degree
+            </span><span class="macro">comp!</span>(<span class="number">1</span>, -<span class="number">1</span>, p, sh1n1, tol);
+            <span class="macro">comp!</span>(<span class="number">1</span>, <span class="number">0</span>, p, sh10, tol);
+            <span class="macro">comp!</span>(<span class="number">1</span>, <span class="number">1</span>, p, sh1p1, tol);
+            <span class="comment">// 2nd degree
+            </span><span class="macro">comp!</span>(<span class="number">2</span>, -<span class="number">2</span>, p, sh2n2, tol);
+            <span class="macro">comp!</span>(<span class="number">2</span>, -<span class="number">1</span>, p, sh2n1, tol);
+            <span class="macro">comp!</span>(<span class="number">2</span>, <span class="number">0</span>, p, sh20, tol);
+            <span class="macro">comp!</span>(<span class="number">2</span>, <span class="number">1</span>, p, sh2p1, tol);
+            <span class="macro">comp!</span>(<span class="number">2</span>, <span class="number">2</span>, p, sh2p2, tol);
+            <span class="comment">// 3rd degree
+            </span><span class="macro">comp!</span>(<span class="number">3</span>, -<span class="number">3</span>, p, sh3n3, tol);
+            <span class="macro">comp!</span>(<span class="number">3</span>, -<span class="number">2</span>, p, sh3n2, tol);
+            <span class="macro">comp!</span>(<span class="number">3</span>, -<span class="number">1</span>, p, sh3n1, tol);
+            <span class="macro">comp!</span>(<span class="number">3</span>, <span class="number">0</span>, p, sh30, tol);
+            <span class="macro">comp!</span>(<span class="number">3</span>, <span class="number">1</span>, p, sh3p1, tol);
+            <span class="macro">comp!</span>(<span class="number">3</span>, <span class="number">2</span>, p, sh3p2, tol);
+            <span class="macro">comp!</span>(<span class="number">3</span>, <span class="number">3</span>, p, sh3p3, tol);
         }
     }
 
-    <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="kw">fn</span> <span class="ident">compare_recursive_complex_and_scipy</span>() {
-        <span class="kw">use</span> <span class="ident">csv</span>;
-        <span class="kw">use</span> <span class="ident">std::fs::File</span>;
+    <span class="attribute">#[test]
+    </span><span class="kw">fn </span>compare_recursive_complex_and_scipy() {
+        <span class="kw">use </span>csv;
+        <span class="kw">use </span>std::fs::File;
 
-        <span class="kw">let</span> <span class="ident">tol</span> <span class="op">=</span> <span class="number">10.0</span> <span class="op">*</span> <span class="ident">std::f64::EPSILON</span>;
-        <span class="kw">let</span> <span class="ident">file</span> <span class="op">=</span> <span class="ident">File::open</span>(<span class="string">&quot;test_helpers/scipy.csv&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">rdr</span> <span class="op">=</span> <span class="ident">csv::Reader::from_reader</span>(<span class="ident">file</span>);
-        <span class="kw">for</span> (<span class="ident">_idx</span>, <span class="ident">result</span>) <span class="kw">in</span> <span class="ident">rdr</span>.<span class="ident">records</span>().<span class="ident">enumerate</span>() {
-            <span class="kw">let</span> <span class="ident">record</span> <span class="op">=</span> <span class="ident">result</span>.<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">l</span>: <span class="ident">i64</span> <span class="op">=</span> <span class="ident">record</span>[<span class="number">0</span>].<span class="ident">parse</span>().<span class="ident">ok</span>().<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">m</span>: <span class="ident">i64</span> <span class="op">=</span> <span class="ident">record</span>[<span class="number">1</span>].<span class="ident">parse</span>().<span class="ident">ok</span>().<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">phi</span>: <span class="ident">f64</span> <span class="op">=</span> <span class="ident">record</span>[<span class="number">2</span>].<span class="ident">parse</span>().<span class="ident">ok</span>().<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">theta</span>: <span class="ident">f64</span> <span class="op">=</span> <span class="ident">record</span>[<span class="number">3</span>].<span class="ident">parse</span>().<span class="ident">ok</span>().<span class="ident">unwrap</span>();
-            <span class="kw">let</span> <span class="ident">scipy_res</span>: <span class="ident">Complex</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Complex::new</span>(
-                <span class="ident">record</span>[<span class="number">4</span>].<span class="ident">parse</span>().<span class="ident">ok</span>().<span class="ident">unwrap</span>(),
-                <span class="ident">record</span>[<span class="number">5</span>].<span class="ident">parse</span>().<span class="ident">ok</span>().<span class="ident">unwrap</span>(),
+        <span class="kw">let </span>tol = <span class="number">10.0 </span>* std::f64::EPSILON;
+        <span class="kw">let </span>file = File::open(<span class="string">&quot;test_helpers/scipy.csv&quot;</span>).unwrap();
+        <span class="kw">let </span><span class="kw-2">mut </span>rdr = csv::Reader::from_reader(file);
+        <span class="kw">for </span>(_idx, result) <span class="kw">in </span>rdr.records().enumerate() {
+            <span class="kw">let </span>record = result.unwrap();
+            <span class="kw">let </span>l: i64 = record[<span class="number">0</span>].parse().ok().unwrap();
+            <span class="kw">let </span>m: i64 = record[<span class="number">1</span>].parse().ok().unwrap();
+            <span class="kw">let </span>phi: f64 = record[<span class="number">2</span>].parse().ok().unwrap();
+            <span class="kw">let </span>theta: f64 = record[<span class="number">3</span>].parse().ok().unwrap();
+            <span class="kw">let </span>scipy_res: Complex&lt;f64&gt; = Complex::new(
+                record[<span class="number">4</span>].parse().ok().unwrap(),
+                record[<span class="number">5</span>].parse().ok().unwrap(),
             );
-            <span class="kw">let</span> <span class="ident">coords</span> <span class="op">=</span> <span class="ident">Coordinates::spherical</span>(<span class="number">1.0</span>, <span class="ident">theta</span>, <span class="ident">phi</span>);
-            <span class="kw">let</span> <span class="ident">sphrs_res</span>: <span class="ident">Complex</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">SH</span>(<span class="ident">l</span>, <span class="ident">m</span>, <span class="kw-2">&amp;</span><span class="ident">coords</span>);
-            <span class="comment">// println!(</span>
-            <span class="comment">//     &quot;{:?} | l: {:?}, m: {:?}, phi: {:?}, theta: {:?}, {:?} - {:?}&quot;,</span>
-            <span class="comment">//     idx, l, m, phi, theta, scipy_res, sphrs_res</span>
-            <span class="comment">// );</span>
-            <span class="macro">assert!</span>((<span class="ident">sphrs_res</span>.<span class="ident">re</span> <span class="op">-</span> <span class="ident">scipy_res</span>.<span class="ident">re</span>).<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="ident">tol</span>);
-            <span class="macro">assert!</span>((<span class="ident">sphrs_res</span>.<span class="ident">im</span> <span class="op">-</span> <span class="ident">scipy_res</span>.<span class="ident">im</span>).<span class="ident">abs</span>() <span class="op">&lt;</span> <span class="ident">tol</span>);
+            <span class="kw">let </span>coords = Coordinates::spherical(<span class="number">1.0</span>, theta, phi);
+            <span class="kw">let </span>sphrs_res: Complex&lt;f64&gt; = SH(l, m, <span class="kw-2">&amp;</span>coords);
+            <span class="comment">// println!(
+            //     &quot;{:?} | l: {:?}, m: {:?}, phi: {:?}, theta: {:?}, {:?} - {:?}&quot;,
+            //     idx, l, m, phi, theta, scipy_res, sphrs_res
+            // );
+            </span><span class="macro">assert!</span>((sphrs_res.re - scipy_res.re).abs() &lt; tol);
+            <span class="macro">assert!</span>((sphrs_res.im - scipy_res.im).abs() &lt; tol);
         }
     }
 }
-</pre></div>
-</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="sphrs" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
-    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>
+</code></pre></div>
+</section></div></main><div id="rustdoc-vars" data-root-path="../../" data-current-crate="sphrs" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.66.0 (69f9c33d7 2022-12-12)" ></div></body></html>
