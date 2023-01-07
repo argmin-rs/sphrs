@@ -90,7 +90,7 @@
 mod coords;
 mod sh;
 
-pub use crate::coords::*;
+pub use crate::coords::{Coordinates, SHCoordinates};
 pub use crate::sh::*;
 use num::{Complex, Float, FromPrimitive};
 use num_traits::float::FloatConst;
