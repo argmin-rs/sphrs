@@ -88,9 +88,9 @@
 #![warn(missing_docs)]
 
 /// Coordinates
-pub mod coords;
+mod coords;
 /// Spherical/solid harmonics
-pub mod sh;
+mod sh;
 
 pub use crate::coords::*;
 pub use crate::sh::*;
