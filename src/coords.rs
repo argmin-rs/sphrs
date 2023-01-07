@@ -49,10 +49,7 @@ where
     T: SphrsFloat,
 {
     /// Create `Coordinates` struct from cartesian coordinates
-    pub fn cartesian<U: Into<T>>(x: U, y: U, z: U) -> Self {
-        let x: T = x.into();
-        let y: T = y.into();
-        let z: T = z.into();
+    pub fn cartesian(x: T, y: T, z: T) -> Self {
         let r = (x.powi(2) + y.powi(2) + z.powi(2)).sqrt();
         let theta = (z / r).acos();
         let phi = y.atan2(x);
@@ -70,10 +67,7 @@ where
     }
 
     /// Create `Coordinates` struct from spherical coordinates
-    pub fn spherical<U: Into<T>>(r: U, theta: U, phi: U) -> Self {
-        let r: T = r.into();
-        let theta: T = theta.into();
-        let phi: T = phi.into();
+    pub fn spherical(r: T, theta: T, phi: T) -> Self {
         let x = r * theta.sin() * phi.cos();
         let y = r * theta.sin() * phi.sin();
         let theta_cos = theta.cos();
@@ -127,5 +121,124 @@ where
     #[inline]
     fn theta_cos(&self) -> T {
         self.theta_cos
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use approx::assert_relative_eq;
+    use quickcheck_macros::quickcheck;
+
+    #[derive(Debug, Copy, Clone)]
+    struct Radius(f64);
+
+    impl quickcheck::Arbitrary for Radius {
+        fn arbitrary(g: &mut quickcheck::Gen) -> Self {
+            loop {
+                let val = f64::arbitrary(g) % 100000.0;
+                if !val.is_nan() && val.is_finite() {
+                    return Radius(val);
+                }
+            }
+        }
+    }
+
+    #[derive(Debug, Copy, Clone)]
+    struct Angle(f64);
+
+    impl quickcheck::Arbitrary for Angle {
+        fn arbitrary(g: &mut quickcheck::Gen) -> Self {
+            loop {
+                let val = f64::arbitrary(g) % 2.0 * std::f64::consts::PI;
+                if !val.is_nan() && val.is_finite() {
+                    return Angle(val);
+                }
+            }
+        }
+    }
+
+    #[derive(Debug, Copy, Clone)]
+    struct Cartesian(f64);
+
+    impl quickcheck::Arbitrary for Cartesian {
+        fn arbitrary(g: &mut quickcheck::Gen) -> Self {
+            loop {
+                let val = f64::arbitrary(g) % 100000.0;
+                if !val.is_nan() && val.is_finite() {
+                    return Cartesian(val);
+                }
+            }
+        }
+    }
+
+    #[quickcheck]
+    fn shcoordinates_spherical_f64(r: Radius, theta: Angle, phi: Angle) {
+        let r = r.0;
+        let theta = theta.0;
+        let phi = phi.0;
+        let coords = Coordinates::spherical(r, theta, phi);
+        assert_relative_eq!(coords.r(), r);
+        assert_relative_eq!(coords.theta(), theta);
+        assert_relative_eq!(coords.phi(), phi);
+        assert_relative_eq!(coords.x(), r * theta.sin() * phi.cos());
+        assert_relative_eq!(coords.y(), r * theta.sin() * phi.sin());
+        assert_relative_eq!(coords.z(), r * theta.cos());
+        assert_relative_eq!(coords.theta_cos(), theta.cos());
+    }
+
+    #[quickcheck]
+    fn shcoordinates_spherical_f32(r: Radius, theta: Angle, phi: Angle) {
+        let r = r.0 as f32;
+        let theta = theta.0 as f32;
+        let phi = phi.0 as f32;
+        let coords = Coordinates::spherical(r, theta, phi);
+        assert_relative_eq!(coords.r(), r);
+        assert_relative_eq!(coords.theta(), theta);
+        assert_relative_eq!(coords.phi(), phi);
+        assert_relative_eq!(coords.x(), r * theta.sin() * phi.cos());
+        assert_relative_eq!(coords.y(), r * theta.sin() * phi.sin());
+        assert_relative_eq!(coords.z(), r * theta.cos());
+        assert_relative_eq!(coords.theta_cos(), theta.cos());
+    }
+
+    #[quickcheck]
+    fn shcoordinates_cartesian_f64(x: Cartesian, y: Cartesian, z: Cartesian) {
+        let x = x.0;
+        let y = y.0;
+        let z = z.0;
+        let r = (x.powi(2) + y.powi(2) + z.powi(2)).sqrt();
+        let theta = (z / r).acos();
+        let phi = y.atan2(x);
+        let theta_cos = theta.cos();
+
+        let coords = Coordinates::cartesian(x, y, z);
+        assert_relative_eq!(coords.x(), x);
+        assert_relative_eq!(coords.y(), y);
+        assert_relative_eq!(coords.z(), z);
+        assert_relative_eq!(coords.r(), r);
+        assert_relative_eq!(coords.theta(), theta);
+        assert_relative_eq!(coords.phi(), phi);
+        assert_relative_eq!(coords.theta_cos(), theta_cos);
+    }
+
+    #[quickcheck]
+    fn shcoordinates_cartesian_f32(x: Cartesian, y: Cartesian, z: Cartesian) {
+        let x = x.0 as f32;
+        let y = y.0 as f32;
+        let z = z.0 as f32;
+        let r = (x.powi(2) + y.powi(2) + z.powi(2)).sqrt();
+        let theta = (z / r).acos();
+        let phi = y.atan2(x);
+        let theta_cos = theta.cos();
+
+        let coords = Coordinates::cartesian(x, y, z);
+        assert_relative_eq!(coords.x(), x);
+        assert_relative_eq!(coords.y(), y);
+        assert_relative_eq!(coords.z(), z);
+        assert_relative_eq!(coords.r(), r);
+        assert_relative_eq!(coords.theta(), theta);
+        assert_relative_eq!(coords.phi(), phi);
+        assert_relative_eq!(coords.theta_cos(), theta_cos);
     }
 }

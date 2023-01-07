@@ -24,7 +24,7 @@ mod tests {
         let sh = RealSHType::Spherical;
         let l = 4;
         let m = -1;
-        let p: Coordinates<f64> = Coordinates::spherical(1.0, PI / 2.0, 0.0);
+        let p = Coordinates::spherical(1.0, PI / 2.0, 0.0);
         b.iter(|| {
             black_box(sh.eval(l, m, &p));
         });

@@ -18,7 +18,10 @@ num-complex = "0.4"
 num-traits = "0.2"
 
 [dev-dependencies]
+approx = { version = "0.5.1", features = ["num-complex"] }
 csv = "1"
+quickcheck = "1.0.3"
+quickcheck_macros = "1.0.0"
 
 [badges]
 maintenance = { status = "actively-developed" }
