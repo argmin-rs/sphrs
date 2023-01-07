@@ -139,14 +139,14 @@ pub fn sh3p3<T: SphrsFloat>(p: &impl SHCoordinates<T>) -> T {
 ///
 /// The compiler will typically compute this at compile time, hence there is no need to
 /// precompute common values and put them into an array.
-#[inline]
+#[inline(always)]
 fn factorial(n: u64) -> u64 {
     (1..=n).product()
 }
 
 /// Normalization factor
 #[allow(non_snake_case)]
-#[inline]
+#[inline(always)]
 fn K<T: SphrsFloat>(l: i64, m: i64) -> T {
     ((T::from_f64(2.0).unwrap() * T::from_i64(l).unwrap() + T::one())
         * T::from_u64(factorial((l - m.abs()) as u64)).unwrap()
@@ -158,7 +158,7 @@ fn K<T: SphrsFloat>(l: i64, m: i64) -> T {
 
 /// Legendre polynomials
 #[allow(non_snake_case)]
-#[inline]
+#[inline(always)]
 fn P<T: SphrsFloat>(l: i64, m: i64, x: T) -> T {
     let mut pmm = T::one();
 
@@ -194,7 +194,7 @@ fn P<T: SphrsFloat>(l: i64, m: i64, x: T) -> T {
 
 /// Complex spherical harmonics
 #[allow(non_snake_case)]
-#[inline]
+#[inline(always)]
 pub fn SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
     assert!(l >= 0);
     assert!(m.abs() <= l);
@@ -237,7 +237,7 @@ pub fn real_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
 /// Spherical harmonics. This will use the hardcoded functions if available and the recursive
 /// implementation otherwise.
 #[allow(non_snake_case)]
-#[inline]
+#[inline(always)]
 pub fn real_SH_hardcoded<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
     match (l, m) {
         // 0th degree
@@ -267,7 +267,7 @@ pub fn real_SH_hardcoded<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T
 
 /// Complex regular solid harmonics
 #[allow(non_snake_case)]
-#[inline]
+#[inline(always)]
 pub fn regular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
     let scaling = ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         * p.r().powi(l as i32);
@@ -277,7 +277,7 @@ pub fn regular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>
 
 /// Complex irregular solid harmonics
 #[allow(non_snake_case)]
-#[inline]
+#[inline(always)]
 pub fn irregular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
     let scaling = ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         / p.r().powi((l + 1) as i32);
@@ -287,7 +287,7 @@ pub fn irregular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<
 
 /// Real regular solid harmonics
 #[allow(non_snake_case)]
-#[inline]
+#[inline(always)]
 pub fn real_regular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         * p.r().powi(l as i32)
@@ -296,7 +296,7 @@ pub fn real_regular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinat
 
 /// Real irregular solid harmonics
 #[allow(non_snake_case)]
-#[inline]
+#[inline(always)]
 pub fn real_irregular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         / p.r().powi(l as i32)
@@ -306,6 +306,7 @@ pub fn real_irregular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordin
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::Coordinates;
     use std::f64::consts::PI;
 
     macro_rules! comp {
