@@ -10,7 +10,7 @@ use crate::SphrsFloat;
 /// SHCoordinates trait
 ///
 /// Every coordinate used in sphrs must implement this trait.
-pub trait SHCoordinates<T> {
+pub trait SHCoordinates<T>: Sized {
     /// Return `theta` (spherical coordinates)
     fn theta(&self) -> T;
     /// Return `phi` (spherical coordinates)
