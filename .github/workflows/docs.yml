@@ -1,0 +1,32 @@
+name: rustdoc
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  rustdoc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: Swatinem/rust-cache@v2
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt,rust-src
+
+      - name: Build documentation
+        run: cargo doc --features "argmin-math/latest_all" --no-deps
+
+      - name: Forwarding
+        run: echo '<!doctype html><meta http-equiv="refresh" content="0; ./argmin/">' > ./target/doc/index.html
+
+      - name: Deploy docs
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./target/doc
