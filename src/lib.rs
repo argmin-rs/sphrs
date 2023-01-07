@@ -137,9 +137,9 @@ where
     fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
         assert!(m.abs() <= l);
         match self {
-            Self::Spherical => real_SH_hardcoded(l, m, p),
-            Self::RegularSolid => real_regular_solid_SH(l, m, p),
-            Self::IrregularSolid => real_irregular_solid_SH(l, m, p),
+            Self::Spherical => real_sh_hardcoded(l, m, p),
+            Self::RegularSolid => real_regular_solid_sh(l, m, p),
+            Self::IrregularSolid => real_irregular_solid_sh(l, m, p),
         }
     }
 }
@@ -153,9 +153,9 @@ where
     fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
         assert!(m.abs() <= l);
         match self {
-            Self::Spherical => SH(l, m, p),
-            Self::RegularSolid => regular_solid_SH(l, m, p),
-            Self::IrregularSolid => irregular_solid_SH(l, m, p),
+            Self::Spherical => sh(l, m, p),
+            Self::RegularSolid => regular_solid_sh(l, m, p),
+            Self::IrregularSolid => irregular_solid_sh(l, m, p),
         }
     }
 }

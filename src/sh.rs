@@ -193,9 +193,8 @@ fn P<T: SphrsFloat>(l: i64, m: i64, x: T) -> T {
 }
 
 /// Complex spherical harmonics
-#[allow(non_snake_case)]
 #[inline(always)]
-pub fn SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
+pub fn sh<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
     assert!(l >= 0);
     assert!(m.abs() <= l);
     let v: T = if m == 0 {
@@ -217,7 +216,7 @@ pub fn SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T
 /// Real spherical harmonics (recursive implementation)
 #[allow(non_snake_case)]
 #[inline(always)]
-pub fn real_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
+pub fn real_sh<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
     T::from_f64((-1f64).powi(m.abs() as i32)).unwrap()
         * if m == 0 {
             K::<T>(l, 0) * P(l, m, p.theta_cos())
@@ -234,11 +233,12 @@ pub fn real_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
         }
 }
 
-/// Spherical harmonics. This will use the hardcoded functions if available and the recursive
-/// implementation otherwise.
-#[allow(non_snake_case)]
+/// Accelerated spherical harmonics.
+///
+/// This will use the hardcoded functions up to third order and the recursive implementation
+/// for orders >= 3.
 #[inline(always)]
-pub fn real_SH_hardcoded<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
+pub fn real_sh_hardcoded<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
     match (l, m) {
         // 0th degree
         (0, 0) => sh00(p),
@@ -261,46 +261,42 @@ pub fn real_SH_hardcoded<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T
         (3, 2) => sh3p2(p),
         (3, 3) => sh3p3(p),
         // the rest
-        _ => real_SH(l, m, p),
+        _ => real_sh(l, m, p),
     }
 }
 
 /// Complex regular solid harmonics
-#[allow(non_snake_case)]
 #[inline(always)]
-pub fn regular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
+pub fn regular_solid_sh<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
     let scaling = ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         * p.r().powi(l as i32);
-    let sh = SH(l, m, p);
+    let sh = sh(l, m, p);
     Complex::new(sh.re * scaling, sh.im * scaling)
 }
 
 /// Complex irregular solid harmonics
-#[allow(non_snake_case)]
 #[inline(always)]
-pub fn irregular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
+pub fn irregular_solid_sh<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
     let scaling = ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         / p.r().powi((l + 1) as i32);
-    let sh = SH(l, m, p);
+    let sh = sh(l, m, p);
     Complex::new(sh.re * scaling, sh.im * scaling)
 }
 
 /// Real regular solid harmonics
-#[allow(non_snake_case)]
 #[inline(always)]
-pub fn real_regular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
+pub fn real_regular_solid_sh<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         * p.r().powi(l as i32)
-        * real_SH_hardcoded(l, m, p)
+        * real_sh_hardcoded(l, m, p)
 }
 
 /// Real irregular solid harmonics
-#[allow(non_snake_case)]
 #[inline(always)]
-pub fn real_irregular_solid_SH<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
+pub fn real_irregular_solid_sh<T: SphrsFloat>(l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
     ((T::from_f64(4.0).unwrap() * T::PI()) / T::from_i64(2 * l + 1).unwrap()).sqrt()
         / p.r().powi(l as i32)
-        * real_SH_hardcoded(l, m, p)
+        * real_sh_hardcoded(l, m, p)
 }
 
 #[cfg(test)]
@@ -311,7 +307,7 @@ mod tests {
 
     macro_rules! comp {
         ($l:expr, $m:expr, $p:tt, $hcf:expr, $tol:tt) => {
-            let rsh: f64 = real_SH($l, $m, $p);
+            let rsh: f64 = real_sh($l, $m, $p);
             let hsh: f64 = $hcf($p);
             assert!((rsh - hsh).abs() < $tol);
         };
@@ -378,7 +374,7 @@ mod tests {
                 record[5].parse().ok().unwrap(),
             );
             let coords = Coordinates::spherical(1.0, theta, phi);
-            let sphrs_res: Complex<f64> = SH(l, m, &coords);
+            let sphrs_res: Complex<f64> = sh(l, m, &coords);
             // println!(
             //     "{:?} | l: {:?}, m: {:?}, phi: {:?}, theta: {:?}, {:?} - {:?}",
             //     idx, l, m, phi, theta, scipy_res, sphrs_res
