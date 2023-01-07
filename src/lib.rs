@@ -133,9 +133,9 @@ where
     T: SphrsFloat,
 {
     /// Evaluate real SH (l, m) at position `p`
-    #[inline]
+    #[inline(always)]
     fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
-        debug_assert!(m.abs() <= l);
+        assert!(m.abs() <= l);
         match self {
             Self::Spherical => real_SH_hardcoded(l, m, p),
             Self::RegularSolid => real_regular_solid_SH(l, m, p),
@@ -149,9 +149,9 @@ where
     T: SphrsFloat,
 {
     /// Evaluate complex SH (l, m) at position `p`
-    #[inline]
+    #[inline(always)]
     fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
-        debug_assert!(m.abs() <= l);
+        assert!(m.abs() <= l);
         match self {
             Self::Spherical => SH(l, m, p),
             Self::RegularSolid => regular_solid_SH(l, m, p),
