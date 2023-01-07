@@ -8,24 +8,29 @@
 use crate::SphrsFloat;
 
 /// SHCoordinates trait
+///
+/// Every coordinate used in sphrs must implement this trait.
 pub trait SHCoordinates<T> {
-    /// Return `theta`
+    /// Return `theta` (spherical coordinates)
     fn theta(&self) -> T;
-    /// Return `phi`
+    /// Return `phi` (spherical coordinates)
     fn phi(&self) -> T;
-    /// Return `r`
+    /// Return radus `r` (spherical coordinates)
     fn r(&self) -> T;
-    /// Return `x`
+    /// Return `x` (Cartesian coordinates)
     fn x(&self) -> T;
-    /// Return `y`
+    /// Return `y` (Cartesian coordinates)
     fn y(&self) -> T;
-    /// Return `z`
+    /// Return `z` (Cartesian coordinates)
     fn z(&self) -> T;
     /// Return `cos(theta)`
     fn theta_cos(&self) -> T;
 }
 
-/// Coordinates struct
+/// Representation of coordinates.
+///
+/// Generic over floats. Can be created with [`cartesian`](`Coordinates::cartesian`) (Cartesian
+/// coordinates) or [`spherical`](`Coordinates::spherical`) (spherical coordinates).
 #[derive(Default, Clone, Debug)]
 pub struct Coordinates<T> {
     /// radius (spherical coordinates)
@@ -48,7 +53,14 @@ impl<T> Coordinates<T>
 where
     T: SphrsFloat,
 {
-    /// Create `Coordinates` struct from cartesian coordinates
+    /// Create `Coordinates` struct from Cartesian coordinates
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use sphrs::Coordinates;
+    /// let coords = Coordinates::cartesian(1.0f64, 0.5, 12.0);
+    /// ```
     pub fn cartesian(x: T, y: T, z: T) -> Self {
         let r = (x.powi(2) + y.powi(2) + z.powi(2)).sqrt();
         let theta = (z / r).acos();
@@ -67,6 +79,13 @@ where
     }
 
     /// Create `Coordinates` struct from spherical coordinates
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use sphrs::Coordinates;
+    /// let coords = Coordinates::spherical(1.0f64, 0.5, 0.9);
+    /// ```
     pub fn spherical(r: T, theta: T, phi: T) -> Self {
         let x = r * theta.sin() * phi.cos();
         let y = r * theta.sin() * phi.sin();
@@ -88,37 +107,44 @@ impl<T> SHCoordinates<T> for Coordinates<T>
 where
     T: SphrsFloat,
 {
-    #[inline]
+    /// Return angle `theta`
+    #[inline(always)]
     fn theta(&self) -> T {
         self.theta
     }
 
-    #[inline]
+    /// Return angle `phi`
+    #[inline(always)]
     fn phi(&self) -> T {
         self.phi
     }
 
-    #[inline]
+    /// Return radius `r`
+    #[inline(always)]
     fn r(&self) -> T {
         self.r
     }
 
-    #[inline]
+    /// Return coordinate `x`
+    #[inline(always)]
     fn x(&self) -> T {
         self.x
     }
 
-    #[inline]
+    /// Return coordinate `y`
+    #[inline(always)]
     fn y(&self) -> T {
         self.y
     }
 
-    #[inline]
+    /// Return coordinate `z`
+    #[inline(always)]
     fn z(&self) -> T {
         self.z
     }
 
-    #[inline]
+    /// Return `cos(theta)`
+    #[inline(always)]
     fn theta_cos(&self) -> T {
         self.theta_cos
     }
