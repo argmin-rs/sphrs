@@ -43,12 +43,12 @@
 //! println!("SH ({}, {}): {:?}", degree, order, sh.eval(degree, order, &p));
 //! ```
 //!
-//! Compute all real SH up to 5th degree at (Cartesian) position (1, 0, 0):
+//! Compute all real SH up to 4th degree at (Cartesian) position (1, 0, 0):
 //!
 //! ```rust
 //! use sphrs::{RealSH, HarmonicsSet, Coordinates};
-//! let degree = 5;
-//! let sh: HarmonicsSet<f64, _, _> = HarmonicsSet::new(degree, RealSH::Spherical);
+//! let degree = 4;
+//! let sh = HarmonicsSet::new(degree, RealSH::Spherical);
 //! let p = Coordinates::cartesian(1.0, 0.0, 0.0);
 //! println!("SH up to degree {}: {:?}", degree, sh.eval(&p));
 //! ```
@@ -95,6 +95,7 @@ pub use crate::sh::*;
 use num::{Complex, Float, FromPrimitive};
 use num_traits::float::FloatConst;
 use std::fmt::Debug;
+use std::marker::PhantomData;
 
 /// Trait alias to simplify common trait bounds
 pub trait SphrsFloat: Float + FloatConst + FromPrimitive + Debug {}
@@ -123,18 +124,23 @@ pub enum ComplexSH {
 }
 
 /// SH eval trait (TODO)
-pub trait SHEval<T: SphrsFloat, U> {
+pub trait SHEval<T> {
+    /// Output type
+    type Output;
+
     /// Evaluate SH (l, m) at position `p`
-    fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> U;
+    fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> Self::Output;
 }
 
-impl<T> SHEval<T, T> for RealSH
+impl<T> SHEval<T> for RealSH
 where
     T: SphrsFloat,
 {
+    type Output = T;
+
     /// Evaluate real SH (l, m) at position `p`
     #[inline(always)]
-    fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> T {
+    fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> Self::Output {
         assert!(m.abs() <= l);
         match self {
             Self::Spherical => real_sh_hardcoded(l, m, p),
@@ -144,10 +150,12 @@ where
     }
 }
 
-impl<T> SHEval<T, Complex<T>> for ComplexSH
+impl<T> SHEval<T> for ComplexSH
 where
     T: SphrsFloat,
 {
+    type Output = Complex<T>;
+
     /// Evaluate complex SH (l, m) at position `p`
     #[inline(always)]
     fn eval(&self, l: i64, m: i64, p: &impl SHCoordinates<T>) -> Complex<T> {
@@ -161,69 +169,69 @@ where
 }
 
 /// A set of spherical/solid harmonics up to a given degree
-pub struct HarmonicsSet<T, E, O> {
+pub struct HarmonicsSet<T, E> {
     /// degree
     degree: usize,
     /// Total number of harmonics
     num_sh: usize,
-    /// Optional coefficients
-    coefficients: Option<Vec<O>>,
     /// Type of harmonic
     sh: E,
-    /// Phantom
-    ttt: std::marker::PhantomData<T>,
+    /// Float
+    _ttt: PhantomData<T>,
 }
 
-impl<T, E, O> HarmonicsSet<T, E, O>
+impl<T, E> HarmonicsSet<T, E>
 where
     T: SphrsFloat,
-    O: std::ops::Mul + Copy,
-    Vec<O>: std::iter::FromIterator<<O as std::ops::Mul>::Output>,
-    E: SHEval<T, O>,
+    E: SHEval<T>,
+    E::Output: std::ops::Mul + Copy,
+    Vec<E::Output>: std::iter::FromIterator<<E::Output as std::ops::Mul>::Output>,
 {
     /// Create new `HarmonicsSet` struct
-    pub fn new(degree: usize, sh_type: E) -> HarmonicsSet<T, E, O> {
+    pub fn new(degree: usize, sh_type: E) -> HarmonicsSet<T, E> {
         let num_sh = (0..=degree).map(|o| (2 * o + 1)).sum();
 
         HarmonicsSet {
             degree,
             num_sh,
-            coefficients: None,
             sh: sh_type,
-            ttt: std::marker::PhantomData,
+            _ttt: PhantomData,
         }
     }
 
-    /// Add coefficients
-    pub fn with_coefficients(&mut self, coefficients: Vec<O>) -> &mut Self {
+    /// Evaluate harmonics at position `p` without coefficients.
+    pub fn eval<C>(&self, p: &C) -> Vec<E::Output>
+    where
+        C: SHCoordinates<T>,
+    {
+        self.eval_internal(p)
+    }
+
+    /// Evaluate harmonics at position `p` with a given vector of coefficients.
+    pub fn eval_with_coefficients<C>(&self, p: &C, coefficients: Vec<E::Output>) -> Vec<E::Output>
+    where
+        C: SHCoordinates<T>,
+    {
         assert_eq!(coefficients.len(), self.num_sh);
-        self.coefficients = Some(coefficients);
-        self
-    }
-
-    /// Evaluate harmonics at position `p`. This will respect coefficients if they are provided.
-    #[inline]
-    pub fn eval<C: SHCoordinates<T>>(&self, p: &C) -> Vec<O> {
-        if let Some(ref coefficients) = self.coefficients {
-            self.eval_internal(p)
-                .into_iter()
-                .zip(coefficients.iter())
-                .map(|(a, &b)| a * b)
-                .collect()
-        } else {
-            self.eval_internal(p)
-        }
+        self.eval_internal(p)
+            .into_iter()
+            .zip(coefficients.iter())
+            .map(|(a, &b)| a * b)
+            .collect()
     }
 
     /// Evaluate harmonics at position `p`. If available, hardcoded SH functions will be used.
     #[inline]
-    fn eval_internal<C: SHCoordinates<T>>(&self, p: &C) -> Vec<O> {
+    fn eval_internal<C>(&self, p: &C) -> Vec<E::Output>
+    where
+        C: SHCoordinates<T>,
+    {
         let mut sh = Vec::with_capacity(self.num_sh);
         sh.push(self.sh.eval(0, 0, p));
 
         // The following may seem weird, but apparently it allows the compiler to better optimize
         // the code compared to a executing a loop. Performance improvement is about a facter of
-        // two. I'd appreciate it if someone is able to write a macro for this.
+        // two. Would be great if there was a macro for this.
         if self.degree >= 1 {
             sh.push(self.sh.eval(1, -1, p));
             sh.push(self.sh.eval(1, 0, p));
