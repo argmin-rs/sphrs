@@ -9,7 +9,7 @@
 // expressions.
 #![allow(clippy::comparison_chain)]
 
-use crate::coords::*;
+use crate::coordinates::SHCoordinates;
 use crate::SphrsFloat;
 use num_complex::Complex;
 
