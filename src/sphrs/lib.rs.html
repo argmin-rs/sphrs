@@ -853,9 +853,9 @@
     </span>T: SphrsFloat,
 {
     <span class="doccomment">/// Evaluate real SH (l, m) at position `p`
-    </span><span class="attribute">#[inline]
+    </span><span class="attribute">#[inline(always)]
     </span><span class="kw">fn </span>eval(<span class="kw-2">&amp;</span><span class="self">self</span>, l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; T {
-        <span class="macro">debug_assert!</span>(m.abs() &lt;= l);
+        <span class="macro">assert!</span>(m.abs() &lt;= l);
         <span class="kw">match </span><span class="self">self </span>{
             <span class="self">Self</span>::Spherical =&gt; real_SH_hardcoded(l, m, p),
             <span class="self">Self</span>::RegularSolid =&gt; real_regular_solid_SH(l, m, p),
@@ -869,9 +869,9 @@
     </span>T: SphrsFloat,
 {
     <span class="doccomment">/// Evaluate complex SH (l, m) at position `p`
-    </span><span class="attribute">#[inline]
+    </span><span class="attribute">#[inline(always)]
     </span><span class="kw">fn </span>eval(<span class="kw-2">&amp;</span><span class="self">self</span>, l: i64, m: i64, p: <span class="kw-2">&amp;</span><span class="kw">impl </span>SHCoordinates&lt;T&gt;) -&gt; Complex&lt;T&gt; {
-        <span class="macro">debug_assert!</span>(m.abs() &lt;= l);
+        <span class="macro">assert!</span>(m.abs() &lt;= l);
         <span class="kw">match </span><span class="self">self </span>{
             <span class="self">Self</span>::Spherical =&gt; SH(l, m, p),
             <span class="self">Self</span>::RegularSolid =&gt; regular_solid_SH(l, m, p),
