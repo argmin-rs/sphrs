@@ -1,60 +1,45 @@
-[![sphrs CI](https://github.com/argmin-rs/sphrs/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/argmin-rs/sphrs/actions/workflows/ci.yml)
-[![Gitter chat](https://badges.gitter.im/argmin-rs/community.png)](https://gitter.im/argmin-rs/community)
+<p align="center">
+  <a href="https://crates.io/crates/sphrs"
+    ><img
+      src="https://img.shields.io/crates/v/sphrs?style=flat-square"
+      alt="Crates.io version"
+  /></a>
+  <a href="https://crates.io/crates/sphrs"
+    ><img
+      src="https://img.shields.io/crates/d/sphrs?style=flat-square"
+      alt="Crates.io downloads"
+  /></a>
+  <a href="https://github.com/argmin-rs/sphrs/actions"
+    ><img
+      src="https://img.shields.io/github/actions/workflow/status/argmin-rs/sphrs/ci.yml?branch=main&label=sphrs CI&style=flat-square"
+      alt="GitHub Actions workflow status"
+  /></a>
+  <img
+    src="https://img.shields.io/crates/l/sphrs?style=flat-square"
+    alt="License"
+  />
+  <a href="https://gitter.im/argmin-rs/community"
+    ><img
+      src="https://img.shields.io/gitter/room/argmin-rs/argmin?style=flat-square"
+      alt="Gitter chat"
+  /></a>
+</p>
+
 
 # sphrs
 
-sphrs is a general purpose spherical/solid harmonics library in Rust.
+sphrs is a general purpose spherical harmonics and (regular and irregular) solid harmonics library in Rust.
 
-Documentation: [latest stable release](https://docs.rs/sphrs/latest/sphrs),
+For details on how to use sphrs, please consult the documentation, either for the
+[latest stable release](https://docs.rs/sphrs/latest/sphrs),
+or for the current 
 [main branch](https://argmin-rs.github.io/sphrs/sphrs/).
-
-## Types of spherical/solid harmonics
-
-This crate supports these types of real and complex functions via the enums `RealSH` and `ComplexSH`:
-
-* [Spherical](https://en.wikipedia.org/wiki/Spherical_harmonics)
-* [RegularSolid and IrregularSolid](https://en.wikipedia.org/wiki/Solid_harmonics)
-
-## Usage
-
-Add this to your `Cargo.toml`:
-
-```toml
-[dependencies]
-sphrs = "0.1.3"
-```
-
-## Examples
-
-Compute the complex spherical harmonic function of degree 2 and order 1 at (spherical) position
-(r = 1.0, theta = PI/4, phi = PI/4):
-
-```rust
-use sphrs::{ComplexSH, Coordinates, SHEval};
-use std::f64::consts::PI;
-
-let sh = ComplexSH::Spherical;
-let degree = 2;
-let order = 1;
-let p = Coordinates::spherical(1.0, PI/4.0, PI/8.0);
-println!("SH ({}, {}): {:?}", degree, order, sh.eval(degree, order, &p));
-```
-
-Compute all real SH up to 5th degree at (Cartesian) position (1, 0, 0):
-
-```rust
-use sphrs::{RealSH, HarmonicsSet, Coordinates};
-let degree = 5;
-let sh: HarmonicsSet<f64, _, _> = HarmonicsSet::new(degree, RealSH::Spherical);
-let p = Coordinates::cartesian(1.0, 0.0, 0.0);
-println!("SH up to degree {}: {:?}", degree, sh.eval(&p));
-```
 
 ## Acknowledgements
 
 This crate is heavily inspired by Google's
 [spherical-harmonics](https://github.com/google/spherical-harmonics) library and follows the
-design documented
+mathematics documented
 [here](http://silviojemma.com/public/papers/lighting/spherical-harmonic-lighting.pdf).
 
 ## References
