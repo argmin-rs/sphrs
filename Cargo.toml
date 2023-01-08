@@ -10,7 +10,7 @@ homepage = "http://argmin-rs.org"
 repository = "https://github.com/argmin-rs/sphrs"
 readme = "README.md"
 keywords = ["math", "science"]
-categories = ["science"]
+categories = ["science", "rendering", "graphics"]
 
 [dependencies]
 num = "0.4"
@@ -18,10 +18,10 @@ num-complex = "0.4"
 num-traits = "0.2"
 
 [dev-dependencies]
-approx = { version = "0.5.1", features = ["num-complex"] }
+approx = { version = "0.5", features = ["num-complex"] }
 csv = "1"
-quickcheck = "1.0.3"
-quickcheck_macros = "1.0.0"
+quickcheck = "1"
+quickcheck_macros = "1"
 
 [badges]
 maintenance = { status = "actively-developed" }
