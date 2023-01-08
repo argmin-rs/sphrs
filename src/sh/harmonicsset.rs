@@ -25,8 +25,6 @@ impl<T, E> HarmonicsSet<T, E>
 where
     T: SphrsFloat,
     E: SHEval<T>,
-    E::Output: std::ops::Mul + Copy,
-    Vec<E::Output>: std::iter::FromIterator<<E::Output as std::ops::Mul>::Output>,
 {
     /// Create new `HarmonicsSet` struct
     pub fn new(degree: usize, sh_type: E) -> HarmonicsSet<T, E> {
@@ -40,6 +38,11 @@ where
         }
     }
 
+    /// Returns the total number of spherical harmonics in the set
+    pub fn num_sh(&self) -> usize {
+        self.num_sh
+    }
+
     /// Evaluate harmonics at position `p` without coefficients.
     pub fn eval<C>(&self, p: &C) -> Vec<E::Output>
     where
@@ -49,15 +52,17 @@ where
     }
 
     /// Evaluate harmonics at position `p` with a given vector of coefficients.
-    pub fn eval_with_coefficients<C>(&self, p: &C, coefficients: Vec<E::Output>) -> Vec<E::Output>
+    pub fn eval_with_coefficients<C, I>(&self, p: &C, coefficients: &[I]) -> Vec<E::Output>
     where
         C: SHCoordinates<T>,
+        I: std::ops::Mul<E::Output> + Copy,
+        Vec<E::Output>: std::iter::FromIterator<<I as std::ops::Mul<E::Output>>::Output>,
     {
         assert_eq!(coefficients.len(), self.num_sh);
         self.eval_internal(p)
             .into_iter()
             .zip(coefficients.iter())
-            .map(|(a, &b)| a * b)
+            .map(|(a, &b)| b * a)
             .collect()
     }
 
