@@ -7,16 +7,15 @@
 
 //! A general purpose spherical/solid harmonics library in Rust.
 //!
-//! Documentation: [stable](https://docs.rs/sphrs/latest/sphrs),
-//! [main](https://argmin-rs.github.io/sphrs/sphrs/).
+//! This crate offers real and complex spherical harmonics and solid harmonics.
 //!
-//! # Types of spherical/solid harmonics
+//! * [Spherical Harmonics (Wikipedia)](https://en.wikipedia.org/wiki/Spherical_harmonics)
+//! * [Regular Solid and Irregular Solid Harmonics (Wikipedia)](https://en.wikipedia.org/wiki/Solid_harmonics)
 //!
-//! This crate supports these types of real and complex functions via the enums `RealSH` and
-//! `ComplexSH`:
 //!
-//! * [Spherical](https://en.wikipedia.org/wiki/Spherical_harmonics)
-//! * [RegularSolid and IrregularSolid](https://en.wikipedia.org/wiki/Solid_harmonics)
+//! Documentation:
+//! * [latest released version](https://docs.rs/sphrs/latest/sphrs)
+//! * [main branch](https://argmin-rs.github.io/sphrs/sphrs/)
 //!
 //! # Usage
 //!
@@ -27,31 +26,67 @@
 #![doc = concat!("sphrs = \"", env!("CARGO_PKG_VERSION"), "\"")]
 //! ```
 //!
-//! # Examples
+//! # Tutorial
 //!
-//! Compute the complex spherical harmonic function of degree 2 and order 1 at (spherical) position
-//! (r = 1.0, theta = PI/4, phi = PI/4):
+//! There are two enums [`RealSH`] and [`ComplexSH`], each with the following variants:
+//!
+//! * `Spherical`
+//! * `RegularSolid`
+//! * `IrregularSolid`
+//!
+//! These variants are used to define which kind of spherical/solid harmonic is to be computed.
+//! Each enum implements the [`SHEval`] trait, which provides an [`SHEval::eval`] method.
+//! This method is used to compute the spherical/solid harmonic for [`Coordinates`].
+//! Coordinates define a position in space and can be constructed from Cartesian and spherical
+//! coordinates via [`Coordinates::cartesian`] and [`Coordinates::spherical`], respectively.
+//!
+//! In order to compute real valued spherical harmonics, one needs to call the
+//! [`eval`](`SHEval::eval`) method on the `Spherical` variant of the `RealSH` enum.
+//! The `eval` method is part of the [`SHEval`] trait and as such this trait must be in scope.
 //!
 //! ```rust
-//! use sphrs::{ComplexSH, Coordinates, SHEval};
-//! use std::f64::consts::PI;
+//! use sphrs::{RealSH, Coordinates, SHEval};
 //!
-//! let sh = ComplexSH::Spherical;
+//! let sh = RealSH::Spherical;
 //! let degree = 2;
 //! let order = 1;
-//! let p = Coordinates::spherical(1.0, PI/4.0, PI/8.0);
-//! println!("SH ({}, {}): {:?}", degree, order, sh.eval(degree, order, &p));
+//! let p = Coordinates::cartesian(1.0, 0.0, 0.0);
+//! let computed_sh = RealSH::Spherical.eval(degree, order, &p);
+//! println!("SH ({}, {}): {:?}", degree, order, computed_sh);
 //! ```
 //!
-//! Compute all real SH up to 4th degree at (Cartesian) position (1, 0, 0):
+//! This library can also compute [`HarmonicsSet`]s which contains all spherical/solid harmonics
+//! up to a given order.
+//!
+//! The following example shows how to compute complex spherical harmonics up to third order at
+//! the spherical coordinates (1.0, 0.8, 0.4):
 //!
 //! ```rust
-//! use sphrs::{RealSH, HarmonicsSet, Coordinates};
-//! let degree = 4;
-//! let sh = HarmonicsSet::new(degree, RealSH::Spherical);
-//! let p = Coordinates::cartesian(1.0, 0.0, 0.0);
-//! println!("SH up to degree {}: {:?}", degree, sh.eval(&p));
+//! use sphrs::{ComplexSH, HarmonicsSet, Coordinates};
+//! let degree = 3;
+//! let sh = HarmonicsSet::new(degree, ComplexSH::Spherical);
+//! let p = Coordinates::spherical(1.0, 0.8, 0.4);
+//! let set = sh.eval(&p); // Is of type Vec<_>
+//! println!("SH up to degree {}: {:?}", degree, set);
 //! ```
+//!
+//! The individual SH in the set can also be multiplied element-wise with a vector of coefficients
+//! with the function [`HarmonicsSet::eval_with_coefficients`]:
+//!
+//! ```rust
+//! # use sphrs::{ComplexSH, HarmonicsSet, Coordinates};
+//! # let degree = 3;
+//! let sh = HarmonicsSet::new(degree, ComplexSH::Spherical);
+//! # let p = Coordinates::spherical(1.0, 0.8, 0.4);
+//! // Must be the same length as the set.
+//! let coeff = vec![2.0; sh.num_sh()];
+//! let set = sh.eval_with_coefficients(&p, coeff.as_slice());
+//! println!("SH up to degree {}: {:?}", degree, set);
+//! ```
+//!
+//! # Advanced features
+//!
+//! Feel free to use the low level functions linked at the bottom of this page directly.
 //!
 //! # Acknowledgements
 //!
