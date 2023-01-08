@@ -24,7 +24,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! sphrs = "0.1.3"
+#![doc = concat!("sphrs = \"", env!("CARGO_PKG_VERSION"), "\"")]
 //! ```
 //!
 //! # Examples
