@@ -14,6 +14,11 @@
       src="https://img.shields.io/github/actions/workflow/status/argmin-rs/sphrs/ci.yml?branch=main&label=sphrs CI&style=flat-square"
       alt="GitHub Actions workflow status"
   /></a>
+  <a href="https://app.codecov.io/gh/argmin-rs/sphrs/"
+    ><img
+      src="https://img.shields.io/codecov/c/github/argmin-rs/sphrs/main?style=flat-square"
+      alt="Code coverage"
+  /></a>
   <img
     src="https://img.shields.io/crates/l/sphrs?style=flat-square"
     alt="License"
