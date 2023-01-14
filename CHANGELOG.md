@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2023-01-14
+
 This release improves the API by reconsidering some of the previous choices. 
 Breaking changes were unavoidable. The following list gives an overview of the changes,
 please refer to the (updated and improved) documentation for details.
@@ -28,12 +30,11 @@ please refer to the (updated and improved) documentation for details.
 * Removed some somewhat unnecessary generics with the benefit that fewer type annotations are needed (see #18 for details)
 
 
-### Fixed
-
 ## [0.1.3] - 2021-07-24
 
 Version prior to adding a CHANGELOG.
 
-[unreleased]: https://github.com/argmin-rs/sphrs/compare/v0.1.3...HEAD
+[unreleased]: https://github.com/argmin-rs/sphrs/compare/v0.2.0...HEAD
+[0.1.3]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.1.2...v0.1.3
 
