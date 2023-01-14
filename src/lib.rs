@@ -45,13 +45,20 @@
 //! The `eval` method is part of the [`SHEval`] trait and as such this trait must be in scope.
 //!
 //! ```rust
-//! use sphrs::{RealSH, Coordinates, SHEval};
+//! use sphrs::{Coordinates, RealSH, SHEval};
 //!
-//! let sh = RealSH::Spherical;
+//! // l = 2
 //! let degree = 2;
+//! // m = 1
 //! let order = 1;
-//! let p = Coordinates::cartesian(1.0, 0.0, 0.0);
+//!
+//! // Define the position where the SH will be evaluated at
+//! // in Cartesian coordinates
+//! let p = Coordinates::cartesian(1.0, 0.2, 1.4);
+//!
+//! // Compute the real-valued SH value at `p` for l = 2, m = 1
 //! let computed_sh = RealSH::Spherical.eval(degree, order, &p);
+//!
 //! println!("SH ({}, {}): {:?}", degree, order, computed_sh);
 //! ```
 //!
@@ -59,14 +66,23 @@
 //! up to a given order.
 //!
 //! The following example shows how to compute complex spherical harmonics up to third order at
-//! the spherical coordinates (1.0, 0.8, 0.4):
+//! the spherical coordinates (r, theta, phi) = (1.0, 0.8, 0.4):
 //!
 //! ```rust
-//! use sphrs::{ComplexSH, HarmonicsSet, Coordinates};
+//! use sphrs::{ComplexSH, Coordinates, HarmonicsSet};
+//!
+//! // l = 3
 //! let degree = 3;
+//!
+//! // Create the harmonics set (in this case for complex SH)
 //! let sh = HarmonicsSet::new(degree, ComplexSH::Spherical);
+//!
+//! // Position in spherical coordinates where the set is evaluated at
 //! let p = Coordinates::spherical(1.0, 0.8, 0.4);
-//! let set = sh.eval(&p); // Is of type Vec<_>
+//!
+//! // Evaluate. Returns a `Vec<f64>`
+//! let set = sh.eval(&p);
+//!
 //! println!("SH up to degree {}: {:?}", degree, set);
 //! ```
 //!
@@ -86,7 +102,7 @@
 //!
 //! # Advanced features
 //!
-//! Feel free to use the low level functions linked at the bottom of this page directly.
+//! Feel free to directly use the low level functions linked at the bottom of this page.
 //!
 //! # Acknowledgements
 //!

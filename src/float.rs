@@ -9,6 +9,6 @@ use num::{Float, FromPrimitive};
 use num_traits::float::FloatConst;
 use std::fmt::Debug;
 
-/// Trait alias to simplify common trait bounds
+/// Trait alias for trait bounds on floats
 pub trait SphrsFloat: Float + FloatConst + FromPrimitive + Debug {}
 impl<I> SphrsFloat for I where I: Float + FloatConst + FromPrimitive + Debug {}
