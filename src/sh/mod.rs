@@ -21,7 +21,9 @@ use crate::coordinates::SHCoordinates;
 use crate::SphrsFloat;
 use num_complex::Complex;
 
-/// SH eval trait (TODO)
+/// Harmonics evaluation trait
+///
+/// Every kind of harmonics needs to implement this in order to be usable with [`HarmonicsSet`].
 pub trait SHEval<T> {
     /// Output type
     type Output;
