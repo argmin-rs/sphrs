@@ -277,9 +277,9 @@
 
 </span><span class="kw">use </span><span class="kw">crate</span>::SphrsFloat;
 
-<span class="doccomment">/// SHCoordinates trait
+<span class="doccomment">/// Definition of coordinates
 ///
-/// Every coordinate used in sphrs must implement this trait.
+/// Coordinates used in sphrs must implement this trait.
 </span><span class="kw">pub trait </span>SHCoordinates&lt;T&gt;: Sized {
     <span class="doccomment">/// Return `theta` (spherical coordinates)
     </span><span class="kw">fn </span>theta(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; T;

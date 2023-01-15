@@ -23,7 +23,7 @@
 <span class="kw">use </span>num_traits::float::FloatConst;
 <span class="kw">use </span>std::fmt::Debug;
 
-<span class="doccomment">/// Trait alias to simplify common trait bounds
+<span class="doccomment">/// Trait alias for trait bounds on floats
 </span><span class="kw">pub trait </span>SphrsFloat: Float + FloatConst + FromPrimitive + Debug {}
 <span class="kw">impl</span>&lt;I&gt; SphrsFloat <span class="kw">for </span>I <span class="kw">where </span>I: Float + FloatConst + FromPrimitive + Debug {}
 </code></pre></div>

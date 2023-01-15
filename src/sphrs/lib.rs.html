@@ -129,6 +129,22 @@
 <span id="129">129</span>
 <span id="130">130</span>
 <span id="131">131</span>
+<span id="132">132</span>
+<span id="133">133</span>
+<span id="134">134</span>
+<span id="135">135</span>
+<span id="136">136</span>
+<span id="137">137</span>
+<span id="138">138</span>
+<span id="139">139</span>
+<span id="140">140</span>
+<span id="141">141</span>
+<span id="142">142</span>
+<span id="143">143</span>
+<span id="144">144</span>
+<span id="145">145</span>
+<span id="146">146</span>
+<span id="147">147</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2018-2023 Stefan Kroboth
 //
 // Licensed under the Apache License, Version 2.0 &lt;LICENSE-APACHE or
@@ -176,13 +192,20 @@
 //! The `eval` method is part of the [`SHEval`] trait and as such this trait must be in scope.
 //!
 //! ```rust
-//! use sphrs::{RealSH, Coordinates, SHEval};
+//! use sphrs::{Coordinates, RealSH, SHEval};
 //!
-//! let sh = RealSH::Spherical;
+//! // l = 2
 //! let degree = 2;
+//! // m = 1
 //! let order = 1;
-//! let p = Coordinates::cartesian(1.0, 0.0, 0.0);
+//!
+//! // Define the position where the SH will be evaluated at
+//! // in Cartesian coordinates
+//! let p = Coordinates::cartesian(1.0, 0.2, 1.4);
+//!
+//! // Compute the real-valued SH value at `p` for l = 2, m = 1
 //! let computed_sh = RealSH::Spherical.eval(degree, order, &amp;p);
+//!
 //! println!(&quot;SH ({}, {}): {:?}&quot;, degree, order, computed_sh);
 //! ```
 //!
@@ -190,14 +213,23 @@
 //! up to a given order.
 //!
 //! The following example shows how to compute complex spherical harmonics up to third order at
-//! the spherical coordinates (1.0, 0.8, 0.4):
+//! the spherical coordinates (r, theta, phi) = (1.0, 0.8, 0.4):
 //!
 //! ```rust
-//! use sphrs::{ComplexSH, HarmonicsSet, Coordinates};
+//! use sphrs::{ComplexSH, Coordinates, HarmonicsSet};
+//!
+//! // l = 3
 //! let degree = 3;
+//!
+//! // Create the harmonics set (in this case for complex SH)
 //! let sh = HarmonicsSet::new(degree, ComplexSH::Spherical);
+//!
+//! // Position in spherical coordinates where the set is evaluated at
 //! let p = Coordinates::spherical(1.0, 0.8, 0.4);
-//! let set = sh.eval(&amp;p); // Is of type Vec&lt;_&gt;
+//!
+//! // Evaluate. Returns a `Vec&lt;f64&gt;`
+//! let set = sh.eval(&amp;p);
+//!
 //! println!(&quot;SH up to degree {}: {:?}&quot;, degree, set);
 //! ```
 //!
@@ -217,7 +249,7 @@
 //!
 //! # Advanced features
 //!
-//! Feel free to use the low level functions linked at the bottom of this page directly.
+//! Feel free to directly use the low level functions linked at the bottom of this page.
 //!
 //! # Acknowledgements
 //!

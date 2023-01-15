@@ -401,6 +401,8 @@
 <span id="401">401</span>
 <span id="402">402</span>
 <span id="403">403</span>
+<span id="404">404</span>
+<span id="405">405</span>
 </pre><pre class="rust"><code><span class="comment">// Copyright 2018-2023 Stefan Kroboth
 //
 // Licensed under the Apache License, Version 2.0 &lt;LICENSE-APACHE or
@@ -424,7 +426,9 @@
 <span class="kw">use </span><span class="kw">crate</span>::SphrsFloat;
 <span class="kw">use </span>num_complex::Complex;
 
-<span class="doccomment">/// SH eval trait (TODO)
+<span class="doccomment">/// Harmonics evaluation trait
+///
+/// Every kind of harmonics needs to implement this in order to be usable with [`HarmonicsSet`].
 </span><span class="kw">pub trait </span>SHEval&lt;T&gt; {
     <span class="doccomment">/// Output type
     </span><span class="kw">type </span>Output;
