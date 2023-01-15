@@ -108,12 +108,11 @@
 //!
 //! This crate is heavily inspired by Google's
 //! [spherical-harmonics](https://github.com/google/spherical-harmonics) library and follows the
-//! design documented
-//! [here](http://silviojemma.com/public/papers/lighting/spherical-harmonic-lighting.pdf).
+//! design documented [here](https://theory.cpe.ku.ac.th/~pramook/files/spherical-harmonic-lighting.pdf).
 //!
 //! # References
 //!
-//! * Robin Green, ["Spherical Harmonic Lighting: The Gritty Details"](http://silviojemma.com/public/papers/lighting/spherical-harmonic-lighting.pdf)
+//! * Robin Green, ["Spherical Harmonic Lighting: The Gritty Details"](https://theory.cpe.ku.ac.th/~pramook/files/spherical-harmonic-lighting.pdf)
 //! * [Spherical harmonics (Wikipedia)](https://en.wikipedia.org/wiki/Spherical_harmonics)
 //! * [Solid harmonics (Wikipedia)](https://en.wikipedia.org/wiki/Spherical_harmonics)
 //!
