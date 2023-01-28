@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2023-01-28
+
+### Fixed
+
+* Fixed link to spherical harmonics lighting paper
+
 ## [0.2.0] - 2023-01-14
 
 This release improves the API by reconsidering some of the previous choices. 
@@ -34,7 +40,8 @@ please refer to the (updated and improved) documentation for details.
 
 Version prior to adding a CHANGELOG.
 
-[unreleased]: https://github.com/argmin-rs/sphrs/compare/v0.2.0...HEAD
-[0.1.3]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.1.3...v0.2.0
+[Unreleased]: https://github.com/argmin-rs/sphrs/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.1.2...v0.1.3
 
