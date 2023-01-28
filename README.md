@@ -44,11 +44,11 @@ or for the current
 
 This crate is heavily inspired by Google's
 [spherical-harmonics](https://github.com/google/spherical-harmonics) library and follows the
-mathematics documented [here](https://theory.cpe.ku.ac.th/~pramook/files/spherical-harmonic-lighting.pdf).
+mathematics documented [here](https://basesandframes.files.wordpress.com/2016/05/spherical_harmonic_lighting_gritty_details_green_2003.pdf).
 
 ## References
 
-* Robin Green, ["Spherical Harmonic Lighting: The Gritty Details"](https://theory.cpe.ku.ac.th/~pramook/files/spherical-harmonic-lighting.pdf)
+* Robin Green, ["Spherical Harmonic Lighting: The Gritty Details"](https://basesandframes.files.wordpress.com/2016/05/spherical_harmonic_lighting_gritty_details_green_2003.pdf)
 * [Spherical harmonics (Wikipedia)](https://en.wikipedia.org/wiki/Spherical_harmonics)
 * [Solid harmonics (Wikipedia)](https://en.wikipedia.org/wiki/Spherical_harmonics)
 
