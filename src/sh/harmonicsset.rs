@@ -130,6 +130,7 @@ where
 
         if self.degree >= 6 {
             sh.push(self.sh.eval(6, -6, p));
+            sh.push(self.sh.eval(6, -5, p));
             sh.push(self.sh.eval(6, -4, p));
             sh.push(self.sh.eval(6, -3, p));
             sh.push(self.sh.eval(6, -2, p));
@@ -146,6 +147,7 @@ where
         if self.degree >= 7 {
             sh.push(self.sh.eval(7, -7, p));
             sh.push(self.sh.eval(7, -6, p));
+            sh.push(self.sh.eval(7, -5, p));
             sh.push(self.sh.eval(7, -4, p));
             sh.push(self.sh.eval(7, -3, p));
             sh.push(self.sh.eval(7, -2, p));
@@ -164,6 +166,7 @@ where
             sh.push(self.sh.eval(8, -8, p));
             sh.push(self.sh.eval(8, -7, p));
             sh.push(self.sh.eval(8, -6, p));
+            sh.push(self.sh.eval(8, -5, p));
             sh.push(self.sh.eval(8, -4, p));
             sh.push(self.sh.eval(8, -3, p));
             sh.push(self.sh.eval(8, -2, p));
@@ -184,6 +187,7 @@ where
             sh.push(self.sh.eval(9, -8, p));
             sh.push(self.sh.eval(9, -7, p));
             sh.push(self.sh.eval(9, -6, p));
+            sh.push(self.sh.eval(9, -5, p));
             sh.push(self.sh.eval(9, -4, p));
             sh.push(self.sh.eval(9, -3, p));
             sh.push(self.sh.eval(9, -2, p));
@@ -206,6 +210,7 @@ where
             sh.push(self.sh.eval(10, -8, p));
             sh.push(self.sh.eval(10, -7, p));
             sh.push(self.sh.eval(10, -6, p));
+            sh.push(self.sh.eval(10, -5, p));
             sh.push(self.sh.eval(10, -4, p));
             sh.push(self.sh.eval(10, -3, p));
             sh.push(self.sh.eval(10, -2, p));
@@ -230,6 +235,7 @@ where
             sh.push(self.sh.eval(11, -8, p));
             sh.push(self.sh.eval(11, -7, p));
             sh.push(self.sh.eval(11, -6, p));
+            sh.push(self.sh.eval(11, -5, p));
             sh.push(self.sh.eval(11, -4, p));
             sh.push(self.sh.eval(11, -3, p));
             sh.push(self.sh.eval(11, -2, p));
@@ -256,6 +262,7 @@ where
             sh.push(self.sh.eval(12, -8, p));
             sh.push(self.sh.eval(12, -7, p));
             sh.push(self.sh.eval(12, -6, p));
+            sh.push(self.sh.eval(12, -5, p));
             sh.push(self.sh.eval(12, -4, p));
             sh.push(self.sh.eval(12, -3, p));
             sh.push(self.sh.eval(12, -2, p));
@@ -284,6 +291,7 @@ where
             sh.push(self.sh.eval(13, -8, p));
             sh.push(self.sh.eval(13, -7, p));
             sh.push(self.sh.eval(13, -6, p));
+            sh.push(self.sh.eval(13, -5, p));
             sh.push(self.sh.eval(13, -4, p));
             sh.push(self.sh.eval(13, -3, p));
             sh.push(self.sh.eval(13, -2, p));
@@ -314,6 +322,7 @@ where
             sh.push(self.sh.eval(14, -8, p));
             sh.push(self.sh.eval(14, -7, p));
             sh.push(self.sh.eval(14, -6, p));
+            sh.push(self.sh.eval(14, -5, p));
             sh.push(self.sh.eval(14, -4, p));
             sh.push(self.sh.eval(14, -3, p));
             sh.push(self.sh.eval(14, -2, p));
@@ -346,6 +355,7 @@ where
             sh.push(self.sh.eval(15, -8, p));
             sh.push(self.sh.eval(15, -7, p));
             sh.push(self.sh.eval(15, -6, p));
+            sh.push(self.sh.eval(15, -5, p));
             sh.push(self.sh.eval(15, -4, p));
             sh.push(self.sh.eval(15, -3, p));
             sh.push(self.sh.eval(15, -2, p));
@@ -380,6 +390,7 @@ where
             sh.push(self.sh.eval(16, -8, p));
             sh.push(self.sh.eval(16, -7, p));
             sh.push(self.sh.eval(16, -6, p));
+            sh.push(self.sh.eval(16, -5, p));
             sh.push(self.sh.eval(16, -4, p));
             sh.push(self.sh.eval(16, -3, p));
             sh.push(self.sh.eval(16, -2, p));
@@ -416,6 +427,7 @@ where
             sh.push(self.sh.eval(17, -8, p));
             sh.push(self.sh.eval(17, -7, p));
             sh.push(self.sh.eval(17, -6, p));
+            sh.push(self.sh.eval(17, -5, p));
             sh.push(self.sh.eval(17, -4, p));
             sh.push(self.sh.eval(17, -3, p));
             sh.push(self.sh.eval(17, -2, p));
@@ -454,6 +466,7 @@ where
             sh.push(self.sh.eval(18, -8, p));
             sh.push(self.sh.eval(18, -7, p));
             sh.push(self.sh.eval(18, -6, p));
+            sh.push(self.sh.eval(18, -5, p));
             sh.push(self.sh.eval(18, -4, p));
             sh.push(self.sh.eval(18, -3, p));
             sh.push(self.sh.eval(18, -2, p));
@@ -494,6 +507,7 @@ where
             sh.push(self.sh.eval(19, -8, p));
             sh.push(self.sh.eval(19, -7, p));
             sh.push(self.sh.eval(19, -6, p));
+            sh.push(self.sh.eval(19, -5, p));
             sh.push(self.sh.eval(19, -4, p));
             sh.push(self.sh.eval(19, -3, p));
             sh.push(self.sh.eval(19, -2, p));
@@ -536,6 +550,7 @@ where
             sh.push(self.sh.eval(20, -8, p));
             sh.push(self.sh.eval(20, -7, p));
             sh.push(self.sh.eval(20, -6, p));
+            sh.push(self.sh.eval(20, -5, p));
             sh.push(self.sh.eval(20, -4, p));
             sh.push(self.sh.eval(20, -3, p));
             sh.push(self.sh.eval(20, -2, p));
