@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2023-05-14
+
+### Fixed
+
+* Added missing degree -5 for orders >=6 in HarmonicsSet ([@AhmadHuran](https://github.com/AhmadHuran))
+
 ## [0.2.1] - 2023-01-28
 
 ### Fixed
@@ -40,7 +46,8 @@ please refer to the (updated and improved) documentation for details.
 
 Version prior to adding a CHANGELOG.
 
-[Unreleased]: https://github.com/argmin-rs/sphrs/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/argmin-rs/sphrs/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.1.3...v0.2.0
 [0.1.3]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.1.2...v0.1.3
